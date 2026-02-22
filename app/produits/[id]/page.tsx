@@ -44,7 +44,7 @@ export default function ProductPage({ params }: ProductPageProps) {
       .catch(() => {})
   }, [])
 
-  // TikTok ViewContent event
+  // TikTok ViewContent event + Telegram notification
   useEffect(() => {
     if (!product) return
     const eventId = `vc_${id}_${Date.now()}`
@@ -85,7 +85,23 @@ export default function ProductPage({ params }: ProductPageProps) {
       value: Number(product.packages[0].pricePerUnit) || 0,
       currency: 'CAD',
     })
-  }, [id])
+
+    // Telegram notification for page visit (only for Wicked Ball M3)
+    if (product.id === 'wicked-ball-m3') {
+      fetch('/api/telegram-notify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          type: 'page_visit',
+          productName: product.name,
+          productId: product.id,
+          userAgent: navigator.userAgent,
+          timestamp: new Date().toISOString(),
+          ip: 'Client IP', // Will be detected server-side
+        }),
+      }).catch(() => {})
+    }
+  }, [id, product])
 
   // Countdown timer
   const [timeLeft, setTimeLeft] = useState({ hours: 5, minutes: 56, seconds: 23 })
@@ -120,6 +136,22 @@ export default function ProductPage({ params }: ProductPageProps) {
         image: product.colors[selectedColor].image,
         variant: `#PAWPAW -${Math.round((1 - currentPrice / product.originalPrice) * 100)}% appliqué`,
       })
+    }
+
+    // Telegram notification for cart addition (only for Wicked Ball M3)
+    if (product.id === 'wicked-ball-m3') {
+      fetch('/api/telegram-notify', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          type: 'add_to_cart',
+          productName: `${product.name} (${product.colors[selectedColor].name})`,
+          productId: product.id,
+          userAgent: navigator.userAgent,
+          timestamp: new Date().toISOString(),
+          ip: 'Client IP', // Will be detected server-side
+        }),
+      }).catch(() => {})
     }
   }
 
