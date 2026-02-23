@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { stats } from '../telegram-webhook/route'
 
 const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN
 const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID
@@ -27,16 +28,25 @@ export async function POST(request: NextRequest) {
     const ipData = ipTracker.get(clientIp) || { lastVisit: 0, lastCart: 0 }
     
     if (type === 'page_visit') {
+      // Track total visits
+      stats.totalVisits++
+      
       // Only send notification if this IP hasn't visited in the last 24 hours
       if (now - ipData.lastVisit < oneDay) {
         return NextResponse.json({ success: true, message: 'Rate limited - visit' })
       }
+      
+      // Track unique visitors
+      stats.uniqueVisitors.add(clientIp)
       ipData.lastVisit = now
     } else if (type === 'add_to_cart') {
       // Only send notification if this IP hasn't added to cart in the last 24 hours
       if (now - ipData.lastCart < oneDay) {
         return NextResponse.json({ success: true, message: 'Rate limited - cart' })
       }
+      
+      // Track cart additions
+      stats.cartAdditions++
       ipData.lastCart = now
     }
     
