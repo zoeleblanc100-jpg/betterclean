@@ -13,6 +13,10 @@ const productStats = new Map<string, number>()
 
 export async function POST(request: NextRequest) {
   try {
+    // EMERGENCY: DISABLE ALL NOTIFICATIONS TEMPORARILY
+    console.log('[TELEGRAM-NOTIFY] EMERGENCY: All notifications disabled to prevent spam')
+    return NextResponse.json({ success: true, message: 'Notifications temporarily disabled' })
+
     if (!TELEGRAM_BOT_TOKEN || !TELEGRAM_CHAT_ID) {
       console.error('Missing Telegram configuration')
       return NextResponse.json({ error: 'Telegram not configured' }, { status: 500 })
