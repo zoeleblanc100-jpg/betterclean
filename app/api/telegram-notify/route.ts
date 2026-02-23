@@ -11,12 +11,11 @@ const ipTracker = new Map<string, { lastVisit: number, lastCart: number }>()
 const productStats = new Map<string, number>()
 
 
+// Global request tracking to prevent duplicates
+const activeRequests = new Map<string, number>()
+
 export async function POST(request: NextRequest) {
   try {
-    // EMERGENCY: DISABLE ALL NOTIFICATIONS TEMPORARILY
-    console.log('[TELEGRAM-NOTIFY] EMERGENCY: All notifications disabled to prevent spam')
-    return NextResponse.json({ success: true, message: 'Notifications temporarily disabled' })
-
     if (!TELEGRAM_BOT_TOKEN || !TELEGRAM_CHAT_ID) {
       console.error('Missing Telegram configuration')
       return NextResponse.json({ error: 'Telegram not configured' }, { status: 500 })
@@ -29,7 +28,27 @@ export async function POST(request: NextRequest) {
     const realIp = request.headers.get('x-real-ip')
     const clientIp = forwarded?.split(',')[0] || realIp || 'Non disponible'
 
+    // Create unique request ID to prevent duplicates
+    const requestId = `${clientIp}-${type}-${productId}`
     const now = Date.now()
+    
+    // Check if identical request is already being processed (within 5 seconds)
+    const lastRequest = activeRequests.get(requestId)
+    if (lastRequest && now - lastRequest < 5000) {
+      console.log(`[TELEGRAM-NOTIFY] DUPLICATE REQUEST BLOCKED: ${requestId}`)
+      return NextResponse.json({ success: true, message: 'Duplicate request blocked' })
+    }
+    
+    // Mark this request as active
+    activeRequests.set(requestId, now)
+    
+    // Clean up old active requests (older than 10 seconds)
+    for (const [key, time] of activeRequests.entries()) {
+      if (now - time > 10000) {
+        activeRequests.delete(key)
+      }
+    }
+    
     const oneHour = 60 * 60 * 1000 // 1 hour in milliseconds
     
     // Check IP rate limiting
