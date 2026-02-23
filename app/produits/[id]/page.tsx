@@ -103,9 +103,17 @@ export default function ProductPage({ params }: ProductPageProps) {
     }
   }, [id, product])
 
-  // Countdown timer
+  // Countdown timer - client-side only to avoid hydration mismatch
   const [timeLeft, setTimeLeft] = useState({ hours: 5, minutes: 56, seconds: 23 })
+  const [isClient, setIsClient] = useState(false)
+  
   useEffect(() => {
+    setIsClient(true)
+  }, [])
+  
+  useEffect(() => {
+    if (!isClient) return
+    
     const timer = setInterval(() => {
       setTimeLeft(prev => {
         let { hours, minutes, seconds } = prev
@@ -117,7 +125,7 @@ export default function ProductPage({ params }: ProductPageProps) {
       })
     }, 1000)
     return () => clearInterval(timer)
-  }, [])
+  }, [isClient])
 
   if (!product) {
     notFound()
