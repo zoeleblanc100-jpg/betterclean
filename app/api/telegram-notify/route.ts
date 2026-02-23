@@ -28,15 +28,15 @@ export async function POST(request: NextRequest) {
     // Check IP rate limiting
     const ipData = ipTracker.get(clientIp) || { lastVisit: 0, lastCart: 0 }
     
+    // Check rate limiting FIRST before tracking anything
     if (type === 'page_visit') {
-      // Track total visits
-      stats.totalVisits++
-      
       // Only send notification if this IP hasn't visited in the last hour
       if (now - ipData.lastVisit < oneHour) {
         return NextResponse.json({ success: true, message: 'Rate limited - visit' })
       }
       
+      // Track total visits only if notification will be sent
+      stats.totalVisits++
       // Track unique visitors
       stats.uniqueVisitors.add(clientIp)
       ipData.lastVisit = now
@@ -46,7 +46,7 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ success: true, message: 'Rate limited - cart' })
       }
       
-      // Track cart additions
+      // Track cart additions only if notification will be sent
       stats.cartAdditions++
       ipData.lastCart = now
     }
