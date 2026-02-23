@@ -129,6 +129,7 @@ export default function ProductPage({ params }: ProductPageProps) {
   const handleAddToCart = () => {
     console.log('🛒 handleAddToCart called for product:', product.id)
     alert('🛒 handleAddToCart called for product: ' + product.id)
+    alert('🔍 Product object:', JSON.stringify({id: product.id, name: product.name}))
     
     for (let i = 0; i < product.packages[selectedPackage].quantity; i++) {
       addItem({
