@@ -31,37 +31,45 @@ export async function POST(request: NextRequest) {
     // Check IP rate limiting
     const ipData = ipTracker.get(clientIp) || { lastVisit: 0, lastCart: 0 }
     
-    // SIMPLE rate limiting - 1 notification per type per IP per hour
+    // DEBUG: Log every request
+    console.log(`[TELEGRAM-NOTIFY] ${type} request from IP ${clientIp} at ${new Date().toISOString()}`)
+    console.log(`[TELEGRAM-NOTIFY] Current ipData:`, ipData)
+    console.log(`[TELEGRAM-NOTIFY] Time since last visit: ${ipData.lastVisit ? now - ipData.lastVisit : 'never'}ms`)
+    console.log(`[TELEGRAM-NOTIFY] Time since last cart: ${ipData.lastCart ? now - ipData.lastCart : 'never'}ms`)
+
+    // ULTRA-SIMPLE rate limiting with extensive logging
     if (type === 'page_visit') {
-      // Check if this IP already sent a visit notification in the last hour
-      if (ipData.lastVisit > 0 && now - ipData.lastVisit < oneHour) {
-        return NextResponse.json({ success: true, message: 'Rate limited - visit' })
+      const timeSinceLastVisit = ipData.lastVisit ? now - ipData.lastVisit : Infinity
+      console.log(`[TELEGRAM-NOTIFY] Visit check: timeSinceLastVisit=${timeSinceLastVisit}, oneHour=${oneHour}`)
+      
+      if (timeSinceLastVisit < oneHour) {
+        console.log(`[TELEGRAM-NOTIFY] BLOCKED: Visit rate limited for IP ${clientIp}`)
+        return NextResponse.json({ success: true, message: `Rate limited - visit (${Math.round(timeSinceLastVisit/1000)}s ago)` })
       }
       
-      // Update timestamp BEFORE sending notification to prevent duplicates
+      console.log(`[TELEGRAM-NOTIFY] ALLOWING: Visit notification for IP ${clientIp}`)
       ipData.lastVisit = now
       ipTracker.set(clientIp, ipData)
-      
-      // Track stats
       stats.totalVisits++
       stats.uniqueVisitors.add(clientIp)
       
     } else if (type === 'add_to_cart') {
-      // Check if this IP already sent a cart notification in the last hour
-      if (ipData.lastCart > 0 && now - ipData.lastCart < oneHour) {
-        return NextResponse.json({ success: true, message: 'Rate limited - cart' })
+      const timeSinceLastCart = ipData.lastCart ? now - ipData.lastCart : Infinity
+      console.log(`[TELEGRAM-NOTIFY] Cart check: timeSinceLastCart=${timeSinceLastCart}, oneHour=${oneHour}`)
+      
+      if (timeSinceLastCart < oneHour) {
+        console.log(`[TELEGRAM-NOTIFY] BLOCKED: Cart rate limited for IP ${clientIp}`)
+        return NextResponse.json({ success: true, message: `Rate limited - cart (${Math.round(timeSinceLastCart/1000)}s ago)` })
       }
       
-      // Update timestamp BEFORE sending notification to prevent duplicates
+      console.log(`[TELEGRAM-NOTIFY] ALLOWING: Cart notification for IP ${clientIp}`)
       ipData.lastCart = now
       ipTracker.set(clientIp, ipData)
       
-      // Track cart additions per product
       const currentCount = productStats.get(productId) || 0
       productStats.set(productId, currentCount + 1)
-      
-      // Track global cart additions
       stats.cartAdditions++
+      console.log(`[TELEGRAM-NOTIFY] Cart stats updated: ${productId} now has ${currentCount + 1} additions`)
     }
 
     let message = ''
