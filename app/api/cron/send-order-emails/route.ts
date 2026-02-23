@@ -217,32 +217,41 @@ export async function GET() {
     for (const order of orders) {
       const orderDate = new Date(order.order_date)
       const now = new Date()
-      const hoursSince = (now.getTime() - orderDate.getTime()) / (1000 * 60 * 60)
+      const daysSince = Math.floor((now.getTime() - orderDate.getTime()) / (1000 * 60 * 60 * 24))
       const currentStage = order.email_stage || 1
       const isFr = order.locale === 'fr'
+
+      // Check if we already sent an email today for this order
+      const lastEmailSent = order.last_email_sent ? new Date(order.last_email_sent) : null
+      const today = new Date().toDateString()
+      const lastEmailToday = lastEmailSent && lastEmailSent.toDateString() === today
+
+      if (lastEmailToday) {
+        continue // Skip if we already sent an email today
+      }
 
       let emailType: 'shipped' | 'problem' | 'lost' | null = null
       let newStage = currentStage
       let subject = ''
 
-      // Stage 1 = confirmation sent, check if shipped email needed (18h)
-      if (currentStage === 1 && hoursSince >= 18) {
+      // Stage 1 = confirmation sent, check if shipped email needed (1 day)
+      if (currentStage === 1 && daysSince >= 1) {
         emailType = 'shipped'
         newStage = 2
         subject = isFr
           ? `Commande expediee - Purrball #${order.order_number}`
           : `Order Shipped - Purrball #${order.order_number}`
       }
-      // Stage 2 = shipped sent, check if problem email needed (60h)
-      else if (currentStage === 2 && hoursSince >= 60) {
+      // Stage 2 = shipped sent, check if problem email needed (3 days)
+      else if (currentStage === 2 && daysSince >= 3) {
         emailType = 'problem'
         newStage = 3
         subject = isFr
           ? `Probleme de livraison - Purrball #${order.order_number}`
           : `Delivery Problem - Purrball #${order.order_number}`
       }
-      // Stage 3 = problem sent, check if lost email needed (72h)
-      else if (currentStage === 3 && hoursSince >= 72) {
+      // Stage 3 = problem sent, check if lost email needed (4 days)
+      else if (currentStage === 3 && daysSince >= 4) {
         emailType = 'lost'
         newStage = 4
         subject = isFr
@@ -265,10 +274,13 @@ export async function GET() {
           continue
         }
 
-        // Update email_stage in Supabase
+        // Update email_stage and last_email_sent in Supabase
         await supabase
           .from('orders')
-          .update({ email_stage: newStage })
+          .update({ 
+            email_stage: newStage,
+            last_email_sent: new Date().toISOString()
+          })
           .eq('order_number', order.order_number)
 
         sentCount++
