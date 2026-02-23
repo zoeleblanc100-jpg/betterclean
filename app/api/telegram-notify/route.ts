@@ -4,15 +4,11 @@ import { stats } from '../telegram-webhook/route'
 const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN
 const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID
 
-// In-memory storage for IP tracking (in production, use Redis or database)
-const ipTracker = new Map<string, { lastVisit: number, lastCart: number }>()
+// ULTRA-SIMPLE: Track last notification time per IP
+const ipLastNotification = new Map<string, number>()
 
 // Track cart additions per product
 const productStats = new Map<string, number>()
-
-
-// Global request tracking to prevent duplicates
-const activeRequests = new Map<string, number>()
 
 export async function POST(request: NextRequest) {
   try {
@@ -28,116 +24,52 @@ export async function POST(request: NextRequest) {
     const realIp = request.headers.get('x-real-ip')
     const clientIp = forwarded?.split(',')[0] || realIp || 'Non disponible'
 
-    // Create unique request ID to prevent duplicates
-    const requestId = `${clientIp}-${type}-${productId}`
     const now = Date.now()
-    
-    // Check if identical request is already being processed (within 5 seconds)
-    const lastRequest = activeRequests.get(requestId)
-    if (lastRequest && now - lastRequest < 5000) {
-      console.log(`[TELEGRAM-NOTIFY] DUPLICATE REQUEST BLOCKED: ${requestId}`)
-      return NextResponse.json({ success: true, message: 'Duplicate request blocked' })
-    }
-    
-    // Mark this request as active
-    activeRequests.set(requestId, now)
-    
-    // Clean up old active requests (older than 10 seconds)
-    for (const [key, time] of activeRequests.entries()) {
-      if (now - time > 10000) {
-        activeRequests.delete(key)
-      }
-    }
-    
     const oneHour = 60 * 60 * 1000 // 1 hour in milliseconds
     
-    // Check IP rate limiting
-    const ipData = ipTracker.get(clientIp) || { lastVisit: 0, lastCart: 0 }
+    // SIMPLE RULE: Same IP = no notification for 1 hour (ANY type)
+    const lastNotification = ipLastNotification.get(clientIp) || 0
+    if (now - lastNotification < oneHour) {
+      console.log(`[TELEGRAM-NOTIFY] BLOCKED: IP ${clientIp} already notified ${Math.round((now - lastNotification)/60000)} minutes ago`)
+      return NextResponse.json({ success: true, message: 'IP rate limited' })
+    }
     
-    // DEBUG: Log every request
-    console.log(`[TELEGRAM-NOTIFY] ${type} request from IP ${clientIp} at ${new Date().toISOString()}`)
-    console.log(`[TELEGRAM-NOTIFY] Current ipData:`, ipData)
-    console.log(`[TELEGRAM-NOTIFY] Time since last visit: ${ipData.lastVisit ? now - ipData.lastVisit : 'never'}ms`)
-    console.log(`[TELEGRAM-NOTIFY] Time since last cart: ${ipData.lastCart ? now - ipData.lastCart : 'never'}ms`)
-
-    // ULTRA-SIMPLE rate limiting with extensive logging
+    // Update IP timestamp BEFORE sending to prevent duplicates
+    ipLastNotification.set(clientIp, now)
+    
+    // Update statistics
     if (type === 'page_visit') {
-      const timeSinceLastVisit = ipData.lastVisit ? now - ipData.lastVisit : Infinity
-      console.log(`[TELEGRAM-NOTIFY] Visit check: timeSinceLastVisit=${timeSinceLastVisit}, oneHour=${oneHour}`)
-      
-      if (timeSinceLastVisit < oneHour) {
-        console.log(`[TELEGRAM-NOTIFY] BLOCKED: Visit rate limited for IP ${clientIp}`)
-        return NextResponse.json({ success: true, message: `Rate limited - visit (${Math.round(timeSinceLastVisit/1000)}s ago)` })
-      }
-      
-      console.log(`[TELEGRAM-NOTIFY] ALLOWING: Visit notification for IP ${clientIp}`)
-      ipData.lastVisit = now
-      ipTracker.set(clientIp, ipData)
       stats.totalVisits++
       stats.uniqueVisitors.add(clientIp)
-      
-      // Update time-based statistics for visits
-      const now_date = new Date()
-      const today = now_date.toISOString().split('T')[0]
-      const thisWeek = getWeekKey(now_date)
-      const thisMonth = `${now_date.getFullYear()}-${String(now_date.getMonth() + 1).padStart(2, '0')}`
-      
-      // Update daily stats
-      const todayStats = stats.dailyStats.get(today) || {visits: 0, carts: 0}
-      todayStats.visits++
-      stats.dailyStats.set(today, todayStats)
-      
-      // Update weekly stats
-      const weekStats = stats.weeklyStats.get(thisWeek) || {visits: 0, carts: 0}
-      weekStats.visits++
-      stats.weeklyStats.set(thisWeek, weekStats)
-      
-      // Update monthly stats
-      const monthStats = stats.monthlyStats.get(thisMonth) || {visits: 0, carts: 0}
-      monthStats.visits++
-      stats.monthlyStats.set(thisMonth, monthStats)
-      
     } else if (type === 'add_to_cart') {
-      const timeSinceLastCart = ipData.lastCart ? now - ipData.lastCart : Infinity
-      console.log(`[TELEGRAM-NOTIFY] Cart check: timeSinceLastCart=${timeSinceLastCart}, oneHour=${oneHour}`)
-      
-      if (timeSinceLastCart < oneHour) {
-        console.log(`[TELEGRAM-NOTIFY] BLOCKED: Cart rate limited for IP ${clientIp}`)
-        return NextResponse.json({ success: true, message: `Rate limited - cart (${Math.round(timeSinceLastCart/1000)}s ago)` })
-      }
-      
-      console.log(`[TELEGRAM-NOTIFY] ALLOWING: Cart notification for IP ${clientIp}`)
-      ipData.lastCart = now
-      ipTracker.set(clientIp, ipData)
-      
       const currentCount = productStats.get(productId) || 0
       productStats.set(productId, currentCount + 1)
       stats.cartAdditions++
-      
-      // Update time-based statistics
-      const now_date = new Date()
-      const today = now_date.toISOString().split('T')[0]
-      const thisWeek = getWeekKey(now_date)
-      const thisMonth = `${now_date.getFullYear()}-${String(now_date.getMonth() + 1).padStart(2, '0')}`
-      
-      // Update daily stats
-      const todayStats = stats.dailyStats.get(today) || {visits: 0, carts: 0}
-      todayStats.carts++
-      stats.dailyStats.set(today, todayStats)
-      
-      // Update weekly stats
-      const weekStats = stats.weeklyStats.get(thisWeek) || {visits: 0, carts: 0}
-      weekStats.carts++
-      stats.weeklyStats.set(thisWeek, weekStats)
-      
-      // Update monthly stats
-      const monthStats = stats.monthlyStats.get(thisMonth) || {visits: 0, carts: 0}
-      monthStats.carts++
-      stats.monthlyStats.set(thisMonth, monthStats)
-      
-      console.log(`[TELEGRAM-NOTIFY] Cart stats updated: ${productId} now has ${currentCount + 1} additions`)
-      console.log(`[TELEGRAM-NOTIFY] Time-based stats updated - Today: ${todayStats.carts} carts`)
     }
+    
+    // Update time-based statistics
+    const now_date = new Date()
+    const today = now_date.toISOString().split('T')[0]
+    const thisWeek = getWeekKey(now_date)
+    const thisMonth = `${now_date.getFullYear()}-${String(now_date.getMonth() + 1).padStart(2, '0')}`
+    
+    const todayStats = stats.dailyStats.get(today) || {visits: 0, carts: 0}
+    const weekStats = stats.weeklyStats.get(thisWeek) || {visits: 0, carts: 0}
+    const monthStats = stats.monthlyStats.get(thisMonth) || {visits: 0, carts: 0}
+    
+    if (type === 'page_visit') {
+      todayStats.visits++
+      weekStats.visits++
+      monthStats.visits++
+    } else if (type === 'add_to_cart') {
+      todayStats.carts++
+      weekStats.carts++
+      monthStats.carts++
+    }
+    
+    stats.dailyStats.set(today, todayStats)
+    stats.weeklyStats.set(thisWeek, weekStats)
+    stats.monthlyStats.set(thisMonth, monthStats)
 
     let message = ''
     
