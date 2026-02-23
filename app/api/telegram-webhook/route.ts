@@ -6,7 +6,10 @@ const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN
 const stats = {
   uniqueVisitors: new Set<string>(),
   cartAdditions: 0,
-  totalVisits: 0
+  totalVisits: 0,
+  dailyStats: new Map<string, {visits: number, carts: number}>(),
+  weeklyStats: new Map<string, {visits: number, carts: number}>(),
+  monthlyStats: new Map<string, {visits: number, carts: number}>()
 }
 
 export async function POST(request: NextRequest) {
@@ -24,6 +27,16 @@ export async function POST(request: NextRequest) {
       // Import product stats from notification module
       const { productStats } = await import('../telegram-notify/route')
       
+      // Calculate time-based statistics
+      const now = new Date()
+      const today = now.toISOString().split('T')[0] // YYYY-MM-DD
+      const thisWeek = getWeekKey(now)
+      const thisMonth = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`
+      
+      const todayStats = stats.dailyStats.get(today) || {visits: 0, carts: 0}
+      const weekStats = stats.weeklyStats.get(thisWeek) || {visits: 0, carts: 0}
+      const monthStats = stats.monthlyStats.get(thisMonth) || {visits: 0, carts: 0}
+      
       // Prepare statistics message
       const uniqueVisitorCount = stats.uniqueVisitors.size
       const cartCount = stats.cartAdditions
@@ -40,9 +53,18 @@ export async function POST(request: NextRequest) {
       const statsMessage = `📊 *Statistiques E-commerce*\n\n` +
                           `👥 Visiteurs uniques: ${uniqueVisitorCount}\n` +
                           `🛒 Ajouts au panier total: ${cartCount}\n` +
-                          `📈 Visites totales: ${totalVisitCount}` +
+                          `📈 Visites totales: ${totalVisitCount}\n\n` +
+                          `📅 *Aujourd'hui (${today}):*\n` +
+                          `• Visites: ${todayStats.visits}\n` +
+                          `• Paniers: ${todayStats.carts}\n\n` +
+                          `📅 *Cette semaine:*\n` +
+                          `• Visites: ${weekStats.visits}\n` +
+                          `• Paniers: ${weekStats.carts}\n\n` +
+                          `📅 *Ce mois:*\n` +
+                          `• Visites: ${monthStats.visits}\n` +
+                          `• Paniers: ${monthStats.carts}` +
                           productStatsText +
-                          `\n📅 Dernière mise à jour: ${new Date().toLocaleString('fr-CA', { timeZone: 'America/Toronto' })}`
+                          `\n\n� Dernière mise à jour: ${now.toLocaleString('fr-CA', { timeZone: 'America/Toronto' })}`
 
       // Send response back to Telegram
       const response = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
@@ -72,6 +94,15 @@ export async function POST(request: NextRequest) {
     console.error('Telegram webhook error:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
+}
+
+// Helper function to get week key (YYYY-WW format)
+function getWeekKey(date: Date): string {
+  const year = date.getFullYear()
+  const firstDayOfYear = new Date(year, 0, 1)
+  const pastDaysOfYear = (date.getTime() - firstDayOfYear.getTime()) / 86400000
+  const weekNumber = Math.ceil((pastDaysOfYear + firstDayOfYear.getDay() + 1) / 7)
+  return `${year}-W${String(weekNumber).padStart(2, '0')}`
 }
 
 // Export stats for use by other modules

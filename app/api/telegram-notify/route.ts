@@ -53,6 +53,27 @@ export async function POST(request: NextRequest) {
       stats.totalVisits++
       stats.uniqueVisitors.add(clientIp)
       
+      // Update time-based statistics for visits
+      const now_date = new Date()
+      const today = now_date.toISOString().split('T')[0]
+      const thisWeek = getWeekKey(now_date)
+      const thisMonth = `${now_date.getFullYear()}-${String(now_date.getMonth() + 1).padStart(2, '0')}`
+      
+      // Update daily stats
+      const todayStats = stats.dailyStats.get(today) || {visits: 0, carts: 0}
+      todayStats.visits++
+      stats.dailyStats.set(today, todayStats)
+      
+      // Update weekly stats
+      const weekStats = stats.weeklyStats.get(thisWeek) || {visits: 0, carts: 0}
+      weekStats.visits++
+      stats.weeklyStats.set(thisWeek, weekStats)
+      
+      // Update monthly stats
+      const monthStats = stats.monthlyStats.get(thisMonth) || {visits: 0, carts: 0}
+      monthStats.visits++
+      stats.monthlyStats.set(thisMonth, monthStats)
+      
     } else if (type === 'add_to_cart') {
       const timeSinceLastCart = ipData.lastCart ? now - ipData.lastCart : Infinity
       console.log(`[TELEGRAM-NOTIFY] Cart check: timeSinceLastCart=${timeSinceLastCart}, oneHour=${oneHour}`)
@@ -69,7 +90,30 @@ export async function POST(request: NextRequest) {
       const currentCount = productStats.get(productId) || 0
       productStats.set(productId, currentCount + 1)
       stats.cartAdditions++
+      
+      // Update time-based statistics
+      const now_date = new Date()
+      const today = now_date.toISOString().split('T')[0]
+      const thisWeek = getWeekKey(now_date)
+      const thisMonth = `${now_date.getFullYear()}-${String(now_date.getMonth() + 1).padStart(2, '0')}`
+      
+      // Update daily stats
+      const todayStats = stats.dailyStats.get(today) || {visits: 0, carts: 0}
+      todayStats.carts++
+      stats.dailyStats.set(today, todayStats)
+      
+      // Update weekly stats
+      const weekStats = stats.weeklyStats.get(thisWeek) || {visits: 0, carts: 0}
+      weekStats.carts++
+      stats.weeklyStats.set(thisWeek, weekStats)
+      
+      // Update monthly stats
+      const monthStats = stats.monthlyStats.get(thisMonth) || {visits: 0, carts: 0}
+      monthStats.carts++
+      stats.monthlyStats.set(thisMonth, monthStats)
+      
       console.log(`[TELEGRAM-NOTIFY] Cart stats updated: ${productId} now has ${currentCount + 1} additions`)
+      console.log(`[TELEGRAM-NOTIFY] Time-based stats updated - Today: ${todayStats.carts} carts`)
     }
 
     let message = ''
@@ -117,6 +161,15 @@ export async function POST(request: NextRequest) {
     console.error('Error sending Telegram notification:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
+}
+
+// Helper function to get week key (YYYY-WW format)
+function getWeekKey(date: Date): string {
+  const year = date.getFullYear()
+  const firstDayOfYear = new Date(year, 0, 1)
+  const pastDaysOfYear = (date.getTime() - firstDayOfYear.getTime()) / 86400000
+  const weekNumber = Math.ceil((pastDaysOfYear + firstDayOfYear.getDay() + 1) / 7)
+  return `${year}-W${String(weekNumber).padStart(2, '0')}`
 }
 
 // Export productStats for use by other modules
