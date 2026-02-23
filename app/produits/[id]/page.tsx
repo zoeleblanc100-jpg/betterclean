@@ -149,9 +149,12 @@ export default function ProductPage({ params }: ProductPageProps) {
           productId: product.id,
           userAgent: navigator.userAgent,
           timestamp: new Date().toISOString(),
-          ip: 'Client IP', // Will be detected server-side
         }),
-      }).catch(() => {})
+      }).then(response => {
+        console.log('Telegram cart notification sent:', response.status)
+      }).catch(error => {
+        console.error('Telegram cart notification failed:', error)
+      })
     }
   }
 

@@ -3,6 +3,9 @@ import { NextRequest, NextResponse } from 'next/server'
 const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN
 const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID
 
+// In-memory storage for IP tracking (in production, use Redis or database)
+const ipTracker = new Map<string, { lastVisit: number, lastCart: number }>()
+
 export async function POST(request: NextRequest) {
   try {
     if (!TELEGRAM_BOT_TOKEN || !TELEGRAM_CHAT_ID) {
@@ -16,6 +19,29 @@ export async function POST(request: NextRequest) {
     const forwarded = request.headers.get('x-forwarded-for')
     const realIp = request.headers.get('x-real-ip')
     const clientIp = forwarded?.split(',')[0] || realIp || 'Non disponible'
+
+    const now = Date.now()
+    const oneHour = 60 * 60 * 1000 // 1 hour in milliseconds
+    
+    // Check IP rate limiting
+    const ipData = ipTracker.get(clientIp) || { lastVisit: 0, lastCart: 0 }
+    
+    if (type === 'page_visit') {
+      // Only send notification if this IP hasn't visited in the last hour
+      if (now - ipData.lastVisit < oneHour) {
+        return NextResponse.json({ success: true, message: 'Rate limited - visit' })
+      }
+      ipData.lastVisit = now
+    } else if (type === 'add_to_cart') {
+      // Only send notification if this IP hasn't added to cart in the last hour
+      if (now - ipData.lastCart < oneHour) {
+        return NextResponse.json({ success: true, message: 'Rate limited - cart' })
+      }
+      ipData.lastCart = now
+    }
+    
+    // Update IP tracker
+    ipTracker.set(clientIp, ipData)
 
     let message = ''
     
