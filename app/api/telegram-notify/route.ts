@@ -7,9 +7,6 @@ const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID
 // In-memory storage for IP tracking (in production, use Redis or database)
 const ipTracker = new Map<string, { lastVisit: number, lastCart: number }>()
 
-// Global rate limiting - prevent any notifications for 1 hour after any notification
-let lastGlobalNotification = 0
-const GLOBAL_COOLDOWN = 60 * 60 * 1000 // 1 hour
 
 export async function POST(request: NextRequest) {
   try {
@@ -26,13 +23,7 @@ export async function POST(request: NextRequest) {
     const clientIp = forwarded?.split(',')[0] || realIp || 'Non disponible'
 
     const now = Date.now()
-    
-    // GLOBAL rate limiting - prevent ALL notifications for 1 hour after any notification
-    if (now - lastGlobalNotification < GLOBAL_COOLDOWN) {
-      return NextResponse.json({ success: true, message: 'Global rate limited - too soon after last notification' })
-    }
-    
-    const oneDay = 24 * 60 * 60 * 1000 // 24 hours in milliseconds
+    const oneHour = 60 * 60 * 1000 // 1 hour in milliseconds
     
     // Check IP rate limiting
     const ipData = ipTracker.get(clientIp) || { lastVisit: 0, lastCart: 0 }
@@ -41,8 +32,8 @@ export async function POST(request: NextRequest) {
       // Track total visits
       stats.totalVisits++
       
-      // Only send notification if this IP hasn't visited in the last 24 hours
-      if (now - ipData.lastVisit < oneDay) {
+      // Only send notification if this IP hasn't visited in the last hour
+      if (now - ipData.lastVisit < oneHour) {
         return NextResponse.json({ success: true, message: 'Rate limited - visit' })
       }
       
@@ -50,8 +41,8 @@ export async function POST(request: NextRequest) {
       stats.uniqueVisitors.add(clientIp)
       ipData.lastVisit = now
     } else if (type === 'add_to_cart') {
-      // Only send notification if this IP hasn't added to cart in the last 24 hours
-      if (now - ipData.lastCart < oneDay) {
+      // Only send notification if this IP hasn't added to cart in the last hour
+      if (now - ipData.lastCart < oneHour) {
         return NextResponse.json({ success: true, message: 'Rate limited - cart' })
       }
       
@@ -62,9 +53,6 @@ export async function POST(request: NextRequest) {
     
     // Update IP tracker
     ipTracker.set(clientIp, ipData)
-    
-    // Update global notification timestamp
-    lastGlobalNotification = now
 
     let message = ''
     
