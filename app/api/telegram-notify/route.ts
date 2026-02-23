@@ -31,31 +31,30 @@ export async function POST(request: NextRequest) {
     // Check IP rate limiting
     const ipData = ipTracker.get(clientIp) || { lastVisit: 0, lastCart: 0 }
     
-    // Check rate limiting FIRST before tracking anything
+    // SIMPLE rate limiting - 1 notification per type per IP per hour
     if (type === 'page_visit') {
-      // Only send visit notification if this IP has NEVER visited ANY product
-      if (now - ipData.lastVisit < oneHour) {
+      // Check if this IP already sent a visit notification in the last hour
+      if (ipData.lastVisit > 0 && now - ipData.lastVisit < oneHour) {
         return NextResponse.json({ success: true, message: 'Rate limited - visit' })
       }
       
-      // Track total visits only if notification will be sent
-      stats.totalVisits++
-      // Track unique visitors
-      stats.uniqueVisitors.add(clientIp)
+      // Update timestamp BEFORE sending notification to prevent duplicates
       ipData.lastVisit = now
+      ipTracker.set(clientIp, ipData)
+      
+      // Track stats
+      stats.totalVisits++
+      stats.uniqueVisitors.add(clientIp)
+      
     } else if (type === 'add_to_cart') {
-      // For cart additions, only send if user hasn't been notified for visit recently
-      // This prevents spam but allows cart notifications for engaged users
-      if (now - ipData.lastVisit < oneHour && ipData.lastVisit > 0) {
-        // User was recently notified for visit, allow cart notification
-        // But check if they already added this specific product to cart
-        if (now - ipData.lastCart < oneHour) {
-          return NextResponse.json({ success: true, message: 'Rate limited - cart' })
-        }
-      } else {
-        // User hasn't visited recently, don't send cart notification
-        return NextResponse.json({ success: true, message: 'No recent visit - cart notification skipped' })
+      // Check if this IP already sent a cart notification in the last hour
+      if (ipData.lastCart > 0 && now - ipData.lastCart < oneHour) {
+        return NextResponse.json({ success: true, message: 'Rate limited - cart' })
       }
+      
+      // Update timestamp BEFORE sending notification to prevent duplicates
+      ipData.lastCart = now
+      ipTracker.set(clientIp, ipData)
       
       // Track cart additions per product
       const currentCount = productStats.get(productId) || 0
@@ -63,11 +62,7 @@ export async function POST(request: NextRequest) {
       
       // Track global cart additions
       stats.cartAdditions++
-      ipData.lastCart = now
     }
-    
-    // Update IP tracker
-    ipTracker.set(clientIp, ipData)
 
     let message = ''
     
