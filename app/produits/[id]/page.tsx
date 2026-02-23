@@ -135,10 +135,6 @@ export default function ProductPage({ params }: ProductPageProps) {
   const totalPrice = currentPrice * product.packages[selectedPackage].quantity
 
   const handleAddToCart = () => {
-    console.log('🛒 handleAddToCart called for product:', product.id)
-    alert('🛒 handleAddToCart called for product: ' + product.id)
-    alert('🔍 Product object: ' + JSON.stringify({id: product.id, name: product.name}))
-    
     for (let i = 0; i < product.packages[selectedPackage].quantity; i++) {
       addItem({
         id: `${product.id}-${product.colors[selectedColor].name}`,
@@ -152,8 +148,6 @@ export default function ProductPage({ params }: ProductPageProps) {
 
     // Telegram notification for cart addition (only for Wicked Ball M3)
     if (product.id === 'wicked-ball-m3') {
-      console.log('📱 Sending Telegram notification for cart addition...')
-      alert('📱 Sending Telegram notification for cart addition...')
       fetch('/api/telegram-notify', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -164,20 +158,7 @@ export default function ProductPage({ params }: ProductPageProps) {
           userAgent: navigator.userAgent,
           timestamp: new Date().toISOString(),
         }),
-      }).then(response => {
-        console.log('✅ Telegram cart notification response:', response.status)
-        alert('✅ Telegram response: ' + response.status)
-        return response.json()
-      }).then(data => {
-        console.log('📊 Telegram response data:', data)
-        alert('📊 Response data: ' + JSON.stringify(data))
-      }).catch(error => {
-        console.error('❌ Telegram cart notification failed:', error)
-        alert('❌ Error: ' + error.message)
-      })
-    } else {
-      console.log('⚠️ Product is not wicked-ball-m3, no notification sent. Current product:', product.id)
-      alert('⚠️ Product is not wicked-ball-m3: ' + product.id)
+      }).catch(() => {})
     }
   }
 
