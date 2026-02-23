@@ -78,10 +78,12 @@ export async function POST(request: NextRequest) {
     if (!response.ok) {
       const errorData = await response.text()
       console.error('Telegram API error:', errorData)
-      return NextResponse.json({ error: 'Failed to send notification' }, { status: 500 })
+      return NextResponse.json({ error: 'Failed to send notification', details: errorData }, { status: 500 })
     }
 
-    return NextResponse.json({ success: true })
+    const result = await response.json()
+    console.log('Telegram API success:', result)
+    return NextResponse.json({ success: true, telegram_response: result })
   } catch (error) {
     console.error('Error sending Telegram notification:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
