@@ -7,6 +7,9 @@ const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID
 // In-memory storage for IP tracking (in production, use Redis or database)
 const ipTracker = new Map<string, { lastVisit: number, lastCart: number }>()
 
+// Track cart additions per product
+const productStats = new Map<string, number>()
+
 
 export async function POST(request: NextRequest) {
   try {
@@ -30,7 +33,7 @@ export async function POST(request: NextRequest) {
     
     // Check rate limiting FIRST before tracking anything
     if (type === 'page_visit') {
-      // Only send notification if this IP hasn't visited in the last hour
+      // Only send visit notification if this IP has NEVER visited ANY product
       if (now - ipData.lastVisit < oneHour) {
         return NextResponse.json({ success: true, message: 'Rate limited - visit' })
       }
@@ -41,12 +44,24 @@ export async function POST(request: NextRequest) {
       stats.uniqueVisitors.add(clientIp)
       ipData.lastVisit = now
     } else if (type === 'add_to_cart') {
-      // Only send notification if this IP hasn't added to cart in the last hour
-      if (now - ipData.lastCart < oneHour) {
-        return NextResponse.json({ success: true, message: 'Rate limited - cart' })
+      // For cart additions, only send if user hasn't been notified for visit recently
+      // This prevents spam but allows cart notifications for engaged users
+      if (now - ipData.lastVisit < oneHour && ipData.lastVisit > 0) {
+        // User was recently notified for visit, allow cart notification
+        // But check if they already added this specific product to cart
+        if (now - ipData.lastCart < oneHour) {
+          return NextResponse.json({ success: true, message: 'Rate limited - cart' })
+        }
+      } else {
+        // User hasn't visited recently, don't send cart notification
+        return NextResponse.json({ success: true, message: 'No recent visit - cart notification skipped' })
       }
       
-      // Track cart additions only if notification will be sent
+      // Track cart additions per product
+      const currentCount = productStats.get(productId) || 0
+      productStats.set(productId, currentCount + 1)
+      
+      // Track global cart additions
       stats.cartAdditions++
       ipData.lastCart = now
     }
@@ -100,3 +115,6 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }
+
+// Export productStats for use by other modules
+export { productStats }

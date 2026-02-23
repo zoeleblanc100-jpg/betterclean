@@ -21,16 +21,28 @@ export async function POST(request: NextRequest) {
     if (body.message && body.message.text && body.message.text.startsWith('/start')) {
       const chatId = body.message.chat.id
       
+      // Import product stats from notification module
+      const { productStats } = await import('../telegram-notify/route')
+      
       // Prepare statistics message
       const uniqueVisitorCount = stats.uniqueVisitors.size
       const cartCount = stats.cartAdditions
       const totalVisitCount = stats.totalVisits
       
-      const statsMessage = `📊 *Statistiques Wicked Ball M3*\n\n` +
+      let productStatsText = ''
+      if (productStats && productStats.size > 0) {
+        productStatsText = '\n📦 *Par produit:*\n'
+        for (const [productId, count] of productStats.entries()) {
+          productStatsText += `• ${productId}: ${count} ajouts\n`
+        }
+      }
+      
+      const statsMessage = `📊 *Statistiques E-commerce*\n\n` +
                           `👥 Visiteurs uniques: ${uniqueVisitorCount}\n` +
-                          `🛒 Ajouts au panier: ${cartCount}\n` +
-                          `📈 Visites totales: ${totalVisitCount}\n\n` +
-                          `📅 Dernière mise à jour: ${new Date().toLocaleString('fr-CA', { timeZone: 'America/Toronto' })}`
+                          `🛒 Ajouts au panier total: ${cartCount}\n` +
+                          `📈 Visites totales: ${totalVisitCount}` +
+                          productStatsText +
+                          `\n📅 Dernière mise à jour: ${new Date().toLocaleString('fr-CA', { timeZone: 'America/Toronto' })}`
 
       // Send response back to Telegram
       const response = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
