@@ -186,6 +186,9 @@ export default function ProductPage({ params }: ProductPageProps) {
                   alt={product.name}
                   fill
                   className="object-cover"
+                  priority
+                  quality={95}
+                  sizes="(max-width: 768px) 90vw, (max-width: 1024px) 50vw, 40vw"
                 />
                 
                 {/* Thumbnail Images - Positioned at bottom of main image */}
@@ -205,6 +208,8 @@ export default function ProductPage({ params }: ProductPageProps) {
                         alt={`${product.name} view ${index + 1}`}
                         fill
                         className="object-cover"
+                        quality={90}
+                        sizes="48px"
                       />
                     </button>
                   ))}

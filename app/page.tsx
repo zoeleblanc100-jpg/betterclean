@@ -49,6 +49,9 @@ export default function LandingPage() {
                 alt="QuickClean Electric Scrubber"
                 fill
                 className="object-cover"
+                priority
+                quality={95}
+                sizes="(max-width: 768px) 80vw, (max-width: 1024px) 60vw, 50vw"
               />
             </div>
             <div>
@@ -97,6 +100,9 @@ export default function LandingPage() {
                 alt="QuickClean in Action"
                 fill
                 className="object-cover"
+                priority
+                quality={95}
+                sizes="(max-width: 768px) 80vw, (max-width: 1024px) 60vw, 50vw"
               />
             </div>
           </div>
