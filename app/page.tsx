@@ -50,7 +50,8 @@ export default function LandingPage() {
                 fill
                 className="object-cover"
                 priority
-                quality={95}
+                quality={100}
+                unoptimized
                 sizes="(max-width: 768px) 80vw, (max-width: 1024px) 60vw, 50vw"
               />
             </div>
@@ -101,7 +102,8 @@ export default function LandingPage() {
                 fill
                 className="object-cover"
                 priority
-                quality={95}
+                quality={100}
+                unoptimized
                 sizes="(max-width: 768px) 80vw, (max-width: 1024px) 60vw, 50vw"
               />
             </div>

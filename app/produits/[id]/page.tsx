@@ -187,7 +187,8 @@ export default function ProductPage({ params }: ProductPageProps) {
                   fill
                   className="object-cover"
                   priority
-                  quality={95}
+                  quality={100}
+                  unoptimized
                   sizes="(max-width: 768px) 90vw, (max-width: 1024px) 50vw, 40vw"
                 />
                 
@@ -208,7 +209,8 @@ export default function ProductPage({ params }: ProductPageProps) {
                         alt={`${product.name} view ${index + 1}`}
                         fill
                         className="object-cover"
-                        quality={90}
+                        quality={100}
+                        unoptimized
                         sizes="48px"
                       />
                     </button>
