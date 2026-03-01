@@ -236,7 +236,7 @@ export default function CartPage() {
         </div>
       </div>
       
-      <Footer hideGuarantees />
+      <Footer />
     </div>
   )
 }
