@@ -1,285 +1,222 @@
 "use client"
 
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect } from "react"
 import { createPortal } from "react-dom"
-import { ShoppingCart, X, Plus, Minus, Trash2, Star, Truck, Shield, Clock, MapPin } from "lucide-react"
+import { ShoppingCart, X, Plus, Minus, Truck } from "lucide-react"
 import { useCart } from "@/lib/cart-context"
-import { useI18n } from "@/lib/i18n-context"
 import Image from "next/image"
 import Link from "next/link"
 
 export default function CartDropdown() {
-  const { items, removeItem, updateQuantity, total, itemCount, paidItemCount, freeShippingProgress, freeShippingThreshold, addItem, setCartOpen, isCartOpen } = useCart()
-  const { t, formatPrice } = useI18n()
-  const [currentBannerIndex, setCurrentBannerIndex] = useState(0)
+  const { items, removeItem, updateQuantity, total, itemCount, setCartOpen, isCartOpen } = useCart()
+  const [mounted, setMounted] = useState(false)
 
-  const remainingForFreeShipping = Math.max(0, freeShippingThreshold - total)
-
-  // Rotating banner messages
-  const isFr = t.cart.title === 'Panier'
-  const bannerMessages = isFr ? [
-    { icon: <MapPin className="w-4 h-4" />, text: "Fabriqué au Canada", subtext: "Nos produits sont 100% naturels" },
-    { icon: <Truck className="w-4 h-4" />, text: "Livraison 2-3 jours", subtext: "Expédition rapide" },
-    { icon: <Shield className="w-4 h-4" />, text: "Garantie 2 mois", subtext: "100% sécurisé" }
-  ] : [
-    { icon: <MapPin className="w-4 h-4" />, text: "Made in Canada", subtext: "Our products are 100% natural" },
-    { icon: <Truck className="w-4 h-4" />, text: "Delivery 2-3 days", subtext: "Fast shipping" },
-    { icon: <Shield className="w-4 h-4" />, text: "2-month warranty", subtext: "100% secure" }
-  ]
-
-  // Auto-rotate banner every 4 seconds
   useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentBannerIndex((prev) => (prev + 1) % bannerMessages.length)
-    }, 4000)
-    return () => clearInterval(interval)
+    setMounted(true)
   }, [])
 
-  // Smart recommendation: fountain if cart has toys, toy if cart has fountain
-  const hasToy = items.some(item => item.id.includes('ball') || item.id.includes('smart'))
-  const hasFountain = items.some(item => item.id.includes('fountain') || item.id.includes('purr'))
+  if (!mounted) return null
 
-  const fountainRec = {
-    id: "purr-fountain-f1",
-    name: isFr ? "Purr Fountain F1" : "Purr Fountain F1",
-    desc: isFr ? "Fontaine à eau intelligente sans pompe" : "Smart pumpless water fountain",
-    price: 27.15,
-    originalPrice: 84.00,
-    image: "https://res.cloudinary.com/dhhdhilja/image/upload/v1770517651/purrball/e__pumpless_design.webp",
-    rating: 4.9,
-    reviews: 128,
-    href: "/fournitures",
-    badge: isFr ? "Fournitures" : "Supplies",
-  }
-
-  const toyRec = {
-    id: "smart-interactive-ball",
-    name: "Smart Interactive Ball",
-    desc: isFr ? "Balle intelligente auto-roulante" : "Smart auto-rolling ball toy",
-    price: 4.99,
-    originalPrice: 11.99,
-    image: "https://res.cloudinary.com/dhhdhilja/image/upload/v1770517783/purrball/smart_interactive_cats_ball_toy_red.png.webp",
-    rating: 4.8,
-    reviews: 325,
-    href: "/produits",
-    badge: isFr ? "Jouets" : "Toys",
-  }
-
-  // Show fountain if user has toys (or only free items), show toy if user has fountain
-  // Don't recommend items already in cart
-  const recommendation = hasFountain && hasToy ? null : hasFountain ? toyRec : fountainRec
+  const formatPrice = (price: number) => `$${price.toFixed(2)}`
 
   return (
     <>
       {/* Cart Button */}
       <button
         onClick={() => setCartOpen(!isCartOpen)}
-        className="relative p-2 text-neutral-800 hover:text-black transition-colors"
+        className="relative p-2 text-gray-600 hover:text-gray-900 transition-colors"
       >
         <ShoppingCart className="w-5 h-5" />
         {itemCount > 0 && (
-          <span className="absolute -top-1 -right-1 w-5 h-5 bg-brand text-white text-xs rounded-full flex items-center justify-center font-medium">
+          <span className="absolute -top-1 -right-1 w-5 h-5 bg-[#5a9ea8] text-white text-xs rounded-full flex items-center justify-center font-medium">
             {itemCount}
           </span>
         )}
       </button>
 
-      {/* Dropdown - rendered via portal to escape header containment */}
-      {isCartOpen && typeof document !== 'undefined' && createPortal(
+      {/* Shopify-style Cart Sidebar */}
+      {isCartOpen && createPortal(
         <>
           {/* Animation styles */}
           <style>{`
-            @keyframes cartSlideIn {
+            @keyframes slideInRight {
               from { transform: translateX(100%); }
               to { transform: translateX(0); }
             }
-            @keyframes cartFadeIn {
+            @keyframes fadeIn {
               from { opacity: 0; }
               to { opacity: 1; }
+            }
+            .cart-sidebar {
+              animation: slideInRight 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            }
+            .cart-backdrop {
+              animation: fadeIn 0.3s ease-out;
             }
           `}</style>
 
           {/* Backdrop */}
           <div 
-            className="fixed inset-0 bg-black/40" 
-            style={{ zIndex: 99998, animation: 'cartFadeIn 0.3s ease-out' }}
+            className="cart-backdrop fixed inset-0 bg-black/50 z-[9998]"
             onClick={() => setCartOpen(false)}
           />
           
-          {/* Cart Panel */}
-          <div className="fixed right-0 top-0 bottom-0 w-full sm:w-[420px] flex flex-col shadow-2xl" style={{ zIndex: 99999, backgroundColor: '#ffffff', animation: 'cartSlideIn 0.3s ease-out' }}>
+          {/* Cart Sidebar */}
+          <div className="cart-sidebar fixed right-0 top-0 bottom-0 w-full max-w-md bg-white shadow-2xl z-[9999] flex flex-col">
             {/* Header */}
-            <div className="flex-shrink-0 flex items-center justify-between px-4 py-4 border-b border-neutral-100">
-              <h3 className="font-semibold text-neutral-900 text-base">{t.cart.title} ({itemCount})</h3>
+            <div className="flex items-center justify-between p-6 border-b border-gray-200">
+              <h2 className="text-lg font-semibold text-[#1a1a1a] font-[var(--font-dm-sans)]">
+                Shopping Cart ({itemCount})
+              </h2>
               <button
                 onClick={() => setCartOpen(false)}
-                className="p-1.5 hover:bg-neutral-100 rounded-full transition-colors"
+                className="p-2 hover:bg-gray-100 rounded-full transition-colors"
               >
-                <X className="w-5 h-5 text-neutral-500" />
+                <X className="w-5 h-5 text-gray-500" />
               </button>
             </div>
 
-            {/* Free shipping banner / progress */}
-            {itemCount >= freeShippingThreshold ? (
-              <div className="flex-shrink-0 bg-green-50 px-4 py-2.5 text-center">
-                <p className="text-green-700 text-xs font-medium">{t.cart.freeShipping}</p>
+            {/* Free Shipping Progress */}
+            <div className="p-6 bg-[#d6ecf0] border-b border-gray-200">
+              <div className="flex items-center gap-2 mb-2">
+                <Truck className="w-4 h-4 text-[#5a9ea8]" />
+                <span className="text-sm font-medium text-[#1a1a1a] font-[var(--font-dm-sans)]">
+                  Free shipping on orders over $75
+                </span>
               </div>
-            ) : (
-              <div className="flex-shrink-0 bg-blue-50 px-4 py-3">
-                <p className="text-blue-800 text-xs font-medium text-center mb-2">
-                  {isFr
-                    ? `Plus que ${freeShippingThreshold - itemCount} article${freeShippingThreshold - itemCount > 1 ? 's' : ''} pour la livraison gratuite !`
-                    : `Only ${freeShippingThreshold - itemCount} more item${freeShippingThreshold - itemCount > 1 ? 's' : ''} for free shipping!`}
+              <div className="w-full bg-gray-200 rounded-full h-2">
+                <div 
+                  className="bg-[#5a9ea8] h-2 rounded-full transition-all duration-300" 
+                  style={{ width: `${Math.min((total / 75) * 100, 100)}%` }}
+                />
+              </div>
+              {total < 75 && (
+                <p className="text-xs text-gray-600 mt-2 font-[var(--font-dm-sans)]">
+                  Add ${(75 - total).toFixed(2)} more for free shipping
                 </p>
-                <div className="w-full bg-blue-200 rounded-full h-1.5">
-                  <div className="bg-blue-600 h-1.5 rounded-full transition-all" style={{ width: `${freeShippingProgress}%` }} />
-                </div>
-              </div>
-            )}
-
-            {/* Delivery estimate */}
-            <div className="flex-shrink-0 flex items-center justify-center gap-2 px-4 py-2 border-b border-neutral-100">
-              <Truck className="w-4 h-4 text-brand" />
-              <p className="text-neutral-600 text-xs">{t.cart.delivery} <span className="font-semibold text-neutral-900">{t.cart.deliveryDays}</span></p>
+              )}
             </div>
 
             {items.length === 0 ? (
               <div className="flex-1 flex flex-col items-center justify-center p-8 text-center">
-                <ShoppingCart className="w-14 h-14 mx-auto mb-4 text-neutral-200" />
-                <h3 className="text-base font-semibold text-neutral-900 mb-1">{t.cart.empty}</h3>
-                <p className="text-sm text-neutral-400 mb-6">{t.cart.emptySubtitle}</p>
-                <Link href="/produits" onClick={() => setCartOpen(false)} className="bg-brand text-white px-6 py-2.5 rounded-full text-sm font-medium hover:bg-brand-dark transition-colors">
-                  {t.cart.viewProducts}
+                <ShoppingCart className="w-16 h-16 mx-auto mb-4 text-gray-300" />
+                <h3 className="text-lg font-semibold text-[#1a1a1a] mb-2 font-[var(--font-dm-sans)]">
+                  Your cart is empty
+                </h3>
+                <p className="text-gray-600 mb-6 font-[var(--font-dm-sans)]">
+                  Add some products to get started
+                </p>
+                <Link href="/produits/quickclean-pro-1">
+                  <button 
+                    onClick={() => setCartOpen(false)}
+                    className="bg-[#5a9ea8] hover:bg-[#4a8a94] text-white px-8 py-3 rounded-full font-medium transition-colors font-[var(--font-dm-sans)]"
+                  >
+                    Shop Now
+                  </button>
                 </Link>
               </div>
             ) : (
               <>
-                {/* Scrollable items - takes all remaining space */}
-                <div className="overflow-y-auto flex-1" style={{ minHeight: '200px' }}>
-                  {items.map((item) => (
-                    <div key={item.id} className="px-4 py-4 border-b border-neutral-100">
-                      <div className="flex gap-3">
-                        <div className="relative w-16 h-16 rounded-lg overflow-hidden bg-neutral-50 flex-shrink-0">
+                {/* Cart Items */}
+                <div className="flex-1 overflow-y-auto p-6">
+                  <div className="space-y-4">
+                    {items.map((item) => (
+                      <div key={item.id} className="flex gap-4 p-4 bg-gray-50 rounded-lg">
+                        <div className="relative w-16 h-16 bg-white rounded-lg overflow-hidden flex-shrink-0">
                           <Image
-                            src={item.image || "/placeholder.svg"}
+                            src={item.image || "/product1.webp"}
                             alt={item.name}
                             fill
-                            sizes="64px"
-                            className="object-contain p-1"
+                            className="object-cover"
                           />
                         </div>
                         
-                        <div className="flex-1 min-w-0 overflow-hidden">
-                          <div className="flex justify-between items-start gap-1">
-                            <h4 className="text-sm font-medium text-neutral-900 leading-tight truncate">
-                              {item.name}
-                            </h4>
-                            <button
-                              onClick={() => removeItem(item.id)}
-                              className="p-1 text-neutral-300 hover:text-red-500 transition-colors flex-shrink-0"
-                            >
-                              <X className="w-3.5 h-3.5" />
-                            </button>
-                          </div>
+                        <div className="flex-1 min-w-0">
+                          <h4 className="font-medium text-[#1a1a1a] text-sm mb-1 font-[var(--font-dm-sans)]">
+                            {item.name}
+                          </h4>
                           {item.variant && (
-                            <p className="text-xs mt-0.5">
-                              {item.variant.includes('PAWPAW') ? (
-                                <span className="text-green-600 font-medium">{item.variant}</span>
-                              ) : (
-                                <span className="text-neutral-400">{item.variant}</span>
-                              )}
+                            <p className={`text-xs mb-2 font-[var(--font-dm-sans)] ${item.variant === 'FREE GIFT' ? 'text-green-600 font-semibold' : 'text-gray-500'}`}>
+                              {item.variant}
                             </p>
                           )}
                           
-                          <div className="flex items-center justify-between mt-3 gap-2">
+                          <div className="flex items-center justify-between">
                             {item.price === 0 ? (
-                              <span className="text-xs text-green-600 font-medium whitespace-nowrap">Cadeau × 1</span>
+                              <span className="text-xs text-green-600 font-medium font-[var(--font-dm-sans)]">x {item.quantity}</span>
                             ) : (
-                              <div className="flex items-center border border-neutral-200 rounded-lg flex-shrink-0">
+                              <div className="flex items-center border border-gray-200 rounded-lg">
                                 <button
-                                  onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                                  className="w-7 h-7 flex items-center justify-center hover:bg-neutral-50 transition-colors"
+                                  onClick={() => updateQuantity(item.id, Math.max(0, item.quantity - 1))}
+                                  className="w-8 h-8 flex items-center justify-center hover:bg-gray-100 transition-colors"
                                 >
                                   <Minus className="w-3 h-3" />
                                 </button>
-                                <span className="text-sm font-medium w-6 text-center">{item.quantity}</span>
+                                <span className="w-8 text-center text-sm font-medium font-[var(--font-dm-sans)]">
+                                  {item.quantity}
+                                </span>
                                 <button
                                   onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                                  className="w-7 h-7 flex items-center justify-center hover:bg-neutral-50 transition-colors"
+                                  className="w-8 h-8 flex items-center justify-center hover:bg-gray-100 transition-colors"
                                 >
                                   <Plus className="w-3 h-3" />
                                 </button>
                               </div>
                             )}
                             
-                            <span className="text-sm font-semibold text-neutral-900 whitespace-nowrap">
-                              {item.price === 0 ? (isFr ? 'GRATUIT' : 'FREE') : formatPrice(item.price * item.quantity)}
-                            </span>
+                            <div className="flex items-center gap-2">
+                              {item.price === 0 ? (
+                                <div className="flex items-center gap-2">
+                                  <span className="text-xs text-gray-400 line-through font-[var(--font-dm-sans)]">{formatPrice(item.originalPrice)}</span>
+                                  <span className="font-semibold text-green-600 font-[var(--font-dm-sans)]">FREE</span>
+                                </div>
+                              ) : (
+                                <>
+                                  <span className="font-semibold text-[#1a1a1a] font-[var(--font-dm-sans)]">
+                                    {formatPrice(item.price * item.quantity)}
+                                  </span>
+                                  <button
+                                    onClick={() => removeItem(item.id)}
+                                    className="p-1 text-gray-400 hover:text-red-500 transition-colors"
+                                  >
+                                    <X className="w-4 h-4" />
+                                  </button>
+                                </>
+                              )}
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
-                  ))}
-                  {/* Recommended Product */}
-                  {recommendation && (
-                  <div className="px-4 py-4 bg-neutral-50 border-t border-neutral-100">
-                    <div className="flex items-center gap-2 mb-3">
-                      <p className="text-[11px] font-semibold text-neutral-400 uppercase tracking-wider">
-                        {isFr ? 'Complétez votre commande' : 'Complete your order'}
-                      </p>
-                      <span className="text-[9px] font-semibold text-white bg-brand px-1.5 py-0.5 rounded-full uppercase tracking-wider">
-                        {isFr ? 'Recommandé' : 'Recommended'}
-                      </span>
-                    </div>
-                    <Link href={recommendation.href} onClick={() => setCartOpen(false)} className="flex gap-3 group">
-                      <div className="relative w-16 h-16 rounded-lg overflow-hidden bg-white border border-neutral-100 flex-shrink-0">
-                        <Image src={recommendation.image} alt={recommendation.name} fill sizes="64px" className="object-contain p-1" />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <span className="text-[9px] font-semibold text-brand uppercase tracking-wider">{recommendation.badge}</span>
-                        <h4 className="text-sm font-medium text-neutral-900 truncate group-hover:text-brand transition-colors">{recommendation.name}</h4>
-                        <p className="text-[11px] text-neutral-400 truncate">{recommendation.desc}</p>
-                        <div className="flex items-center gap-2 mt-1">
-                          <span className="text-xs font-bold text-red-600">{formatPrice(recommendation.price)}</span>
-                          <span className="text-[10px] text-neutral-300 line-through">{formatPrice(recommendation.originalPrice)}</span>
-                          <div className="flex items-center gap-0.5 ml-auto">
-                            <Star className="w-2.5 h-2.5 fill-yellow-400 text-yellow-400" />
-                            <span className="text-[10px] text-neutral-400">{recommendation.rating}</span>
-                          </div>
-                        </div>
-                      </div>
-                    </Link>
+                    ))}
                   </div>
-                  )}
                 </div>
 
                 {/* Footer */}
-                <div className="flex-shrink-0 border-t border-neutral-100 bg-white p-4">
-                  {/* #PAWPAW discount applied */}
-                  <div className="flex items-center gap-1.5 mb-3 bg-green-50 rounded-lg px-3 py-2">
-                    <span className="w-1.5 h-1.5 bg-green-500 rounded-full flex-shrink-0" />
-                    <span className="text-green-700 text-[11px] font-medium">{t.cart.couponAdded} <span className="font-bold">#PAWPAW</span> {t.cart.couponApplied}</span>
-                  </div>
+                <div className="border-t border-gray-200 p-6 bg-white">
                   <div className="flex items-center justify-between mb-4">
-                    <span className="text-sm text-neutral-500">{t.cart.subtotal}</span>
-                    <span className="text-lg font-semibold text-neutral-900">{formatPrice(total)}</span>
+                    <span className="text-lg font-semibold text-[#1a1a1a] font-[var(--font-dm-sans)]">
+                      Total
+                    </span>
+                    <span className="text-xl font-bold text-[#1a1a1a] font-[var(--font-dm-sans)]">
+                      {formatPrice(total)}
+                    </span>
                   </div>
-                  <p className="text-[11px] text-neutral-400 mb-3">{t.cart.taxes}</p>
                   
-                  <Link href="/checkout" className="block mb-2">
+                  <Link href="/checkout" className="block mb-3">
                     <button
                       onClick={() => setCartOpen(false)}
-                      className="w-full bg-brand hover:bg-brand-dark text-white py-3.5 rounded-full font-medium transition-all text-sm"
+                      className="w-full bg-[#5a9ea8] hover:bg-[#4a8a94] text-white py-4 rounded-full font-semibold text-lg transition-colors font-[var(--font-dm-sans)]"
                     >
-                      {t.cart.checkout} · {formatPrice(total)}
+                      Checkout
                     </button>
                   </Link>
+                  
                   <Link href="/cart" className="block">
                     <button
                       onClick={() => setCartOpen(false)}
-                      className="w-full text-neutral-500 hover:text-neutral-900 py-2 font-medium transition-colors text-xs underline underline-offset-2"
+                      className="w-full text-gray-600 hover:text-[#5a9ea8] py-2 font-medium transition-colors text-sm underline font-[var(--font-dm-sans)]"
                     >
-                      {t.cart.viewCart}
+                      View Cart
                     </button>
                   </Link>
                 </div>

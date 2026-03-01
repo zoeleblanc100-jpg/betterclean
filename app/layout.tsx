@@ -174,45 +174,6 @@ export default function RootLayout({
             `,
           }}
         />
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              (function(){
-                var Tawk_API=window.Tawk_API||{}, Tawk_LoadStart=new Date();
-                Tawk_API.customStyle = {
-                  visibility: {
-                    desktop: { position: 'br', xOffset: 15, yOffset: 15 },
-                    mobile: { position: 'br', xOffset: 10, yOffset: 10 }
-                  },
-                  zIndex: 999
-                };
-                function shouldShow(){ var p=window.location.pathname; return p==='/' || p==='/contact'; }
-                Tawk_API.onLoad = function(){
-                  var iframe = document.querySelector('iframe[title="chat widget"]');
-                  if(iframe) { iframe.style.transform = 'scale(0.8)'; iframe.style.transformOrigin = 'bottom right'; }
-                  if(!shouldShow()) Tawk_API.hideWidget();
-                };
-                window.Tawk_API = Tawk_API;
-                var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-                s1.async=true;
-                s1.src='https://embed.tawk.to/6988a0c34f57c41c38997abe/1jgur7vnh';
-                s1.charset='UTF-8';
-                s1.setAttribute('crossorigin','*');
-                s0.parentNode.insertBefore(s1,s0);
-
-                // Show/hide on client-side navigation
-                var _pushState = history.pushState;
-                history.pushState = function(){
-                  _pushState.apply(this, arguments);
-                  setTimeout(function(){ try { if(shouldShow()) Tawk_API.showWidget(); else Tawk_API.hideWidget(); } catch(e){} }, 100);
-                };
-                window.addEventListener('popstate', function(){
-                  setTimeout(function(){ try { if(shouldShow()) Tawk_API.showWidget(); else Tawk_API.hideWidget(); } catch(e){} }, 100);
-                });
-              })();
-            `,
-          }}
-        />
       </body>
     </html>
   )

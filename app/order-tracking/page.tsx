@@ -119,34 +119,6 @@ export default function OrderTracking() {
               </div>
             )}
             
-            {/* Debug Info */}
-            <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-6">
-              <h4 className="font-medium text-gray-700 mb-2">🔍 Debug Info</h4>
-              <p className="text-sm text-gray-600">
-                Recherche pour: <code className="bg-gray-200 px-1 rounded">{searchOrderId || 'Aucun'}</code>
-              </p>
-              <p className="text-sm text-gray-600">
-                Données trouvées: <code className="bg-gray-200 px-1 rounded">{orderData ? 'Oui' : 'Non'}</code>
-              </p>
-              <p className="text-sm text-gray-600">
-                Erreur: <code className="bg-gray-200 px-1 rounded">{notFound ? 'Oui' : 'Non'}</code>
-              </p>
-              <button 
-                onClick={() => {
-                  console.log('=== LOCALSTORAGE DEBUG ===')
-                  console.log('All localStorage keys:', Object.keys(localStorage))
-                  console.log('Keys starting with order_:', Object.keys(localStorage).filter(key => key.startsWith('order_')))
-                  Object.keys(localStorage).forEach(key => {
-                    if (key.startsWith('order_')) {
-                      console.log(`${key}:`, localStorage.getItem(key))
-                    }
-                  })
-                }}
-                className="mt-2 bg-blue-500 text-white px-3 py-1 rounded text-xs"
-              >
-                Debug localStorage
-              </button>
-            </div>
           </div>
 
           {/* Status Card */}

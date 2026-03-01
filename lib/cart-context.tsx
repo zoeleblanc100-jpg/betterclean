@@ -52,17 +52,17 @@ export function CartProvider({ children }: { children: ReactNode }) {
           setItems(parsedCart)
         }
       } else {
-        // Auto-add free catnip on first visit
-        const freeCatnip: CartItem = {
-          id: 'catnip-gratuit',
-          name: 'Catnip Gratuit',
+        // Auto-add free brush accessory on first visit
+        const freeBrush: CartItem = {
+          id: 'brush-accessory-free',
+          name: 'Extra Brush Head Set',
           price: 0,
-          originalPrice: 5.99,
-          image: '/catnip.webp',
+          originalPrice: 10.00,
+          image: '/product1.webp',
           quantity: 1,
-          variant: 'CADEAU GRATUIT'
+          variant: 'FREE GIFT'
         }
-        setItems([freeCatnip])
+        setItems([freeBrush])
 
         // Show welcome popup
         setTimeout(() => {
@@ -74,7 +74,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
             left: 50% !important;
             transform: translateX(-50%) !important;
             z-index: 99999 !important;
-            background: #171717 !important;
+            background: #5a9ea8 !important;
             color: white !important;
             padding: 12px 20px !important;
             border-radius: 25px !important;
@@ -84,8 +84,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
           `
           popup.innerHTML = `
             <div style="display: flex; align-items: center;">
-              <span style="margin-right: 8px;">🎁</span>
-              <span>Cadeau ajouté à votre panier !</span>
+              <span style="margin-right: 8px; font-size: 18px;">&#127873;</span>
+              <span>Free brush set added to your cart!</span>
             </div>
           `
           document.body.appendChild(popup)
@@ -115,15 +115,32 @@ export function CartProvider({ children }: { children: ReactNode }) {
     setItems(prevItems => {
       const existingItem = prevItems.find(item => item.id === product.id)
       
+      let newItems;
       if (existingItem) {
-        return prevItems.map(item =>
+        newItems = prevItems.map(item =>
           item.id === product.id
             ? { ...item, quantity: item.quantity + 1 }
             : item
         )
+      } else {
+        newItems = [...prevItems, { ...product, quantity: 1 }]
       }
       
-      return [...prevItems, { ...product, quantity: 1 }]
+      // Auto-add free brush gift if not already in cart
+      const hasFreeGift = newItems.some(item => item.id === 'brush-accessory-free')
+      if (!hasFreeGift) {
+        newItems = [...newItems, {
+          id: 'brush-accessory-free',
+          name: 'Extra Brush Head Set',
+          price: 0,
+          originalPrice: 10.00,
+          image: '/product1.webp',
+          quantity: 1,
+          variant: 'FREE GIFT'
+        }]
+      }
+      
+      return newItems
     })
     
     // Auto-open cart when item is added

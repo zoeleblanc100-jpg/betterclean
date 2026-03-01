@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { ArrowLeft, Package, RefreshCw, Clock, CheckCircle } from "lucide-react"
+import { ArrowLeft, Package, RefreshCw, Clock, CheckCircle, XCircle, ArrowRight } from "lucide-react"
 import Footer from "@/components/footer"
 import { useI18n } from "@/lib/i18n-context"
 
@@ -60,7 +60,10 @@ export default function RetoursEchangesPage() {
           </section>
 
           <section>
-            <h2 className="text-2xl font-semibold text-neutral-900 mb-6">{isFr ? '📦 Comment retourner un produit' : '📦 How to Return a Product'}</h2>
+            <h2 className="text-2xl font-semibold text-neutral-900 mb-6 flex items-center gap-2">
+              <Package className="w-6 h-6 text-[#5a9ea8]" />
+              {isFr ? 'Comment retourner un produit' : 'How to Return a Product'}
+            </h2>
             <div className="space-y-6">
               {(isFr ? [
                 { step: "1", title: "Contactez notre équipe", desc: "Envoyez-nous un email à support@happycattoys.ca avec votre numéro de commande, nom du produit, raison du retour et photos si défectueux." },
@@ -92,7 +95,10 @@ export default function RetoursEchangesPage() {
               {isFr ? 'Échanges' : 'Exchanges'}
             </h2>
             <div className="bg-blue-50 border border-blue-200 p-6 rounded-lg">
-              <h3 className="font-semibold text-blue-800 mb-3">{isFr ? '🔄 Processus d\'échange simplifié' : '🔄 Simplified Exchange Process'}</h3>
+              <h3 className="font-semibold text-blue-800 mb-3 flex items-center gap-2">
+                <RefreshCw className="w-5 h-5" />
+                {isFr ? 'Processus d\'échange simplifié' : 'Simplified Exchange Process'}
+              </h3>
               <p className="text-blue-700 mb-4">
                 {isFr ? 'Vous préférez échanger plutôt que retourner ? Nous facilitons le processus !' : 'Prefer to exchange rather than return? We make it easy!'}
               </p>
