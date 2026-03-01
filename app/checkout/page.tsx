@@ -584,30 +584,30 @@ LAST UPDATE:
   }
 
   return (
-    <div className="min-h-screen bg-white py-8 px-4">
-      <div className="max-w-6xl mx-auto">
-        <div className="mb-8">
+    <div className="min-h-screen bg-gray-50 py-4 px-4">
+      <div className="max-w-4xl mx-auto">
+        <div className="mb-6">
           <Link 
             href="/cart"
-            className="inline-flex items-center gap-2 text-neutral-400 hover:text-neutral-900 mb-4 transition-colors text-sm"
+            className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-4 transition-colors text-sm"
           >
             <ArrowLeft className="w-4 h-4" />
             {isFr ? 'Retour au panier' : 'Back to cart'}
           </Link>
-          <h1 className="text-2xl md:text-3xl font-semibold text-neutral-900 tracking-tight">
+          <h1 className="text-xl md:text-2xl font-semibold text-gray-900 text-center">
             {isFr ? 'Finaliser ma commande' : 'Complete your order'}
           </h1>
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-8">
-          <div className="space-y-6">
-            <div className="bg-white rounded-2xl p-6 border border-neutral-100">
-              <h2 className="text-base font-semibold text-neutral-900 mb-4">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="space-y-4">
+            <div className="bg-white rounded-xl p-4 shadow-sm border border-gray-200">
+              <h2 className="text-base font-semibold text-gray-900 mb-4">
                 {isFr ? 'Informations de contact' : 'Contact Information'}
               </h2>
-              <div className="space-y-4">
+              <div className="space-y-3">
                 <div>
-                  <label className="block text-xs font-medium text-neutral-500 mb-1">
+                  <label className="block text-xs font-medium text-gray-600 mb-1">
                     {isFr ? 'Adresse e-mail' : 'Email address'}
                   </label>
                   <input
@@ -615,7 +615,7 @@ LAST UPDATE:
                     name="email"
                     value={formData.email}
                     onChange={handleInputChange}
-                    className={`w-full px-3 py-2.5 border rounded-xl focus:outline-none focus:ring-2 focus:ring-neutral-900 text-sm ${formData.email && !isValidEmail(formData.email) ? 'border-red-300 focus:ring-red-500' : 'border-neutral-200'}`}
+                    className={`w-full px-3 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm ${formData.email && !isValidEmail(formData.email) ? 'border-red-300 focus:ring-red-500' : 'border-gray-300'}`}
                     required
                   />
                   {formData.email && !isValidEmail(formData.email) && (
@@ -631,9 +631,9 @@ LAST UPDATE:
               <h2 className="text-base font-semibold text-neutral-900 mb-4">
                 {isFr ? 'Adresse de livraison' : 'Shipping Address'}
               </h2>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-medium text-neutral-500 mb-1">
+                  <label className="block text-xs font-medium text-gray-600 mb-1">
                     {isFr ? 'Prénom' : 'First name'}
                   </label>
                   <input
@@ -641,12 +641,12 @@ LAST UPDATE:
                     name="firstName"
                     value={formData.firstName}
                     onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-neutral-900 text-sm"
+                    className="w-full px-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
                     required
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-neutral-500 mb-1">
+                  <label className="block text-xs font-medium text-gray-600 mb-1">
                     {isFr ? 'Nom' : 'Last name'}
                   </label>
                   <input
@@ -654,14 +654,14 @@ LAST UPDATE:
                     name="lastName"
                     value={formData.lastName}
                     onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-neutral-900 text-sm"
+                    className="w-full px-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
                     required
                   />
                 </div>
               </div>
               
-              <div className="mt-4">
-                <label className="block text-xs font-medium text-neutral-500 mb-1">
+              <div className="mt-3">
+                <label className="block text-xs font-medium text-gray-600 mb-1">
                   {isFr ? 'Adresse' : 'Address'}
                 </label>
                 <input
@@ -669,13 +669,13 @@ LAST UPDATE:
                   name="address"
                   value={formData.address}
                   onChange={handleInputChange}
-                  className="w-full px-3 py-2 border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-neutral-900 text-sm"
+                  className="w-full px-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
                   required
                 />
               </div>
 
-              <div className="mt-4">
-                <label className="block text-xs font-medium text-neutral-500 mb-1">
+              <div className="mt-3">
+                <label className="block text-xs font-medium text-gray-600 mb-1">
                   {isFr ? 'Appartement/Suite (optionnel)' : 'Apartment/Suite (optional)'}
                 </label>
                 <input
@@ -683,14 +683,14 @@ LAST UPDATE:
                   name="apartment"
                   value={formData.apartment}
                   onChange={handleInputChange}
-                  className="w-full px-3 py-2 border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-neutral-900 text-sm"
+                  className="w-full px-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
                   placeholder="Apt, suite, etc."
                 />
               </div>
               
-              <div className="grid grid-cols-2 gap-4 mt-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-3">
                 <div>
-                  <label className="block text-xs font-medium text-neutral-500 mb-1">
+                  <label className="block text-xs font-medium text-gray-600 mb-1">
                     {isFr ? 'Ville' : 'City'}
                   </label>
                   <input
@@ -698,12 +698,12 @@ LAST UPDATE:
                     name="city"
                     value={formData.city}
                     onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-neutral-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-neutral-900 text-sm"
+                    className="w-full px-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
                     required
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-neutral-500 mb-1">
+                  <label className="block text-xs font-medium text-gray-600 mb-1">
                     {isFr ? 'Code postal' : 'Postal code'}
                   </label>
                   <input
@@ -711,7 +711,7 @@ LAST UPDATE:
                     name="postalCode"
                     value={formData.postalCode}
                     onChange={handleInputChange}
-                    className={`w-full px-3 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-neutral-900 text-sm ${formData.postalCode && !isValidPostalCode(formData.postalCode, formData.country) ? 'border-red-300 focus:ring-red-500' : 'border-neutral-200'}`}
+                    className={`w-full px-3 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm ${formData.postalCode && !isValidPostalCode(formData.postalCode, formData.country) ? 'border-red-300 focus:ring-red-500' : 'border-gray-300'}`}
                     placeholder={formData.country === 'US' ? '10001' : 'H1H 3K3'}
                     maxLength={formData.country === 'US' ? 5 : 7}
                     required
@@ -997,7 +997,7 @@ LAST UPDATE:
                 <button 
                   type="submit"
                   disabled={isProcessing || !isFormValid()}
-                  className="w-full bg-brand hover:bg-brand-dark disabled:opacity-50 text-white py-3.5 px-4 rounded-full font-medium text-sm transition-all flex items-center justify-center gap-2"
+                  className="w-full bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white py-4 px-4 rounded-lg font-medium text-base transition-all flex items-center justify-center gap-2"
                 >
                   {isProcessing ? (
                     <>
@@ -1014,18 +1014,18 @@ LAST UPDATE:
               </form>
 
               {/* Payment Cards Accepted */}
-              <div className="mt-6 pt-4 border-t border-neutral-100">
-                <p className="text-[10px] text-neutral-300 text-center mb-3">{isFr ? 'Cartes acceptées' : 'Cards accepted'}</p>
-                <div className="flex items-center justify-center gap-2">
-                  <img src="https://cdn.shopify.com/shopifycloud/checkout-web/assets/0169695890db3db16bfe.svg" alt="Visa" className="h-6 w-10" />
-                  <img src="https://secure.payment-ca.com/assets/img/mastercard.svg" alt="Mastercard" className="h-6 w-10" />
-                  <img src="https://secure.payment-ca.com/assets/img/amex.svg" alt="Amex" className="h-6 w-10" />
-                  <img src="https://secure.payment-ca.com/assets/img/unionpay.svg" alt="UnionPay" className="h-6 w-10" />
+              <div className="mt-4 pt-4 border-t border-gray-200">
+                <p className="text-xs text-gray-500 text-center mb-3">{isFr ? 'Cartes acceptées' : 'Cards accepted'}</p>
+                <div className="flex items-center justify-center gap-3">
+                  <img src="https://cdn.shopify.com/shopifycloud/checkout-web/assets/0169695890db3db16bfe.svg" alt="Visa" className="h-5 w-8 opacity-70" />
+                  <img src="https://secure.payment-ca.com/assets/img/mastercard.svg" alt="Mastercard" className="h-5 w-8 opacity-70" />
+                  <img src="https://secure.payment-ca.com/assets/img/amex.svg" alt="Amex" className="h-5 w-8 opacity-70" />
+                  <img src="https://secure.payment-ca.com/assets/img/discover.svg" alt="Discover" className="h-5 w-8 opacity-70" />
                 </div>
               </div>
               
-              <div className="mt-4 text-center">
-                <div className="flex items-center justify-center gap-2 text-[10px] text-neutral-300">
+              <div className="mt-3 text-center">
+                <div className="flex items-center justify-center gap-2 text-xs text-gray-500">
                   <Truck className="w-3 h-3" />
                   {isFr ? 'Livraison 2-3 jours ouvrables' : 'Delivery 2-3 business days'}
                 </div>
