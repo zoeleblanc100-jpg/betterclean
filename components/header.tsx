@@ -41,8 +41,8 @@ export default function Header() {
 
             {/* Center - Logo and Nav */}
             <div className="flex items-center space-x-8">
-              <Link href="/" className="font-bold text-2xl text-[#1a1a1a] font-[var(--font-dm-sans)]">
-                QuickClean
+              <Link href="/" className="text-xl font-bold text-[#1a1a1a] font-[var(--font-dm-sans)]">
+                BetterClean
               </Link>
               
               {/* Desktop Navigation */}

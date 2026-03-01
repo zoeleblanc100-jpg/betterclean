@@ -54,7 +54,7 @@ export default function ReturnsPage() {
               Returns & Exchanges
             </h1>
             <p className="text-lg text-gray-600 font-[var(--font-dm-sans)]">
-              We want you to love your QuickClean. If you're not satisfied, we're here to help.
+              We want you to love your BetterClean. If you're not satisfied, we're here to help.
             </p>
           </div>
 

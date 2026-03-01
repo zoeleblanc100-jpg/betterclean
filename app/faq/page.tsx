@@ -28,9 +28,9 @@ export default function FAQPage() {
       { question: "Comment puis-je suivre ma commande ?", answer: "Dès l'expédition, vous recevrez un email avec votre numéro de suivi Postes Canada. Vous pouvez aussi utiliser notre page de suivi des commandes avec votre numéro de commande." },
     ]},
     { category: "Produit & Utilisation", questions: [
-      { question: "Sur quelles surfaces puis-je utiliser le QuickClean ?", answer: "Le QuickClean Electric Scrubber est sûr pour la plupart des surfaces domestiques : carrelage, joints, éviers, baignoires, douches, plaques de cuisson et vaisselle. Avec les différentes têtes de brosse incluses, vous pouvez passer d'un nettoyage délicat à un récurage plus intense selon la surface." },
+      { question: "Sur quelles surfaces puis-je utiliser le BetterClean ?", answer: "Le BetterClean Electric Scrubber est sûr pour la plupart des surfaces domestiques : carrelage, joints, éviers, baignoires, douches, plaques de cuisson et vaisselle. Avec les différentes têtes de brosse incluses, vous pouvez passer d'un nettoyage délicat à un récurage plus intense selon la surface." },
       { question: "Quelle est la durée de vie de la batterie ?", answer: "La batterie lithium-ion haute capacité offre jusqu'à 90 minutes d'utilisation continue. Elle se recharge complètement en 2-3 heures via le câble USB-C inclus." },
-      { question: "Le produit est-il étanche ?", answer: "Oui ! Le QuickClean a une conception étanche qui permet de l'utiliser en toute sécurité dans la douche, l'évier ou pour nettoyer des surfaces mouillées." },
+      { question: "Le produit est-il étanche ?", answer: "Oui ! Le BetterClean a une conception étanche qui permet de l'utiliser en toute sécurité dans la douche, l'évier ou pour nettoyer des surfaces mouillées." },
       { question: "Comment changer les têtes de brosse ?", answer: "C'est très simple ! Il suffit de tirer la tête de brosse actuelle et d'enclencher la nouvelle. Le système de fixation rapide ne nécessite aucun outil." },
       { question: "Quelle est la puissance du moteur ?", answer: "Le moteur haute performance génère 300 rotations par minute avec un couple puissant pour éliminer même les taches les plus tenaces sans effort de votre part." },
     ]},
@@ -38,14 +38,14 @@ export default function FAQPage() {
       { question: "Quelle est votre politique de retour ?", answer: "Nous offrons 30 jours pour retourner tout produit, sans questions posées ! Si vous n'êtes pas 100% satisfait, nous vous remboursons intégralement." },
       { question: "Puis-je retourner le produit si je l'ai utilisé ?", answer: "Bien sûr ! Tant que le produit est dans un état raisonnablement propre et que vous avez tous les accessoires, vous pouvez le retourner dans les 30 jours." },
       { question: "Combien de temps pour recevoir mon remboursement ?", answer: "Le remboursement est traité sous 3-5 jours ouvrables sur votre méthode de paiement originale une fois que nous avons reçu le produit." },
-      { question: "Que faire si mon colis arrive endommagé ?", answer: "Contactez-nous immédiatement à support@quickclean.com avec des photos. Nous organiserons un remplacement ou un remboursement complet sans que vous ayez à retourner le produit endommagé." },
+      { question: "Que faire si mon colis arrive endommagé ?", answer: "Contactez-nous immédiatement à support@betterclean.com avec des photos. Nous organiserons un remplacement ou un remboursement complet sans que vous ayez à retourner le produit endommagé." },
     ]},
     { category: "Paiement & Sécurité", questions: [
       { question: "Quels modes de paiement acceptez-vous ?", answer: "Nous acceptons Visa, Mastercard, American Express et PayPal. Tous les paiements sont sécurisés avec un cryptage SSL de niveau bancaire." },
       { question: "Mes informations de paiement sont-elles sécurisées ?", answer: "Absolument ! Nous utilisons un cryptage SSL de niveau bancaire et ne stockons jamais vos informations de carte de crédit. Tous les paiements sont traités par des processeurs sécurisés certifiés." },
     ]},
     { category: "Service Client", questions: [
-      { question: "Comment vous contacter ?", answer: "Par email à support@quickclean.com (réponse sous 24h) ou par téléphone au 1-800-QUICKCLEAN du lundi au vendredi de 9h à 17h (EST)." },
+      { question: "Comment vous contacter ?", answer: "Par email à support@betterclean.com (réponse sous 24h) ou par téléphone au 1-800-BETTERCLEAN du lundi au vendredi de 9h à 17h (EST)." },
       { question: "Dans quelle langue offrez-vous le support ?", answer: "Nous offrons un support complet en français et en anglais pour tous nos clients canadiens." },
     ]},
   ] : [
@@ -57,9 +57,9 @@ export default function FAQPage() {
       { question: "How can I track my order?", answer: "Upon shipment, you'll receive an email with your Canada Post tracking number. You can also use our order tracking page with your order number." },
     ]},
     { category: "Product & Usage", questions: [
-      { question: "What surfaces can I use the QuickClean on?", answer: "The QuickClean Electric Scrubber is safe for most household surfaces including tiles, grout, sinks, bathtubs, showers, stovetops and dishes. With the different brush heads included, you can switch between gentle cleaning and tougher scrubbing depending on the surface." },
+      { question: "What surfaces can I use the BetterClean on?", answer: "The BetterClean Electric Scrubber is safe for most household surfaces including tiles, grout, sinks, bathtubs, showers, stovetops and dishes. With the different brush heads included, you can switch between gentle cleaning and tougher scrubbing depending on the surface." },
       { question: "How long does the battery last?", answer: "The high-capacity lithium-ion battery provides up to 90 minutes of continuous use. It fully recharges in 2-3 hours via the included USB-C cable." },
-      { question: "Is the product waterproof?", answer: "Yes! The QuickClean features a waterproof design that allows you to safely use it in the shower, sink, or for cleaning wet surfaces." },
+      { question: "Is the product waterproof?", answer: "Yes! The BetterClean features a waterproof design that allows you to safely use it in the shower, sink, or for cleaning wet surfaces." },
       { question: "How do I change the brush heads?", answer: "It's very simple! Just pull off the current brush head and click the new one into place. The quick-attach system requires no tools." },
       { question: "How powerful is the motor?", answer: "The high-performance motor generates 300 RPM with powerful torque to eliminate even the toughest stains without any effort on your part." },
     ]},
@@ -67,14 +67,14 @@ export default function FAQPage() {
       { question: "What is your return policy?", answer: "We offer 30 days to return any product, no questions asked! If you're not 100% satisfied, we'll give you a full refund." },
       { question: "Can I return the product if I've used it?", answer: "Of course! As long as the product is in reasonably clean condition and you have all accessories, you can return it within 30 days." },
       { question: "How long until I receive my refund?", answer: "Refunds are processed within 3-5 business days to your original payment method once we receive the product." },
-      { question: "What if my package arrives damaged?", answer: "Contact us immediately at support@quickclean.com with photos. We'll arrange a replacement or full refund without requiring you to return the damaged product." },
+      { question: "What if my package arrives damaged?", answer: "Contact us immediately at support@betterclean.com with photos. We'll arrange a replacement or full refund without requiring you to return the damaged product." },
     ]},
     { category: "Payment & Security", questions: [
       { question: "What payment methods do you accept?", answer: "We accept Visa, Mastercard, American Express and PayPal. All payments are secured with bank-level SSL encryption." },
       { question: "Is my payment information secure?", answer: "Absolutely! We use bank-level SSL encryption and never store your credit card information. All payments are processed through certified secure processors." },
     ]},
     { category: "Customer Service", questions: [
-      { question: "How can I contact you?", answer: "By email at support@quickclean.com (response within 24h) or by phone at 1-800-QUICKCLEAN Monday to Friday 9am-5pm (EST)." },
+      { question: "How can I contact you?", answer: "By email at support@betterclean.com (response within 24h) or by phone at 1-800-BETTERCLEAN Monday to Friday 9am-5pm (EST)." },
       { question: "What languages do you offer support in?", answer: "We offer full support in both French and English for all our Canadian customers." },
     ]},
   ]
@@ -95,7 +95,7 @@ export default function FAQPage() {
             {isFr ? 'Questions Fréquentes' : 'Frequently Asked Questions'}
           </h1>
           <p className="text-neutral-400 text-sm">
-            {isFr ? 'Trouvez rapidement les réponses à vos questions sur QuickClean' : 'Quickly find answers to your questions about QuickClean'}
+            {isFr ? 'Trouvez rapidement les réponses à vos questions sur BetterClean' : 'Quickly find answers to your questions about BetterClean'}
           </p>
         </div>
 
@@ -134,6 +134,9 @@ export default function FAQPage() {
                           <p className="text-neutral-500 text-sm leading-relaxed">
                             {item.answer}
                           </p>
+                          <p className="text-neutral-500 text-sm leading-relaxed">
+                            {isFr ? 'Format: A1A 1A1' : 'Format: A1A 1A1'}
+                          </p>
                         </div>
                       )}
                     </div>
@@ -154,12 +157,12 @@ export default function FAQPage() {
           <div className="grid md:grid-cols-2 gap-4">
             <div className="bg-white rounded-xl p-5 border border-neutral-100">
               <h3 className="font-medium text-neutral-900 mb-1 text-sm">Email</h3>
-              <p className="text-neutral-500 text-xs mb-0.5">support@quickclean.com</p>
+              <p className="text-neutral-500 text-xs mb-0.5">support@betterclean.com</p>
               <p className="text-neutral-300 text-[10px]">{isFr ? 'Réponse garantie sous 24h' : 'Guaranteed response within 24h'}</p>
             </div>
             <div className="bg-white rounded-xl p-5 border border-neutral-100">
               <h3 className="font-medium text-neutral-900 mb-1 text-sm">{isFr ? 'Téléphone' : 'Phone'}</h3>
-              <p className="text-neutral-500 text-xs mb-0.5">1-800-QUICKCLEAN</p>
+              <p className="text-neutral-500 text-xs mb-0.5">1-800-BETTERCLEAN</p>
               <p className="text-neutral-300 text-[10px]">{isFr ? 'Lun-Ven 9h-17h (EST)' : 'Mon-Fri 9am-5pm (EST)'}</p>
             </div>
           </div>

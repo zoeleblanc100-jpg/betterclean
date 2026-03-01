@@ -66,8 +66,8 @@ export default function Footer() {
           </div>
           
           <div className="text-center mt-3">
-            <p className="text-xs text-gray-500 font-[var(--font-dm-sans)]">
-              © 2026 QuickClean. All rights reserved.
+            <p className="text-sm text-gray-600 font-[var(--font-dm-sans)]">
+              2024 BetterClean. All rights reserved.
             </p>
           </div>
         </div>

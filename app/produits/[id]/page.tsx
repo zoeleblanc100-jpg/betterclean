@@ -32,12 +32,12 @@ export default function ProductPage({ params }: ProductPageProps) {
 
   const product = {
     id: "quickclean-pro-1",
-    name: "QuickClean Electric Scrubber",
+    name: "BetterClean Electric Scrubber",
     rating: 4.8,
     totalReviews: 32,
     price: 26.97,
     originalPrice: 56.99,
-    description: "Cut your cleaning time in half while getting better results - QuickClean Electric Scrubber delivers professional-grade power that makes stubborn stains disappear with zero elbow grease.",
+    description: "Cut your cleaning time in half while getting better results - BetterClean Electric Scrubber delivers professional-grade power that makes stubborn stains disappear with zero elbow grease.",
     features: [
       "One Tool, Endless Possibilities",
       "Built to Last",
@@ -55,7 +55,7 @@ export default function ProductPage({ params }: ProductPageProps) {
       price: 26.97,
       originalPrice: 56.99,
       savings: 30.02,
-      description: "Single QuickClean Electric Scrubber"
+      description: "Single BetterClean Electric Scrubber"
     },
     {
       id: "buy2",
@@ -63,7 +63,7 @@ export default function ProductPage({ params }: ProductPageProps) {
       price: 49.99,
       originalPrice: 113.98,
       savings: 63.99,
-      description: "Two QuickClean Electric Scrubbers",
+      description: "Two BetterClean Electric Scrubbers",
       popular: true
     },
     {
@@ -72,18 +72,18 @@ export default function ProductPage({ params }: ProductPageProps) {
       price: 69.99,
       originalPrice: 170.97,
       savings: 100.98,
-      description: "Three QuickClean Electric Scrubbers"
+      description: "Three BetterClean Electric Scrubbers"
     }
   ]
 
   const faqs = [
     {
-      q: "What surfaces can I use the QuickClean Pro on?",
+      q: "What surfaces can I use the BetterClean Pro on?",
       a: "This scrubber is safe to use on most common household surfaces including tiles, grout, sinks, bathtubs, showers, stovetops and dishes. With the different brush heads included, you can switch between gentle cleaning and tougher scrubbing depending on the surface.",
     },
     {
       q: "Is it powerful enough to remove tough dirt and stains?",
-      a: "Yes. The high-speed rotating motor is designed to remove built-up grime, soap scum, grease and stains with minimal effort. You don't need to press hard, just let the QuickClean Pro do the work for you.",
+      a: "Yes. The high-speed rotating motor is designed to remove built-up grime, soap scum, grease and stains with minimal effort. You don't need to press hard, just let the BetterClean Pro do the work for you.",
     },
     {
       q: "How long does the battery last on a full charge?",
@@ -91,7 +91,7 @@ export default function ProductPage({ params }: ProductPageProps) {
     },
     {
       q: "Is the scrubber waterproof and safe to use around water?",
-      a: "Yes, the QuickClean Pro is built to handle wet environments like bathrooms and kitchens, boasting an IPX7 rating. It's safe to use with water and cleaning solutions, making it ideal for sinks, showers, and dishes.",
+      a: "Yes, the BetterClean Pro is built to handle wet environments like bathrooms and kitchens, boasting an IPX7 rating. It's safe to use with water and cleaning solutions, making it ideal for sinks, showers, and dishes.",
     },
     {
       q: "Does it come with replacement brush heads?",
@@ -222,7 +222,7 @@ export default function ProductPage({ params }: ProductPageProps) {
             {/* Product Info */}
             <div className="bg-white">
               <h1 className="text-3xl font-semibold mb-2 text-black">
-                QuickClean Electric Scrubber
+                BetterClean Electric Scrubber
               </h1>
               
               <div className="flex items-center gap-2 mb-4">
@@ -358,7 +358,7 @@ export default function ProductPage({ params }: ProductPageProps) {
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold mb-4 text-[#1a1a1a] font-[var(--font-dm-sans)]">
-              Why Choose QuickClean?
+              Why Choose BetterClean?
             </h2>
             <p className="text-lg text-gray-600 font-[var(--font-dm-sans)]">
               Join thousands of satisfied customers who've transformed their cleaning routine
@@ -399,7 +399,7 @@ export default function ProductPage({ params }: ProductPageProps) {
                 Proven Results
               </h3>
               <p className="text-gray-600 font-[var(--font-dm-sans)]">
-                Over 10,000+ customers have cut their cleaning time in half with QuickClean.
+                Over 10,000+ customers have cut their cleaning time in half with BetterClean.
               </p>
             </div>
           </div>
@@ -525,7 +525,7 @@ export default function ProductPage({ params }: ProductPageProps) {
               Need More Brush?
             </h2>
             <p className="text-lg text-gray-600 font-[var(--font-dm-sans)]">
-              Keep your QuickClean performing at its best with replacement brush heads
+              Keep your BetterClean performing at its best with replacement brush heads
             </p>
           </div>
 
@@ -545,7 +545,7 @@ export default function ProductPage({ params }: ProductPageProps) {
                 5 Replacement Brush Heads
               </h3>
               <p className="text-gray-600 mb-6 font-[var(--font-dm-sans)]">
-                Complete set of 5 professional brush heads for different surfaces. Keep your QuickClean scrubber working like new.
+                Complete set of 5 professional brush heads for different surfaces. Keep your BetterClean scrubber working like new.
               </p>
               <div className="flex items-center justify-center gap-3 mb-6">
                 <span className="text-3xl font-bold text-[#5a9ea8] font-[var(--font-dm-sans)]">$10.00</span>
@@ -572,7 +572,7 @@ export default function ProductPage({ params }: ProductPageProps) {
               <div className="space-y-2">
                 <div className="flex items-center justify-center gap-2 text-sm text-gray-600">
                   <Check className="w-4 h-4 text-[#5a9ea8]" />
-                  <span className="font-[var(--font-dm-sans)]">Compatible with all QuickClean models</span>
+                  <span className="font-[var(--font-dm-sans)]">Compatible with all BetterClean models</span>
                 </div>
                 <div className="flex items-center justify-center gap-2 text-sm text-gray-600">
                   <Check className="w-4 h-4 text-[#5a9ea8]" />

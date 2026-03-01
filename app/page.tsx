@@ -46,7 +46,7 @@ export default function LandingPage() {
             <div className="relative aspect-square bg-gray-100 rounded-2xl overflow-hidden w-4/5 sm:w-3/5 md:w-3/5 mx-auto">
               <Image 
                 src="/SHOP.webp" 
-                alt="QuickClean Electric Scrubber"
+                alt="BetterClean Electric Scrubber"
                 fill
                 className="object-cover"
                 priority
@@ -84,7 +84,7 @@ export default function LandingPage() {
                 Let It Do The Work
               </h2>
               <p className="text-lg text-gray-600 mb-8 leading-relaxed font-[var(--font-dm-sans)]">
-                The QuickClean Pro is engineered to be tough on the grime. Easy on you. No more scrubbing until your arms ache - just guide and let the power do the rest.
+                The BetterClean Pro is engineered to be tough on the grime. Easy on you. No more scrubbing until your arms ache - just guide and let the power do the rest.
               </p>
               <Link href="/produits/quickclean-pro-1">
                 <Button 
@@ -98,7 +98,7 @@ export default function LandingPage() {
             <div className="relative aspect-square bg-gray-100 rounded-2xl overflow-hidden w-4/5 sm:w-3/5 md:w-3/5 mx-auto">
               <Image 
                 src="/SHOP1.webp" 
-                alt="QuickClean in Action"
+                alt="BetterClean in Action"
                 fill
                 className="object-cover"
                 priority
@@ -115,7 +115,7 @@ export default function LandingPage() {
       <section className="px-4 py-16 md:py-20 bg-white">
         <div className="max-w-6xl mx-auto text-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-12 text-[#1a1a1a] font-[var(--font-dm-sans)]">
-            Why Choose QuickClean?
+            Why Choose BetterClean?
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="text-center">

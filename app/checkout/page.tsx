@@ -58,7 +58,7 @@ export default function CheckoutPage() {
     return taxRates[province] || 0
   }
 
-  // Clean phone number
+  // BetterClean phone number
   const cleanPhoneNumber = (phone: string) => {
     return phone.replace(/[^\d+]/g, '')
   }
