@@ -43,7 +43,7 @@ export default function LandingPage() {
       <section className="px-4 py-16 md:py-20 bg-white">
         <div className="max-w-6xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div className="relative aspect-square bg-gray-100 rounded-2xl overflow-hidden w-2/5 sm:w-1/2 md:w-3/5 mx-auto">
+            <div className="relative aspect-square bg-gray-100 rounded-2xl overflow-hidden w-4/5 sm:w-3/5 md:w-3/5 mx-auto">
               <Image 
                 src="/SHOP.webp" 
                 alt="QuickClean Electric Scrubber"
@@ -91,7 +91,7 @@ export default function LandingPage() {
                 </Button>
               </Link>
             </div>
-            <div className="relative aspect-square bg-gray-100 rounded-2xl overflow-hidden w-2/5 sm:w-1/2 md:w-3/5 mx-auto">
+            <div className="relative aspect-square bg-gray-100 rounded-2xl overflow-hidden w-4/5 sm:w-3/5 md:w-3/5 mx-auto">
               <Image 
                 src="/SHOP1.webp" 
                 alt="QuickClean in Action"
