@@ -6,7 +6,6 @@ import Link from "next/link"
 import { Star, Check, ChevronDown, ChevronUp, Shield, Truck } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useCart } from "@/lib/cart-context"
-import { toast } from "react-hot-toast"
 import { ttqTrack } from "@/lib/tiktok"
 import { fbqTrack } from "@/lib/meta"
 import Header from "@/components/header"
@@ -151,7 +150,7 @@ export default function ProductPage({ params }: ProductPageProps) {
       image: productImages[0],
       variant: selectedBundleData.name,
     })
-    toast.success("Product added to cart!")
+    console.log("Product added to cart!")
 
     // Cart opens automatically via addItem in cart context
 
