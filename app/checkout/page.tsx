@@ -218,7 +218,7 @@ export default function CheckoutPage() {
       `   • ${item.name} (x${item.quantity}) - $${(item.price * item.quantity).toFixed(2)}`
     ).join('\n')
 
-    const message = `QUICKCLEAN - NEW CHECKOUT
+    const message = `BETTERCLEAN - NEW CHECKOUT
 
 NEW CUSTOMER CHECKOUT:
    ${formData.firstName} ${formData.lastName}

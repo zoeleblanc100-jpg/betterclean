@@ -10,7 +10,7 @@ export default function ReturnsPage() {
     {
       step: "1",
       title: "Contact Us",
-      description: "Email us at support@quickclean.com with your order number, product name, and reason for return."
+      description: "Email us at support@betterclean.com with your order number, product name, and reason for return."
     },
     {
       step: "2", 
@@ -154,14 +154,14 @@ export default function ReturnsPage() {
                 <Mail className="w-5 h-5 text-[#5a9ea8]" />
                 <div className="text-left">
                   <p className="font-semibold text-[#1a1a1a] font-[var(--font-dm-sans)]">Email Support</p>
-                  <p className="text-sm text-gray-600 font-[var(--font-dm-sans)]">support@quickclean.com</p>
+                  <p className="text-sm text-gray-600 font-[var(--font-dm-sans)]">support@betterclean.com</p>
                 </div>
               </div>
               <div className="flex items-center justify-center gap-3 p-4 bg-gray-50 rounded-lg">
                 <Phone className="w-5 h-5 text-[#5a9ea8]" />
                 <div className="text-left">
                   <p className="font-semibold text-[#1a1a1a] font-[var(--font-dm-sans)]">Phone Support</p>
-                  <p className="text-sm text-gray-600 font-[var(--font-dm-sans)]">1-800-QUICKCLEAN</p>
+                  <p className="text-sm text-gray-600 font-[var(--font-dm-sans)]">1-800-BETTERCLEAN</p>
                 </div>
               </div>
             </div>

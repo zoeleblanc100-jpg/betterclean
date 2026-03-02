@@ -38,7 +38,7 @@ export default function Footer() {
         <div className="max-w-6xl mx-auto">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-6 text-sm">
-              <span className="font-bold text-[#1a1a1a] font-[var(--font-dm-sans)]">QuickClean</span>
+              <span className="font-bold text-[#1a1a1a] font-[var(--font-dm-sans)]">BetterClean</span>
               <Link href="/contact" className="text-gray-600 hover:text-[#5a9ea8] transition-colors font-[var(--font-dm-sans)]">
                 Contact
               </Link>
