@@ -53,16 +53,16 @@ export default function ContactPage() {
               <Mail className="w-4 h-4 text-neutral-600" />
             </div>
             <h3 className="font-medium text-neutral-900 mb-2 text-sm">Email</h3>
-            <p className="text-neutral-400 text-xs">support@purrball.ca</p>
-            <p className="text-neutral-400 text-xs">info@purrball.ca</p>
+            <p className="text-neutral-400 text-xs">support@betterclean.com</p>
+            <p className="text-neutral-400 text-xs">info@betterclean.com</p>
           </div>
           <div className="bg-white rounded-2xl shadow-sm border border-neutral-100 p-6 text-center">
             <div className="w-10 h-10 bg-neutral-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <Phone className="w-4 h-4 text-neutral-600" />
             </div>
             <h3 className="font-medium text-neutral-900 mb-2 text-sm">{isFr ? 'Téléphone' : 'Phone'}</h3>
-            <p className="text-neutral-400 text-xs">1-800-CAT-TOYS</p>
-            <p className="text-neutral-400 text-xs">(1-800-228-8697)</p>
+            <p className="text-neutral-400 text-xs">1-800-BETTERCLEAN</p>
+            <p className="text-neutral-400 text-xs">(1-800-238-8372)</p>
           </div>
           <div className="bg-white rounded-2xl shadow-sm border border-neutral-100 p-6 text-center">
             <div className="w-10 h-10 bg-neutral-100 rounded-full flex items-center justify-center mx-auto mb-4">

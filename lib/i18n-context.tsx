@@ -31,7 +31,7 @@ export function I18nProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     // Check localStorage first
-    const saved = localStorage.getItem("purrball-lang") as Locale | null
+    const saved = localStorage.getItem("betterclean-lang") as Locale | null
     if (saved && (saved === "fr" || saved === "en")) {
       setLocaleState(saved)
     } else {
@@ -43,7 +43,7 @@ export function I18nProvider({ children }: { children: ReactNode }) {
         setLocaleState("en")
       }
     }
-    const savedCountry = localStorage.getItem("purrball-country") as Country | null
+    const savedCountry = localStorage.getItem("betterclean-country") as Country | null
     if (savedCountry && (savedCountry === "CA" || savedCountry === "US")) {
       setCountryState(savedCountry)
     }
@@ -51,12 +51,12 @@ export function I18nProvider({ children }: { children: ReactNode }) {
 
   const setLocale = useCallback((newLocale: Locale) => {
     setLocaleState(newLocale)
-    localStorage.setItem("purrball-lang", newLocale)
+    localStorage.setItem("betterclean-lang", newLocale)
   }, [])
 
   const setCountry = useCallback((newCountry: Country) => {
     setCountryState(newCountry)
-    localStorage.setItem("purrball-country", newCountry)
+    localStorage.setItem("betterclean-country", newCountry)
   }, [])
 
   const toggleLocale = useCallback(() => {
