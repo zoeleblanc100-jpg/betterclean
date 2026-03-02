@@ -43,16 +43,17 @@ export default function LandingPage() {
       <section className="px-4 py-16 md:py-20 bg-white">
         <div className="max-w-6xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div className="relative aspect-square bg-gray-100 rounded-2xl overflow-hidden w-4/5 sm:w-3/5 md:w-3/5 mx-auto">
+            <div className="relative w-full h-auto">
               <Image 
-                src="/SHOP.webp" 
+                src="/image_amelioree.png" 
                 alt="BetterClean Electric Scrubber"
-                fill
-                className="object-cover"
+                width={600}
+                height={400}
+                className="w-full h-auto object-contain"
                 priority
                 quality={100}
                 unoptimized
-                sizes="(max-width: 768px) 80vw, (max-width: 1024px) 60vw, 50vw"
+                sizes="(max-width: 768px) 100vw, (max-width: 1024px) 60vw, 50vw"
               />
             </div>
             <div>
@@ -95,16 +96,17 @@ export default function LandingPage() {
                 </Button>
               </Link>
             </div>
-            <div className="relative aspect-square bg-gray-100 rounded-2xl overflow-hidden w-4/5 sm:w-3/5 md:w-3/5 mx-auto">
+            <div className="relative w-full h-auto">
               <Image 
-                src="/SHOP1.webp" 
+                src="/image_amelioree.png" 
                 alt="BetterClean in Action"
-                fill
-                className="object-cover"
+                width={600}
+                height={400}
+                className="w-full h-auto object-contain"
                 priority
                 quality={100}
                 unoptimized
-                sizes="(max-width: 768px) 80vw, (max-width: 1024px) 60vw, 50vw"
+                sizes="(max-width: 768px) 100vw, (max-width: 1024px) 60vw, 50vw"
               />
             </div>
           </div>
