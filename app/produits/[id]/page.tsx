@@ -178,9 +178,9 @@ export default function ProductPage({ params }: ProductPageProps) {
         <div className="max-w-6xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
             {/* Product Image Gallery */}
-            <div className="space-y-4">
+            <div className="relative">
               {/* Main Image */}
-              <div className="aspect-square bg-white rounded-lg overflow-hidden">
+              <div className="aspect-square bg-white rounded-lg overflow-hidden relative">
                 <Image 
                   src={productImages[selectedImageIndex]} 
                   alt={product.name}
@@ -191,31 +191,31 @@ export default function ProductPage({ params }: ProductPageProps) {
                   unoptimized
                   sizes="(max-width: 768px) 90vw, (max-width: 1024px) 50vw, 40vw"
                 />
-              </div>
-              
-              {/* Thumbnail Images - Below main image with horizontal scroll */}
-              <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
-                {productImages.map((image, index) => (
-                  <button
-                    key={index}
-                    onClick={() => setSelectedImageIndex(index)}
-                    className={`relative w-16 h-16 bg-white rounded-lg overflow-hidden flex-shrink-0 border-2 transition-all ${
-                      selectedImageIndex === index 
-                        ? 'border-black' 
-                        : 'border-gray-300'
-                    }`}
-                  >
-                    <Image 
-                      src={image}
-                      alt={`${product.name} view ${index + 1}`}
-                      fill
-                      className="object-cover"
-                      quality={100}
-                      unoptimized
-                      sizes="64px"
-                    />
-                  </button>
-                ))}
+                
+                {/* Thumbnail Images - Positioned at bottom of main image */}
+                <div className="absolute bottom-4 left-4 flex gap-2">
+                  {productImages.map((image, index) => (
+                    <button
+                      key={index}
+                      onClick={() => setSelectedImageIndex(index)}
+                      className={`relative w-12 h-12 bg-white rounded-lg overflow-hidden flex-shrink-0 border-2 transition-all ${
+                        selectedImageIndex === index 
+                          ? 'border-black' 
+                          : 'border-white/80'
+                      }`}
+                    >
+                      <Image 
+                        src={image}
+                        alt={`${product.name} view ${index + 1}`}
+                        fill
+                        className="object-cover"
+                        quality={100}
+                        unoptimized
+                        sizes="48px"
+                      />
+                    </button>
+                  ))}
+                </div>
               </div>
             </div>
 
