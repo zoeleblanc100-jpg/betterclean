@@ -98,7 +98,7 @@ export default function LandingPage() {
             </div>
             <div className="relative w-full h-auto">
               <Image 
-                src="/product_image_2.png" 
+                src="/SHOP1.webp" 
                 alt="BetterClean in Action"
                 width={600}
                 height={400}
