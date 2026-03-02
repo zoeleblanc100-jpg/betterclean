@@ -49,7 +49,7 @@ export default function LandingPage() {
                 alt="BetterClean Electric Scrubber"
                 width={600}
                 height={400}
-                className="w-full h-auto object-contain"
+                className="w-full h-auto object-contain rounded-3xl"
                 priority
                 quality={100}
                 unoptimized
@@ -102,7 +102,7 @@ export default function LandingPage() {
                 alt="BetterClean in Action"
                 width={600}
                 height={400}
-                className="w-full h-auto object-contain"
+                className="w-full h-auto object-contain rounded-3xl"
                 priority
                 quality={100}
                 unoptimized
