@@ -192,29 +192,31 @@ export default function ProductPage({ params }: ProductPageProps) {
                   sizes="(max-width: 768px) 90vw, (max-width: 1024px) 50vw, 40vw"
                 />
                 
-                {/* Thumbnail Images - Positioned at bottom of main image */}
-                <div className="absolute bottom-4 left-4 flex gap-2">
-                  {productImages.map((image, index) => (
-                    <button
-                      key={index}
-                      onClick={() => setSelectedImageIndex(index)}
-                      className={`relative w-12 h-12 bg-white rounded-lg overflow-hidden flex-shrink-0 border-2 transition-all ${
-                        selectedImageIndex === index 
-                          ? 'border-black' 
-                          : 'border-white/80'
-                      }`}
-                    >
-                      <Image 
-                        src={image}
-                        alt={`${product.name} view ${index + 1}`}
-                        fill
-                        className="object-cover"
-                        quality={100}
-                        unoptimized
-                        sizes="48px"
-                      />
-                    </button>
-                  ))}
+                {/* Thumbnail Images - Positioned at bottom with horizontal scroll */}
+                <div className="absolute bottom-4 left-4 right-4">
+                  <div className="flex gap-2 overflow-x-auto scrollbar-hide pb-1" style={{scrollbarWidth: 'none', msOverflowStyle: 'none'}}>
+                    {productImages.map((image, index) => (
+                      <button
+                        key={index}
+                        onClick={() => setSelectedImageIndex(index)}
+                        className={`relative w-12 h-12 bg-white rounded-lg overflow-hidden flex-shrink-0 border-2 transition-all ${
+                          selectedImageIndex === index 
+                            ? 'border-black' 
+                            : 'border-white/80'
+                        }`}
+                      >
+                        <Image 
+                          src={image}
+                          alt={`${product.name} view ${index + 1}`}
+                          fill
+                          className="object-cover"
+                          quality={100}
+                          unoptimized
+                          sizes="48px"
+                        />
+                      </button>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
