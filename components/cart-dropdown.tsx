@@ -81,18 +81,18 @@ export default function CartDropdown() {
               <div className="flex items-center gap-2 mb-2">
                 <Truck className="w-4 h-4 text-[#5a9ea8]" />
                 <span className="text-sm font-medium text-[#1a1a1a] font-[var(--font-dm-sans)]">
-                  Free shipping on orders over $75
+                  {itemCount >= 2 ? "🎉 Free shipping unlocked!" : "Free shipping with 2+ items"}
                 </span>
               </div>
               <div className="w-full bg-gray-200 rounded-full h-2">
                 <div 
                   className="bg-[#5a9ea8] h-2 rounded-full transition-all duration-300" 
-                  style={{ width: `${Math.min((total / 75) * 100, 100)}%` }}
+                  style={{ width: `${Math.min((itemCount / 2) * 100, 100)}%` }}
                 />
               </div>
-              {total < 75 && (
+              {itemCount < 2 && (
                 <p className="text-xs text-gray-600 mt-2 font-[var(--font-dm-sans)]">
-                  Add ${(75 - total).toFixed(2)} more for free shipping
+                  Add {2 - itemCount} more item{2 - itemCount > 1 ? 's' : ''} for free shipping
                 </p>
               )}
             </div>
