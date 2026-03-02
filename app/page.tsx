@@ -28,7 +28,7 @@ export default function LandingPage() {
           <p className="text-lg md:text-xl mb-8 max-w-2xl mx-auto text-gray-600 font-[var(--font-dm-sans)]">
             A powerful electric scrubber that removes grime fast, without the effort.
           </p>
-          <Link href="/produits/quickclean-pro-1">
+          <Link href="/produits/betterclean-pro-1">
             <Button 
               size="lg" 
               className="bg-[#5a9ea8] hover:bg-[#4a8a94] text-white px-8 py-4 text-lg font-semibold rounded-full"
@@ -63,7 +63,7 @@ export default function LandingPage() {
               <p className="text-lg text-gray-600 mb-8 leading-relaxed font-[var(--font-dm-sans)]">
                 Built to handle the mess for you. Deep cleaning has never been this easy. The powerful motor does all the hard work while you guide it effortlessly.
               </p>
-              <Link href="/produits/quickclean-pro-1">
+              <Link href="/produits/betterclean-pro-1">
                 <Button 
                   size="lg" 
                   className="bg-[#5a9ea8] hover:bg-[#4a8a94] text-white px-8 py-4 text-lg font-semibold rounded-full"
@@ -87,7 +87,7 @@ export default function LandingPage() {
               <p className="text-lg text-gray-600 mb-8 leading-relaxed font-[var(--font-dm-sans)]">
                 The BetterClean Pro is engineered to be tough on the grime. Easy on you. No more scrubbing until your arms ache - just guide and let the power do the rest.
               </p>
-              <Link href="/produits/quickclean-pro-1">
+              <Link href="/produits/betterclean-pro-1">
                 <Button 
                   size="lg" 
                   className="bg-[#5a9ea8] hover:bg-[#4a8a94] text-white px-8 py-4 text-lg font-semibold rounded-full"

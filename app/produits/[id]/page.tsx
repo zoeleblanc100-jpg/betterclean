@@ -31,7 +31,7 @@ export default function ProductPage({ params }: ProductPageProps) {
   ]
 
   const product = {
-    id: "quickclean-pro-1",
+    id: "betterclean-pro-1",
     name: "BetterClean Electric Scrubber",
     rating: 4.8,
     totalReviews: 32,
@@ -125,7 +125,7 @@ export default function ProductPage({ params }: ProductPageProps) {
     })
 
     // Telegram notification for page visit
-    if (product.id === 'quickclean-pro-1') {
+    if (product.id === 'betterclean-pro-1') {
       fetch('/api/telegram-notify', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -155,7 +155,7 @@ export default function ProductPage({ params }: ProductPageProps) {
     // Cart opens automatically via addItem in cart context
 
     // Telegram notification for cart addition
-    if (product.id === 'quickclean-pro-1') {
+    if (product.id === 'betterclean-pro-1') {
       fetch('/api/telegram-notify', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

@@ -106,7 +106,7 @@ export default function CartDropdown() {
                 <p className="text-gray-600 mb-6 font-[var(--font-dm-sans)]">
                   Add some products to get started
                 </p>
-                <Link href="/produits/quickclean-pro-1">
+                <Link href="/produits/betterclean-pro-1">
                   <button 
                     onClick={() => setCartOpen(false)}
                     className="bg-[#5a9ea8] hover:bg-[#4a8a94] text-white px-8 py-3 rounded-full font-medium transition-colors font-[var(--font-dm-sans)]"

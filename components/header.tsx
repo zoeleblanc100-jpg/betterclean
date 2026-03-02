@@ -14,7 +14,7 @@ export default function Header() {
 
   const menuItems = [
     { label: "Home", href: "/" },
-    { label: "Shop", href: "/produits/quickclean-pro-1" },
+    { label: "Shop", href: "/produits/betterclean-pro-1" },
     { label: "Contact", href: "/contact" },
   ]
 
