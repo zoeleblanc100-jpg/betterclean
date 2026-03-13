@@ -226,7 +226,7 @@ export default function CartPage() {
             </div>
             <div className="flex flex-col items-center">
               <Shield className="w-6 h-6 mb-2" />
-              <span className="text-sm font-medium">{isFr ? 'Garantie 2 mois' : '2-month warranty'}</span>
+              <span className="text-sm font-medium">{isFr ? 'Garantie 1 mois' : '1-month warranty'}</span>
             </div>
             <div className="flex flex-col items-center">
               <RotateCcw className="w-6 h-6 mb-2" />
