@@ -10,6 +10,7 @@ import { ttqTrack } from "@/lib/tiktok"
 import { fbqTrack } from "@/lib/meta"
 import Header from "@/components/header"
 import Footer from "@/components/footer"
+import ReviewsSection from "@/components/reviews-section"
 
 interface ProductPageProps {
   params: Promise<{ id: string }>
@@ -590,6 +591,10 @@ export default function ProductPage({ params }: ProductPageProps) {
         </div>
       </section>
       
+      {/* Reviews Section */}
+      <ReviewsSection />
+
+      {/* Footer */}
       <Footer />
     </div>
   )
