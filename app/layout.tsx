@@ -123,6 +123,18 @@ export default function RootLayout({
           <img height="1" width="1" 
             src="https://www.facebook.com/tr?id=1215963014054108&ev=PageView&noscript=1"/>
         </noscript>
+        {/* Google tag (gtag.js) */}
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-2J8V2Z8EN8"></script>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'G-2J8V2Z8EN8');
+            `,
+          }}
+        />
       </head>
       <body
         className={`${poppins.variable} ${playfair.variable} antialiased`}
