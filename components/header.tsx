@@ -52,7 +52,7 @@ export default function Header() {
     <>
       {/* Announcement Bar */}
       <div className="bg-[#d6ecf0] text-[#1a1a1a] text-center py-2 px-4 text-sm font-medium">
-        {isFr ? "Livraison gratuite au Canada - Garantie 30 jours" : "🇨🇦 Canada Free Shipping - 30-Day Guarantee"}
+        {isFr ? "🇨🇦 Livraison gratuite au Canada - Garantie 30 jours" : "🇨🇦 Canada Free Shipping - 30-Day Guarantee"}
       </div>
       
       <nav className="sticky top-0 z-50 bg-white border-b border-gray-200 shadow-sm">
