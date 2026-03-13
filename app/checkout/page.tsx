@@ -12,7 +12,7 @@ import { ttqTrack, ttqIdentify } from "@/lib/tiktok"
 import { fbqTrack, fbqIdentify } from "@/lib/meta"
 
 export default function CheckoutPage() {
-  const { items, total, shipping, clearCart } = useCart()
+  const { items, total, shipping, clearCart, updateQuantity } = useCart()
   const { locale, formatPrice } = useI18n()
   const isFr = locale === 'fr'
   
@@ -851,9 +851,37 @@ LAST UPDATE:
                         {item.name}
                       </h4>
                       <div className="flex justify-between items-center">
-                        <span className="text-xs text-neutral-400">
-                          {isFr ? 'Qté' : 'Qty'}: {item.quantity}
-                        </span>
+                        <div className="flex items-center gap-2">
+                          <span className="text-xs text-neutral-400">
+                            {isFr ? 'Qté' : 'Qty'}:
+                          </span>
+                          <div className="flex items-center gap-1">
+                            <button
+                              type="button"
+                              onClick={() => {
+                                if (item.quantity > 1) {
+                                  updateQuantity(item.id, item.quantity - 1)
+                                }
+                              }}
+                              className="w-5 h-5 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-xs"
+                              disabled={item.quantity <= 1}
+                            >
+                              -
+                            </button>
+                            <span className="text-xs font-medium w-6 text-center">
+                              {item.quantity}
+                            </span>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                updateQuantity(item.id, item.quantity + 1)
+                              }}
+                              className="w-5 h-5 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-xs"
+                            >
+                              +
+                            </button>
+                          </div>
+                        </div>
                         <span className="text-sm font-medium">
                           {formatPrice(item.price * item.quantity)}
                         </span>
