@@ -80,8 +80,8 @@ export default function OrderTracking() {
     <main className="min-h-screen bg-white">
       <Header />
       
-      <div className="py-12 px-4">
-        <div className="max-w-4xl mx-auto">
+      <div className="py-6 sm:py-12 px-3 sm:px-4">
+        <div className="max-w-4xl mx-auto w-full">
           {/* Header */}
           <div className="text-center mb-12">
             <h1 className="text-3xl md:text-4xl text-neutral-900 mb-4">
@@ -92,25 +92,25 @@ export default function OrderTracking() {
             </p>
             
             {/* Search Box */}
-            <div className="max-w-md mx-auto mb-8">
-              <div className="flex gap-2">
-                <input
-                  type="text"
-                  placeholder="Ex: PB1738782123456"
-                  value={searchOrderId}
-                  onChange={(e) => setSearchOrderId(e.target.value.toUpperCase())}
-                  className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-900 focus:border-transparent"
-                  onKeyPress={(e) => e.key === 'Enter' && searchOrder()}
-                />
-                <button
-                  onClick={searchOrder}
-                  className="bg-brand hover:bg-brand-dark text-white px-6 py-3 rounded-lg font-medium transition-colors flex items-center gap-2"
-                >
-                  <Search className="w-4 h-4" />
-                  {isFr ? 'Rechercher' : 'Search'}
-                </button>
-              </div>
+          <div className="max-w-md mx-auto mb-8 px-1">
+            <div className="flex flex-col sm:flex-row gap-2">
+              <input
+                type="text"
+                placeholder="Ex: PB1738782123456"
+                value={searchOrderId}
+                onChange={(e) => setSearchOrderId(e.target.value.toUpperCase())}
+                className="flex-1 px-3 sm:px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-neutral-900 focus:border-transparent text-sm sm:text-base"
+                onKeyPress={(e) => e.key === 'Enter' && searchOrder()}
+              />
+              <button
+                onClick={searchOrder}
+                className="bg-brand hover:bg-brand-dark text-white px-4 sm:px-6 py-3 rounded-lg font-medium transition-colors flex items-center justify-center gap-2 whitespace-nowrap text-sm sm:text-base"
+              >
+                <Search className="w-4 h-4" />
+                {isFr ? 'Rechercher' : 'Search'}
+              </button>
             </div>
+          </div>
             
             {notFound && (
               <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
@@ -275,23 +275,23 @@ export default function OrderTracking() {
           )}
 
           {/* Contact Support */}
-          <div className="bg-white rounded-xl p-4 sm:p-6 text-center">
-            <h3 className="text-lg font-semibold text-neutral-900 mb-2">
+          <div className="bg-white rounded-xl p-3 sm:p-6 text-center mx-1 sm:mx-0">
+            <h3 className="text-base sm:text-lg font-semibold text-neutral-900 mb-2">
               {isFr ? "Besoin d'aide ?" : 'Need help?'}
             </h3>
-            <p className="text-neutral-400 mb-4">
+            <p className="text-neutral-400 mb-4 text-sm sm:text-base">
               {isFr ? 'Notre équipe est là pour vous aider avec votre commande' : 'Our team is here to help with your order'}
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 justify-center">
               <a
                 href="/contact"
-                className="bg-brand hover:bg-brand-dark text-white px-6 py-3 rounded-lg font-medium transition-colors"
+                className="bg-brand hover:bg-brand-dark text-white px-4 sm:px-6 py-2.5 sm:py-3 rounded-lg font-medium transition-colors text-sm sm:text-base"
               >
                 {isFr ? 'Contacter le support' : 'Contact support'}
               </a>
               <a
                 href="/faq"
-                className="border border-brand text-brand hover:bg-brand hover:text-white px-6 py-3 rounded-lg font-medium transition-colors"
+                className="border border-brand text-brand hover:bg-brand hover:text-white px-4 sm:px-6 py-2.5 sm:py-3 rounded-lg font-medium transition-colors text-sm sm:text-base"
               >
                 {isFr ? 'Voir la FAQ' : 'View FAQ'}
               </a>
