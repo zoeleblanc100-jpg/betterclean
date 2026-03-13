@@ -554,6 +554,51 @@ LAST UPDATE:
       order_id: orderNumber,
     })
     
+    // Meta Conversions API Purchase event (server-side)
+    try {
+      const purchaseEvent = {
+        event_name: 'Purchase',
+        event_time: Math.floor(Date.now() / 1000),
+        action_source: 'website',
+        user_data: {
+          em: [formData.email.toLowerCase()],
+          ph: [formData.phone?.replace(/\D/g, '') || null],
+          fn: [formData.firstName.toLowerCase()],
+          ln: [formData.lastName.toLowerCase()],
+          ct: [formData.city.toLowerCase()],
+          st: [formData.province],
+          country: [formData.country],
+          zp: [formData.postalCode],
+        },
+        custom_data: {
+          currency: 'CAD',
+          value: Number(total).toFixed(2),
+          order_id: orderNumber,
+          content_ids: items.map(item => item.id),
+          content_type: 'product',
+          contents: items.map(item => ({
+            id: item.id,
+            quantity: item.quantity,
+            item_price: Number(item.price).toFixed(2),
+          })),
+        },
+      }
+      
+      const response = await fetch('/api/meta-conversions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(purchaseEvent),
+      })
+      
+      if (response.ok) {
+        console.log('Meta Conversions API Purchase event sent successfully')
+      } else {
+        console.error('Failed to send Meta Conversions API Purchase event')
+      }
+    } catch (error) {
+      console.error('Meta Conversions API error:', error)
+    }
+    
     // TikTok CompletePayment event
     const cpEventId = `cp_${Date.now()}`
     ttqTrack('CompletePayment', { value: Number(total) || 0, currency: 'CAD', contents })
