@@ -423,7 +423,7 @@ export default function ProductPage({ params }: ProductPageProps) {
               Why Choose BetterClean?
             </h2>
             <p className="text-lg text-gray-600 font-[var(--font-dm-sans)]">
-              Join thousands of satisfied customers who've transformed their cleaning routine
+              {isFr ? 'Rejoignez des milliers de clients satisfaits qui ont transformé leur routine de nettoyage' : 'Join thousands of satisfied customers who\'ve transformed their cleaning routine'}
             </p>
           </div>
 
@@ -461,7 +461,7 @@ export default function ProductPage({ params }: ProductPageProps) {
                 Proven Results
               </h3>
               <p className="text-gray-600 font-[var(--font-dm-sans)]">
-                Over 10,000+ customers have cut their cleaning time in half with BetterClean.
+                {isFr ? 'Plus de 1000 clients ont réduit leur temps de nettoyage de moitié avec BetterClean.' : 'Over 10,000+ customers have cut their cleaning time in half with BetterClean.'}
               </p>
             </div>
           </div>
@@ -469,7 +469,7 @@ export default function ProductPage({ params }: ProductPageProps) {
           {/* Customer Testimonials */}
           <div className="bg-white rounded-2xl p-8 mb-12">
             <h3 className="text-2xl font-bold text-center mb-8 text-[#1a1a1a] font-[var(--font-dm-sans)]">
-              What Our Customers Say
+              {isFr ? 'Ce que disent nos clients' : 'What Our Customers Say'}
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="text-center">
