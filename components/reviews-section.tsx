@@ -78,10 +78,10 @@ export default function ReviewsSection() {
         {/* Header */}
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 text-[#1a1a1a] font-[var(--font-dm-sans)]">
-            Loved by Thousands
+            {isFr ? 'Apprécié par des milliers' : 'Loved by Thousands'}
           </h2>
           <p className="text-lg text-gray-600 mb-6 max-w-2xl mx-auto font-[var(--font-dm-sans)]">
-            Join 100,000+ happy customers who transformed their cleaning routine
+            {isFr ? 'Rejoignez plus de 100 000 clients satisfaits qui ont transformé leur routine de nettoyage' : 'Join 100,000+ happy customers who transformed their cleaning routine'}
           </p>
           
           {/* Rating Summary */}

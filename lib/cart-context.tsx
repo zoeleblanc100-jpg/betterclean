@@ -45,7 +45,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     setIsClient(true)
     try {
-      const savedCart = localStorage.getItem("happy-cat-toys-cart")
+      const savedCart = localStorage.getItem("bettercleans-cart")
       if (savedCart) {
         const parsedCart = JSON.parse(savedCart)
         if (Array.isArray(parsedCart)) {
@@ -97,14 +97,14 @@ export function CartProvider({ children }: { children: ReactNode }) {
         }, 1500)
       }
     } catch {
-      localStorage.removeItem("happy-cat-toys-cart")
+      localStorage.removeItem("bettercleans-cart")
     }
   }, [])
 
   useEffect(() => {
     if (isClient) {
       try {
-        localStorage.setItem("happy-cat-toys-cart", JSON.stringify(items))
+        localStorage.setItem("bettercleans-cart", JSON.stringify(items))
       } catch {
         // Silent fail
       }
@@ -198,7 +198,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   const clearCart = () => {
     setItems([])
-    localStorage.removeItem("happy-cat-toys-cart")
+    localStorage.removeItem("bettercleans-cart")
   }
 
   const subtotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0)
