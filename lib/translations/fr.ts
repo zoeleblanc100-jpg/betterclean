@@ -138,7 +138,7 @@ export const fr = {
     subtitle: "Tout ce dont votre maison a besoin pour un système de nettoyage complet.",
     collection: "Collection",
     new: "Nouveau",
-    productSubtitle: "La fontaine à eau intelligente sans pompe qui garde votre chat hydraté avec de l'eau fraîche et filtrée.",
+    productSubtitle: "Le système de nettoyage intelligent sans pompe qui garde votre maison propre avec une puissance et une efficacité exceptionnelles.",
     save: "Économisez",
     reviews: "avis",
     discount: "Rabais",

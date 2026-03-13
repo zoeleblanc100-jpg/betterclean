@@ -135,10 +135,10 @@ export const en = {
   // Fournitures Page
   fournituresPage: {
     title: "Supplies",
-    subtitle: "Everything your cat needs for a healthy and happy life.",
+    subtitle: "Everything your home needs for a complete cleaning system.",
     collection: "Collection",
     new: "New",
-    productSubtitle: "The smart pumpless water fountain that keeps your cat hydrated with fresh, filtered water.",
+    productSubtitle: "The smart pumpless cleaning system that keeps your home clean with exceptional power and efficiency.",
     save: "Save",
     reviews: "reviews",
     discount: "Discount",

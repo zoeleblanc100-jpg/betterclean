@@ -66,7 +66,7 @@ export default function FournituresPage() {
       <section className="relative h-[200px] md:h-[320px] overflow-hidden">
         <Image
           src="https://res.cloudinary.com/dhhdhilja/image/upload/v1770517763/purrball/petfount.webp"
-          alt="Fournitures pour chats"
+          alt="Accessoires BetterClean"
           fill
           sizes="100vw"
           className="object-cover object-center"
@@ -93,7 +93,7 @@ export default function FournituresPage() {
               {t.fournituresPage.new}
             </span>
             <h2 className="text-2xl md:text-4xl font-bold text-neutral-900 tracking-tight mb-3">
-              Purr Fountain F1
+              BetterClean System F1
             </h2>
             <p className="text-neutral-500 text-sm md:text-base max-w-xl mx-auto">
               {t.fournituresPage.productSubtitle}
