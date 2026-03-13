@@ -1,19 +1,19 @@
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Contactez-nous | Service Client Purrball',
-  description: 'Contactez l\'equipe Purrball pour toute question sur nos jouets pour chat, commandes, livraison ou retours. Service client rapide et amical. Boutique chat en ligne Quebec.',
+  title: 'Contact Us | BetterClean Customer Support',
+  description: 'Contact BetterClean support for questions about our electric scrubber, orders, shipping or returns. Fast and friendly customer service. Free shipping Canada.',
   keywords: [
-    'contact purrball', 'service client chat', 'boutique chat en ligne Quebec',
-    'questions jouets chat', 'support client', 'contact cat store Canada',
+    'contact BetterClean', 'customer support', 'electric scrubber help',
+    'order questions', 'shipping support', 'returns help Canada',
   ],
   alternates: {
     canonical: '/contact',
   },
   openGraph: {
-    title: 'Contactez-nous | Purrball - Service Client',
-    description: 'Contactez notre equipe pour toute question. Service client rapide et amical.',
-    url: 'https://purrball.ca/contact',
+    title: 'Contact Us | BetterClean - Customer Support',
+    description: 'Contact our team for any questions. Fast and friendly customer service.',
+    url: 'https://bettercleans.ca/contact',
   },
 }
 

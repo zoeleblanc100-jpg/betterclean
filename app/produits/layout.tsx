@@ -1,20 +1,21 @@
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Jouets pour Chat | Jouets Interactifs & Stimulants',
-  description: 'Decouvrez nos jouets premium pour chats: balles interactives, jouets stimulants, jouets pour chat d\'interieur et chaton. Livraison gratuite au Canada. Jouets enrichissement chat.',
+  title: 'BetterClean Pro Electric Scrubber | Buy Power Scrubber Online',
+  description: 'Buy BetterClean Pro electric scrubber online. 300 RPM power scrubber for bathroom, tiles, grout. Waterproof, rechargeable, 90min battery. Free shipping Canada.',
   keywords: [
-    'jouets pour chat', 'jouets chat interactifs', 'jouets stimulants chat', 'balle jouet chat',
-    'jouets pour chat interieur', 'jouets pour chaton', 'jouets enrichissement chat',
-    'jouet laser chat', 'souris jouet chat', 'cat toys', 'interactive cat toys', 'best cat toys',
+    'electric scrubber', 'power scrubber', 'buy scrubber online', 'BetterClean Pro',
+    'bathroom scrubber', 'tile scrubber', 'grout cleaner', 'shower scrubber',
+    'electric cleaning brush', 'spin scrubber', 'rechargeable scrubber',
+    'waterproof scrubber', 'scrubber Canada', 'cleaning tools online',
   ],
   alternates: {
     canonical: '/produits',
   },
   openGraph: {
-    title: 'Jouets pour Chat | Purrball - Jouets Interactifs Premium',
-    description: 'Jouets interactifs et stimulants pour chats. Balles auto-roulantes, jouets d\'enrichissement. Livraison gratuite au Canada.',
-    url: 'https://purrball.ca/produits',
+    title: 'BetterClean Pro Electric Scrubber | Power Cleaning Tool',
+    description: 'Professional electric scrubber for deep cleaning. 300 RPM motor, waterproof, rechargeable. Free shipping Canada.',
+    url: 'https://bettercleans.ca/produits',
   },
 }
 

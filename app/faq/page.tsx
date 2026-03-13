@@ -38,14 +38,14 @@ export default function FAQPage() {
       { question: "Quelle est votre politique de retour ?", answer: "Nous offrons 30 jours pour retourner tout produit, sans questions posées ! Si vous n'êtes pas 100% satisfait, nous vous remboursons intégralement." },
       { question: "Puis-je retourner le produit si je l'ai utilisé ?", answer: "Bien sûr ! Tant que le produit est dans un état raisonnablement propre et que vous avez tous les accessoires, vous pouvez le retourner dans les 30 jours." },
       { question: "Combien de temps pour recevoir mon remboursement ?", answer: "Le remboursement est traité sous 3-5 jours ouvrables sur votre méthode de paiement originale une fois que nous avons reçu le produit." },
-      { question: "Que faire si mon colis arrive endommagé ?", answer: "Contactez-nous immédiatement à support@betterclean.com avec des photos. Nous organiserons un remplacement ou un remboursement complet sans que vous ayez à retourner le produit endommagé." },
+      { question: "Que faire si mon colis arrive endommagé ?", answer: "Contactez-nous immédiatement à support@bettercleans.ca avec des photos. Nous organiserons un remplacement ou un remboursement complet sans que vous ayez à retourner le produit endommagé." },
     ]},
     { category: "Paiement & Sécurité", questions: [
       { question: "Quels modes de paiement acceptez-vous ?", answer: "Nous acceptons Visa, Mastercard, American Express et PayPal. Tous les paiements sont sécurisés avec un cryptage SSL de niveau bancaire." },
       { question: "Mes informations de paiement sont-elles sécurisées ?", answer: "Absolument ! Nous utilisons un cryptage SSL de niveau bancaire et ne stockons jamais vos informations de carte de crédit. Tous les paiements sont traités par des processeurs sécurisés certifiés." },
     ]},
     { category: "Service Client", questions: [
-      { question: "Comment vous contacter ?", answer: "Par email à support@betterclean.com (réponse sous 24h) ou par téléphone au 1-800-BETTERCLEAN du lundi au vendredi de 9h à 17h (EST)." },
+      { question: "Comment vous contacter ?", answer: "Par email à support@bettercleans.ca (réponse sous 24h) ou par téléphone au 1-800-BETTERCLEAN du lundi au vendredi de 9h à 17h (EST)." },
       { question: "Dans quelle langue offrez-vous le support ?", answer: "Nous offrons un support complet en français et en anglais pour tous nos clients canadiens." },
     ]},
   ] : [
@@ -67,14 +67,14 @@ export default function FAQPage() {
       { question: "What is your return policy?", answer: "We offer 30 days to return any product, no questions asked! If you're not 100% satisfied, we'll give you a full refund." },
       { question: "Can I return the product if I've used it?", answer: "Of course! As long as the product is in reasonably clean condition and you have all accessories, you can return it within 30 days." },
       { question: "How long until I receive my refund?", answer: "Refunds are processed within 3-5 business days to your original payment method once we receive the product." },
-      { question: "What if my package arrives damaged?", answer: "Contact us immediately at support@betterclean.com with photos. We'll arrange a replacement or full refund without requiring you to return the damaged product." },
+      { question: "What if my package arrives damaged?", answer: "Contact us immediately at support@bettercleans.ca with photos. We'll arrange a replacement or full refund without requiring you to return the damaged product." },
     ]},
     { category: "Payment & Security", questions: [
       { question: "What payment methods do you accept?", answer: "We accept Visa, Mastercard, American Express and PayPal. All payments are secured with bank-level SSL encryption." },
       { question: "Is my payment information secure?", answer: "Absolutely! We use bank-level SSL encryption and never store your credit card information. All payments are processed through certified secure processors." },
     ]},
     { category: "Customer Service", questions: [
-      { question: "How can I contact you?", answer: "By email at support@betterclean.com (response within 24h) or by phone at 1-800-BETTERCLEAN Monday to Friday 9am-5pm (EST)." },
+      { question: "How can I contact you?", answer: "By email at support@bettercleans.ca (response within 24h) or by phone at 1-800-BETTERCLEAN Monday to Friday 9am-5pm (EST)." },
       { question: "What languages do you offer support in?", answer: "We offer full support in both French and English for all our Canadian customers." },
     ]},
   ]
@@ -157,7 +157,7 @@ export default function FAQPage() {
           <div className="grid md:grid-cols-2 gap-4">
             <div className="bg-white rounded-xl p-5 border border-neutral-100">
               <h3 className="font-medium text-neutral-900 mb-1 text-sm">Email</h3>
-              <p className="text-neutral-500 text-xs mb-0.5">support@betterclean.com</p>
+              <p className="text-neutral-500 text-xs mb-0.5">support@bettercleans.ca</p>
               <p className="text-neutral-300 text-[10px]">{isFr ? 'Réponse garantie sous 24h' : 'Guaranteed response within 24h'}</p>
             </div>
             <div className="bg-white rounded-xl p-5 border border-neutral-100">

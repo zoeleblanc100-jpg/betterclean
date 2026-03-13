@@ -53,8 +53,8 @@ export default function ContactPage() {
               <Mail className="w-4 h-4 text-neutral-600" />
             </div>
             <h3 className="font-medium text-neutral-900 mb-2 text-sm">Email</h3>
-            <p className="text-neutral-400 text-xs">support@betterclean.com</p>
-            <p className="text-neutral-400 text-xs">info@betterclean.com</p>
+            <p className="text-neutral-400 text-xs">support@bettercleans.ca</p>
+            <p className="text-neutral-400 text-xs">info@bettercleans.ca</p>
           </div>
           <div className="bg-white rounded-2xl shadow-sm border border-neutral-100 p-6 text-center">
             <div className="w-10 h-10 bg-neutral-100 rounded-full flex items-center justify-center mx-auto mb-4">

@@ -1,19 +1,19 @@
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'FAQ | Questions Frequentes',
-  description: 'Reponses a toutes vos questions sur les jouets pour chat Purrball. Livraison, retours, garantie, commandes. Comment choisir litiere chat, jouets chat interieur.',
+  title: 'FAQ | BetterClean Electric Scrubber Questions',
+  description: 'Answers to all your questions about BetterClean electric scrubber. Shipping, returns, warranty, orders. How to use, battery life, waterproof rating.',
   keywords: [
-    'faq jouets chat', 'questions frequentes chat', 'livraison jouets chat Canada',
-    'retours jouets chat', 'garantie jouets chat', 'comment choisir litiere chat',
+    'BetterClean FAQ', 'electric scrubber questions', 'scrubber help Canada',
+    'shipping returns warranty', 'how to use scrubber', 'battery life FAQ',
   ],
   alternates: {
     canonical: '/faq',
   },
   openGraph: {
-    title: 'FAQ | Purrball - Questions Frequentes',
-    description: 'Trouvez les reponses a toutes vos questions sur nos produits, la livraison et les retours.',
-    url: 'https://purrball.ca/faq',
+    title: 'FAQ | BetterClean - Frequently Asked Questions',
+    description: 'Find answers to all your questions about our products, shipping and returns.',
+    url: 'https://bettercleans.ca/faq',
   },
 }
 

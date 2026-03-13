@@ -116,7 +116,7 @@ export default function OrderFailed() {
               <Link href="/faq" className="border border-gray-300 text-gray-700 hover:bg-gray-50 px-4 py-2 rounded-lg font-medium transition-colors text-sm">
                 {isFr ? 'Voir la FAQ' : 'View FAQ'}
               </Link>
-              <a href="mailto:support@betterclean.com" className="border border-gray-300 text-gray-700 hover:bg-gray-50 px-4 py-2 rounded-lg font-medium transition-colors text-sm">
+              <a href="mailto:support@bettercleans.ca" className="border border-gray-300 text-gray-700 hover:bg-gray-50 px-4 py-2 rounded-lg font-medium transition-colors text-sm">
                 {isFr ? 'Email direct' : 'Direct email'}
               </a>
             </div>

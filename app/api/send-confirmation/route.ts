@@ -126,7 +126,7 @@ export async function POST(req: NextRequest) {
 
           <!-- Track Order Button -->
           <div style="text-align: center; margin-top: 28px;">
-            <a href="https://purrball.ca/suivi" style="display: inline-block; background: #1a1a1a; color: #fff; text-decoration: none; padding: 14px 32px; border-radius: 10px; font-weight: 600; font-size: 14px;">
+            <a href="https://bettercleans.ca/suivi" style="display: inline-block; background: #1a1a1a; color: #fff; text-decoration: none; padding: 14px 32px; border-radius: 10px; font-weight: 600; font-size: 14px;">
               ${isFr ? 'Suivre ma commande' : 'Track Your Order'}
             </a>
           </div>
@@ -156,7 +156,7 @@ export async function POST(req: NextRequest) {
       : `Order Confirmed - Purrball #${orderNumber}`
 
     const { data, error } = await resend.emails.send({
-      from: 'Purrball <noreply@purrball.ca>',
+      from: 'Purrball <noreply@bettercleans.ca>',
       to: [email],
       subject,
       html,

@@ -182,10 +182,10 @@ export default function Header() {
                 <div className="bg-[#d6ecf0] rounded-xl p-4">
                   <p className="text-xs text-gray-500 mb-2">{isFr ? "Besoin d'aide ?" : "Need help?"}</p>
                   <a 
-                    href="mailto:support@betterclean.com" 
+                    href="mailto:support@bettercleans.ca" 
                     className="text-sm font-medium text-[#5a9ea8] hover:underline"
                   >
-                    support@betterclean.com
+                    support@bettercleans.ca
                   </a>
                 </div>
               </div>

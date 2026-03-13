@@ -18,7 +18,7 @@ export default function PolitiqueConfidentialitePage() {
     { title: "6. Vos droits", content: "Conformément aux lois canadiennes, vous pouvez : accéder à vos données, corriger des informations inexactes, demander la suppression, vous opposer au traitement, retirer votre consentement." },
     { title: "7. Cookies", content: "Nous utilisons des cookies pour améliorer votre expérience et analyser le trafic. Gérez vos préférences dans les paramètres de votre navigateur." },
     { title: "8. Conservation des données", content: "Données conservées aussi longtemps que nécessaire pour nos services et obligations légales. Données de commande conservées 7 ans à des fins comptables." },
-    { title: "9. Contact", content: "Pour toute question : support@betterclean.com | 1-800-BETTERCLEAN" },
+    { title: "9. Contact", content: "Pour toute question : support@bettercleans.ca | 1-800-BETTERCLEAN" },
     { title: "10. Modifications", content: "Nous nous réservons le droit de modifier cette politique à tout moment. Consultez régulièrement cette page." },
   ] : [
     { title: "1. Introduction", content: "At Purrball, we are committed to protecting your privacy and personal data. This policy explains how we collect, use, store and protect your information." },
@@ -29,7 +29,7 @@ export default function PolitiqueConfidentialitePage() {
     { title: "6. Your Rights", content: "Under Canadian law, you can: access your data, correct inaccurate information, request deletion, object to processing, withdraw your consent." },
     { title: "7. Cookies", content: "We use cookies to improve your experience and analyze traffic. Manage your preferences in your browser settings." },
     { title: "8. Data Retention", content: "Data retained as long as necessary for our services and legal obligations. Order data retained for 7 years for accounting purposes." },
-    { title: "9. Contact", content: "For any questions: support@betterclean.com | 1-800-BETTERCLEAN" },
+    { title: "9. Contact", content: "For any questions: support@bettercleans.ca | 1-800-BETTERCLEAN" },
     { title: "10. Changes", content: "We reserve the right to modify this policy at any time. Please check this page regularly." },
   ]
 
