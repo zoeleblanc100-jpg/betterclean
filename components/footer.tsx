@@ -14,9 +14,9 @@ export default function Footer() {
 
   const paymentMethods = [
     { name: "Visa", src: "https://cdn.shopify.com/shopifycloud/checkout-web/assets/0169695890db3db16bfe.svg" },
-    { name: "Mastercard", src: "https://secure.payment-ca.com/assets/img/mastercard.svg" },
-    { name: "American Express", src: "https://secure.payment-ca.com/assets/img/amex.svg" },
-    { name: "Discover", src: "https://secure.payment-ca.com/assets/img/discover.svg" },
+    { name: "Mastercard", src: "https://cdn.shopify.com/shopifycloud/checkout-web/assets/8f9c63fb8a5d9a7b5f52.svg" },
+    { name: "American Express", src: "https://cdn.shopify.com/shopifycloud/checkout-web/assets/c2e96f8b0d4cbe0df8ad.svg" },
+    { name: "Discover", src: "https://cdn.shopify.com/shopifycloud/checkout-web/assets/e3e6b97a0d8c7b83e56c.svg" },
   ]
 
   return (
@@ -59,6 +59,7 @@ export default function Footer() {
                     alt={method.name}
                     fill
                     className="object-contain"
+                    unoptimized
                   />
                 </div>
               ))}
