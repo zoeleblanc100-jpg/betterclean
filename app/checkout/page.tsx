@@ -1027,8 +1027,17 @@ LAST UPDATE:
                   disabled={isProcessing || !isFormValid()}
                   className="w-full bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white py-4 px-4 rounded-lg font-medium text-base transition-all flex items-center justify-center gap-2"
                 >
+                  {isProcessing ? (
+                    <>
+                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                      {isFr ? 'Traitement en cours...' : 'Processing...'}
+                    </>
+                  ) : (
+                    <>
                       <Lock className="w-4 h-4" />
                       {isFr ? 'Finaliser ma commande' : 'Complete order'}
+                    </>
+                  )}
                 </button>
               </form>
 
