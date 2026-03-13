@@ -10,7 +10,7 @@ export default function PolitiqueConfidentialitePage() {
   const isFr = locale === 'fr'
 
   const sections = isFr ? [
-    { title: "1. Introduction", content: "Chez Purrball, nous nous engageons à protéger votre vie privée et vos données personnelles. Cette politique explique comment nous collectons, utilisons, stockons et protégeons vos informations." },
+    { title: "1. Introduction", content: "Chez BetterClean, nous nous engageons à protéger votre vie privée et vos données personnelles. Cette politique explique comment nous collectons, utilisons, stockons et protégeons vos informations." },
     { title: "2. Informations collectées", content: "Informations personnelles : nom, email, adresse, téléphone, date de naissance. Informations de commande : historique d'achats, préférences, paiement (traité de manière sécurisée). Données techniques : adresse IP, navigateur, cookies." },
     { title: "3. Utilisation de vos informations", content: "Traiter et expédier vos commandes. Vous contacter concernant vos commandes. Améliorer nos produits et services. Communications marketing (avec consentement). Prévention de la fraude. Obligations légales." },
     { title: "4. Partage de vos informations", content: "Nous ne vendons jamais vos données. Partage uniquement avec : partenaires de livraison, processeurs de paiement sécurisés, autorités légales si requis, ou avec votre consentement explicite." },
@@ -21,7 +21,7 @@ export default function PolitiqueConfidentialitePage() {
     { title: "9. Contact", content: "Pour toute question : support@bettercleans.ca | 1-800-BETTERCLEAN" },
     { title: "10. Modifications", content: "Nous nous réservons le droit de modifier cette politique à tout moment. Consultez régulièrement cette page." },
   ] : [
-    { title: "1. Introduction", content: "At Purrball, we are committed to protecting your privacy and personal data. This policy explains how we collect, use, store and protect your information." },
+    { title: "1. Introduction", content: "At BetterClean, we are committed to protecting your privacy and personal data. This policy explains how we collect, use, store and protect your information." },
     { title: "2. Information Collected", content: "Personal information: name, email, address, phone, date of birth. Order information: purchase history, preferences, payment (processed securely). Technical data: IP address, browser, cookies." },
     { title: "3. How We Use Your Information", content: "Process and ship your orders. Contact you regarding your orders. Improve our products and services. Marketing communications (with consent). Fraud prevention. Legal obligations." },
     { title: "4. Sharing Your Information", content: "We never sell your data. Sharing only with: delivery partners, secure payment processors, legal authorities if required, or with your explicit consent." },

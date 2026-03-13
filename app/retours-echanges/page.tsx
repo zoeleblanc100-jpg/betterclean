@@ -21,7 +21,7 @@ export default function RetoursEchangesPage() {
             {isFr ? 'Retours & Échanges' : 'Returns & Exchanges'}
           </h1>
           <p className="text-neutral-400">
-            {isFr ? 'Guide complet pour retourner ou échanger vos produits Happy Cat Toys' : 'Complete guide to returning or exchanging your Happy Cat Toys products'}
+            {isFr ? 'Guide complet pour retourner ou échanger vos produits BetterClean' : 'Complete guide to returning or exchanging your BetterClean products'}
           </p>
         </div>
 
@@ -33,7 +33,7 @@ export default function RetoursEchangesPage() {
                 {isFr ? 'Politique de retour simple' : 'Simple Return Policy'}
               </h2>
               <p className="text-neutral-400 leading-relaxed">
-                {isFr ? "Chez Happy Cat Toys, nous voulons que vous et votre chat soyez 100% satisfaits. Si ce n'est pas le cas, nous facilitons les retours et échanges avec notre politique généreuse de 30 jours." : "At Happy Cat Toys, we want you and your cat to be 100% satisfied. If not, we make returns and exchanges easy with our generous 30-day policy."}
+                {isFr ? "Chez BetterClean, nous voulons que vous soyez 100% satisfait. Si ce n'est pas le cas, nous facilitons les retours et échanges avec notre politique généreuse de 30 jours." : "At BetterClean, we want you to be 100% satisfied. If not, we make returns and exchanges easy with our generous 30-day policy."}
               </p>
             </div>
           </section>
