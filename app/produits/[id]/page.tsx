@@ -379,7 +379,7 @@ export default function ProductPage({ params }: ProductPageProps) {
                   onClick={handleAddToCart}
                   className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 text-base font-medium rounded-lg transition-colors"
                 >
-                  Add to cart
+                  {isFr ? 'Ajouter au panier' : 'Add to cart'}
                 </Button>
               </div>
 
@@ -468,10 +468,10 @@ export default function ProductPage({ params }: ProductPageProps) {
                 <Shield className="w-8 h-8 text-white" />
               </div>
               <h3 className="text-xl font-bold mb-3 text-[#1a1a1a] font-[var(--font-dm-sans)]">
-                30-Day Guarantee
+                {isFr ? 'Garantie 30 jours' : '30-Day Guarantee'}
               </h3>
               <p className="text-gray-600 font-[var(--font-dm-sans)]">
-                Not satisfied? Return it within 30 days for a full refund. No questions asked.
+                {isFr ? 'Pas satisfait ? Remboursez sous 30 jours.' : 'Not satisfied? Return it within 30 days for a full refund.'}
               </p>
             </div>
 
@@ -492,7 +492,7 @@ export default function ProductPage({ params }: ProductPageProps) {
                 <Check className="w-8 h-8 text-white" />
               </div>
               <h3 className="text-xl font-bold mb-3 text-[#1a1a1a] font-[var(--font-dm-sans)]">
-                Proven Results
+                {isFr ? 'Résultats Prouvés' : 'Proven Results'}
               </h3>
               <p className="text-gray-600 font-[var(--font-dm-sans)]">
                 {isFr ? 'Plus de 1000 clients ont réduit leur temps de nettoyage de moitié avec BetterClean.' : 'Over 10,000+ customers have cut their cleaning time in half with BetterClean.'}
@@ -555,7 +555,7 @@ export default function ProductPage({ params }: ProductPageProps) {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl mx-auto">
               <div className="flex items-center justify-center gap-3">
                 <Check className="w-6 h-6 flex-shrink-0" />
-                <span className="font-[var(--font-dm-sans)]">30-Day Money Back Guarantee</span>
+                <span className="font-[var(--font-dm-sans)]">{isFr ? 'Garantie Remboursement 30 jours' : '30-Day Money Back Guarantee'}</span>
               </div>
               <div className="flex items-center justify-center gap-3">
                 <Check className="w-6 h-6 flex-shrink-0" />
@@ -663,7 +663,7 @@ export default function ProductPage({ params }: ProductPageProps) {
                 }}
                 className="w-full bg-[#5a9ea8] hover:bg-[#4a8a94] text-white py-4 rounded-full font-bold text-lg transition-colors font-[var(--font-dm-sans)] mb-4"
               >
-                Add to Cart - $10.00
+                {isFr ? 'Ajouter au Panier - 10,00 $' : 'Add to Cart - $10.00'}
               </button>
               <div className="space-y-2">
                 <div className="flex items-center justify-center gap-2 text-sm text-gray-600">
