@@ -37,8 +37,8 @@ export default function ProductPage({ params }: ProductPageProps) {
   const product = {
     id: "betterclean-pro-1",
     name: isFr ? "Brosse Électrique BetterClean" : "BetterClean Electric Scrubber",
-    rating: 4.8,
-    totalReviews: 32,
+    rating: 4.2,
+    totalReviews: 247,
     price: 26.97,
     originalPrice: 56.99,
     description: isFr 
