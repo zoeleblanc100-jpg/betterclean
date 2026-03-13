@@ -191,7 +191,7 @@ export default function ProductsPage() {
           </h2>
 
           <div className="grid grid-cols-2 md:grid-cols-3 gap-6 md:gap-8">
-            {products.filter(p => p.category !== 'Fournitures').map((rawP) => {
+            {products.filter(p => p.category !== 'Fournitures').slice(1).map((rawP) => {
               const p = localize(rawP)
               return (
               <Link key={p.id} href={`/produits/${p.id}`} className="group block">
