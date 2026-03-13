@@ -4,6 +4,7 @@ import { useState, useEffect } from "react"
 import Image from "next/image"
 import { Star, ChevronDown, Check } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { useI18n } from "@/lib/i18n-context"
 
 interface Review {
   id: number
@@ -18,6 +19,8 @@ interface Review {
 }
 
 export default function ReviewsSection() {
+  const { t, locale } = useI18n()
+  const isFr = locale === 'fr'
   const [reviews, setReviews] = useState<Review[]>([])
   const [filteredReviews, setFilteredReviews] = useState<Review[]>([])
   const [displayCount, setDisplayCount] = useState(6)
@@ -192,7 +195,7 @@ export default function ReviewsSection() {
               variant="outline"
               className="px-8 py-3 rounded-full border-[#5a9ea8] text-[#5a9ea8] hover:bg-[#5a9ea8] hover:text-white transition-all"
             >
-              Voir plus
+              {isFr ? 'Voir plus' : 'See more'}
               <ChevronDown className="w-4 h-4 ml-2" />
             </Button>
           </div>
