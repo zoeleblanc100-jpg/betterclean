@@ -38,8 +38,9 @@ export default function CartPage() {
   }
 
   return (
-    <div className="min-h-screen bg-white py-12 px-4">
-      <div className="max-w-4xl mx-auto">
+    <div className="min-h-screen bg-white flex flex-col">
+      <div className="flex-1 py-12 px-4">
+        <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="mb-8">
           <Link 
@@ -210,9 +211,10 @@ export default function CartPage() {
           </div>
         </div>
       </div>
+      </div>
       
-      {/* Trust Section */}
-      <div className="bg-brand text-white py-8 mt-8">
+      {/* Trust Section - Fixed at bottom */}
+      <div className="bg-brand text-white py-8">
         <div className="max-w-6xl mx-auto px-4">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
             <div className="flex flex-col items-center">
