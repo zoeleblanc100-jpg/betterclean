@@ -123,56 +123,63 @@ export default function OrderTracking() {
 
           {/* Status Card */}
           {orderData && (
-          <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
-            <div className="flex items-center justify-between mb-6">
+          <div className="bg-white rounded-xl shadow-lg p-4 sm:p-6 mb-8">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 gap-4">
               <div>
-                <h2 className="text-xl font-semibold text-neutral-900 mb-2">
+                <h2 className="text-lg sm:text-xl font-semibold text-neutral-900 mb-2">
                   {isFr ? 'Commande' : 'Order'} #{orderData.orderNumber}
                 </h2>
-                <p className="text-neutral-400">
+                <p className="text-neutral-400 text-sm">
                   {isFr ? 'Statut actuel : Préparation en cours' : 'Current status: Being prepared'}
                 </p>
-                <p className="text-neutral-400">
+                <p className="text-neutral-400 text-sm">
                   {isFr ? 'Livraison estimée : 2-3 jours ouvrables' : 'Estimated delivery: 2-3 business days'}
                 </p>
               </div>
-              <div className="text-right">
-                <div className="w-16 h-16 bg-neutral-900 rounded-full flex items-center justify-center">
-                  <Package className="w-8 h-8 text-white" />
+              <div className="self-end sm:self-auto">
+                <div className="w-12 h-12 sm:w-16 sm:h-16 bg-neutral-900 rounded-full flex items-center justify-center">
+                  <Package className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
                 </div>
               </div>
             </div>
 
-            {/* Progress Bar */}
+            {/* Progress Bar - Mobile: Vertical, Desktop: Horizontal */}
             <div className="relative">
-              <div className="absolute top-6 left-0 w-full h-0.5 bg-gray-200"></div>
+              {/* Desktop: Horizontal line */}
+              <div className="hidden sm:block absolute top-6 left-0 w-full h-0.5 bg-gray-200"></div>
               <div 
-                className="absolute top-6 left-0 h-0.5 bg-neutral-900 transition-all duration-500"
+                className="hidden sm:block absolute top-6 left-0 h-0.5 bg-neutral-900 transition-all duration-500"
                 style={{ width: `${(defaultOrderStatus.currentStep / steps.length) * 100}%` }}
               ></div>
               
-              <div className="relative flex justify-between">
+              <div className="relative flex flex-col sm:flex-row sm:justify-between gap-4 sm:gap-0">
                 {steps.map((step, index) => {
                   const Icon = step.icon
+                  const isLast = index === steps.length - 1
                   return (
-                    <div key={step.id} className="flex flex-col items-center">
-                      <div className={`w-12 h-12 rounded-full flex items-center justify-center border-4 transition-all duration-300 ${
+                    <div key={step.id} className="flex sm:flex-col items-center gap-3 sm:gap-0">
+                      {/* Mobile: connecting line */}
+                      {!isLast && (
+                        <div className="sm:hidden absolute left-6 top-0 bottom-0 w-0.5 bg-gray-200" style={{top: '24px', bottom: '-16px'}}></div>
+                      )}
+                      
+                      <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center border-2 sm:border-4 flex-shrink-0 transition-all duration-300 z-10 ${
                         step.completed 
                           ? 'bg-neutral-900 border-neutral-900 text-white' 
                           : step.current
                           ? 'bg-white border-neutral-900 text-neutral-900 animate-pulse'
                           : 'bg-white border-gray-200 text-gray-400'
                       }`}>
-                        <Icon className="w-5 h-5" />
+                        <Icon className="w-4 h-4 sm:w-5 sm:h-5" />
                       </div>
                       
-                      <div className="mt-4 text-center max-w-[120px]">
+                      <div className="flex-1 sm:flex-none sm:mt-4 sm:text-center sm:max-w-[120px]">
                         <h3 className={`font-medium text-sm mb-1 ${
                           step.completed || step.current ? 'text-neutral-900' : 'text-neutral-400'
                         }`}>
                           {step.title}
                         </h3>
-                        <p className="text-xs text-neutral-400 mb-1">
+                        <p className="text-xs text-neutral-400 mb-1 hidden sm:block">
                           {step.description}
                         </p>
                         <p className="text-xs font-medium text-neutral-900">
@@ -189,49 +196,49 @@ export default function OrderTracking() {
 
           {/* Order Details */}
           {orderData && (
-          <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
+          <div className="bg-white rounded-xl shadow-lg p-4 sm:p-6 mb-8">
             <h3 className="text-lg font-semibold text-neutral-900 mb-4">
               {isFr ? 'Détails de la commande' : 'Order Details'}
             </h3>
             
-            <div className="space-y-4">
-              <div className="flex justify-between py-2 border-b border-gray-100">
-                <span className="text-neutral-400">{isFr ? 'Numéro de commande' : 'Order number'}</span>
-                <span className="font-medium">{orderData.orderNumber}</span>
+            <div className="space-y-3 sm:space-y-4">
+              <div className="flex flex-col sm:flex-row sm:justify-between py-2 border-b border-gray-100 gap-1 sm:gap-0">
+                <span className="text-neutral-400 text-sm">{isFr ? 'Numéro de commande' : 'Order number'}</span>
+                <span className="font-medium text-sm sm:text-base">{orderData.orderNumber}</span>
               </div>
-              <div className="flex justify-between py-2 border-b border-gray-100">
-                <span className="text-neutral-400">{isFr ? 'Date de commande' : 'Order date'}</span>
-                <span className="font-medium">
+              <div className="flex flex-col sm:flex-row sm:justify-between py-2 border-b border-gray-100 gap-1 sm:gap-0">
+                <span className="text-neutral-400 text-sm">{isFr ? 'Date de commande' : 'Order date'}</span>
+                <span className="font-medium text-sm sm:text-base">
                   {new Date(orderData.orderDate).toLocaleDateString(isFr ? 'fr-FR' : 'en-CA')}
                 </span>
               </div>
-              <div className="flex justify-between py-2 border-b border-gray-100">
-                <span className="text-neutral-400">{isFr ? 'Client' : 'Customer'}</span>
-                <span className="font-medium">
+              <div className="flex flex-col sm:flex-row sm:justify-between py-2 border-b border-gray-100 gap-1 sm:gap-0">
+                <span className="text-neutral-400 text-sm">{isFr ? 'Client' : 'Customer'}</span>
+                <span className="font-medium text-sm sm:text-base">
                   {orderData.customerInfo.firstName} {orderData.customerInfo.lastName}
                 </span>
               </div>
-              <div className="flex justify-between py-2 border-b border-gray-100">
-                <span className="text-neutral-400">Email</span>
-                <span className="font-medium">{orderData.customerInfo.email}</span>
+              <div className="flex flex-col sm:flex-row sm:justify-between py-2 border-b border-gray-100 gap-1 sm:gap-0">
+                <span className="text-neutral-400 text-sm">Email</span>
+                <span className="font-medium text-sm sm:text-base break-all">{orderData.customerInfo.email}</span>
               </div>
-              <div className="flex justify-between py-2 border-b border-gray-100">
-                <span className="text-neutral-400">{isFr ? 'Téléphone' : 'Phone'}</span>
-                <span className="font-medium">{orderData.customerInfo.phone}</span>
+              <div className="flex flex-col sm:flex-row sm:justify-between py-2 border-b border-gray-100 gap-1 sm:gap-0">
+                <span className="text-neutral-400 text-sm">{isFr ? 'Téléphone' : 'Phone'}</span>
+                <span className="font-medium text-sm sm:text-base">{orderData.customerInfo.phone}</span>
               </div>
-              <div className="flex justify-between py-2 border-b border-gray-100">
-                <span className="text-neutral-400">{isFr ? 'Méthode de livraison' : 'Shipping method'}</span>
-                <span className="font-medium">{isFr ? 'Livraison standard (2-3 jours)' : 'Standard shipping (2-3 days)'}</span>
+              <div className="flex flex-col sm:flex-row sm:justify-between py-2 border-b border-gray-100 gap-1 sm:gap-0">
+                <span className="text-neutral-400 text-sm">{isFr ? 'Méthode de livraison' : 'Shipping method'}</span>
+                <span className="font-medium text-sm sm:text-base">{isFr ? 'Livraison standard (2-3 jours)' : 'Standard shipping (2-3 days)'}</span>
               </div>
-              <div className="flex justify-between py-2 border-b border-gray-100">
-                <span className="text-neutral-400">{isFr ? 'Total de la commande' : 'Order total'}</span>
-                <span className="font-medium">
+              <div className="flex flex-col sm:flex-row sm:justify-between py-2 border-b border-gray-100 gap-1 sm:gap-0">
+                <span className="text-neutral-400 text-sm">{isFr ? 'Total de la commande' : 'Order total'}</span>
+                <span className="font-medium text-sm sm:text-base">
                   ${orderData.finalTotal.toFixed(2)} CAD
                 </span>
               </div>
-              <div className="flex justify-between py-2">
-                <span className="text-neutral-400">{isFr ? 'Adresse de livraison' : 'Shipping address'}</span>
-                <span className="font-medium text-right">
+              <div className="flex flex-col sm:flex-row sm:justify-between py-2 gap-1 sm:gap-0">
+                <span className="text-neutral-400 text-sm">{isFr ? 'Adresse de livraison' : 'Shipping address'}</span>
+                <span className="font-medium text-sm sm:text-base text-right">
                   {orderData.customerInfo.address}<br />
                   {orderData.customerInfo.apartment && `${orderData.customerInfo.apartment}<br />`}
                   {orderData.customerInfo.city}, {orderData.customerInfo.province} {orderData.customerInfo.postalCode}
@@ -243,24 +250,24 @@ export default function OrderTracking() {
 
           {/* Order Items */}
           {orderData && (
-            <div className="bg-white rounded-xl shadow-lg p-6 mb-8">
+            <div className="bg-white rounded-xl shadow-lg p-4 sm:p-6 mb-8">
               <h3 className="text-lg font-semibold text-neutral-900 mb-4">
                 {isFr ? 'Articles commandés' : 'Ordered Items'}
               </h3>
               <div className="space-y-3">
                 {orderData.items.map((item, index) => (
-                  <div key={index} className="flex justify-between items-center py-2 border-b border-gray-100 last:border-b-0">
+                  <div key={index} className="flex flex-col sm:flex-row sm:justify-between sm:items-center py-2 border-b border-gray-100 last:border-b-0 gap-1 sm:gap-0">
                     <div>
-                      <p className="font-medium text-neutral-900">{item.name}</p>
-                      <p className="text-sm text-neutral-400">{isFr ? 'Quantité' : 'Quantity'}: {item.quantity}</p>
+                      <p className="font-medium text-neutral-900 text-sm sm:text-base">{item.name}</p>
+                      <p className="text-xs sm:text-sm text-neutral-400">{isFr ? 'Quantité' : 'Quantity'}: {item.quantity}</p>
                     </div>
-                    <p className="font-medium">${(item.price * item.quantity).toFixed(2)} CAD</p>
+                    <p className="font-medium text-sm sm:text-base">${(item.price * item.quantity).toFixed(2)} CAD</p>
                   </div>
                 ))}
                 <div className="pt-3 border-t border-gray-200">
                   <div className="flex justify-between items-center">
-                    <span className="font-semibold text-neutral-900">{isFr ? 'Total final' : 'Final total'}</span>
-                    <span className="font-bold text-neutral-900 text-lg">${orderData.finalTotal.toFixed(2)} CAD</span>
+                    <span className="font-semibold text-neutral-900 text-sm sm:text-base">{isFr ? 'Total final' : 'Final total'}</span>
+                    <span className="font-bold text-neutral-900 text-base sm:text-lg">${orderData.finalTotal.toFixed(2)} CAD</span>
                   </div>
                 </div>
               </div>
@@ -268,7 +275,7 @@ export default function OrderTracking() {
           )}
 
           {/* Contact Support */}
-          <div className="bg-white rounded-xl p-6 text-center">
+          <div className="bg-white rounded-xl p-4 sm:p-6 text-center">
             <h3 className="text-lg font-semibold text-neutral-900 mb-2">
               {isFr ? "Besoin d'aide ?" : 'Need help?'}
             </h3>
