@@ -446,10 +446,10 @@ export default function ProductPage({ params }: ProductPageProps) {
                 <Truck className="w-8 h-8 text-white" />
               </div>
               <h3 className="text-xl font-bold mb-3 text-[#1a1a1a] font-[var(--font-dm-sans)]">
-                Free Worldwide Shipping
+                {isFr ? 'Livraison Gratuite Partout au Canada' : 'Free Shipping Across Canada'}
               </h3>
               <p className="text-gray-600 font-[var(--font-dm-sans)]">
-                Fast and secure delivery to your door. Track your order every step of the way.
+                {isFr ? 'Livraison rapide et sécurisée directement à votre porte. Suivez votre commande à chaque étape.' : 'Fast and secure delivery to your door. Track your order every step of the way.'}
               </p>
             </div>
 
