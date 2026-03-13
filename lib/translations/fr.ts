@@ -117,6 +117,16 @@ export const fr = {
     addToCart: "Ajouter au Panier",
     viewDetails: "Voir Détails",
     learnMore: "En Savoir Plus",
+    stockText: "Seulement {count} en stock",
+    fountainTitle: "Eau en Mouvement, Maison en Santé",
+    fountainDesc: "Le système BetterClean utilise une technologie avancée pour offrir un nettoyage puissant et efficace — rendant votre maison plus propre et votre vie plus facile.",
+    fountainFeatures: [
+      "Moteur puissant — ultra efficace",
+      "Capteur intelligent — détecte la saleté",
+      "Conception étanche — 100% sécuritaire",
+      "Triple action — toujours propre"
+    ],
+    discoverFountain: "Découvrir le Système BetterClean",
   },
 
   // Fournitures Page

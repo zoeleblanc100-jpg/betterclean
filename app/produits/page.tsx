@@ -94,7 +94,7 @@ export default function ProductsPage() {
 
               <p className="text-xs text-orange-600 flex items-center gap-1">
                 <span className="w-1.5 h-1.5 bg-orange-500 rounded-full animate-pulse" />
-                {t.productsPage.cat === 'Chat' ? `Seulement ${product.stockCount} en stock` : `Only ${product.stockCount} left in stock`}
+                {t.productsPage.stockText.replace('{count}', product.stockCount.toString())}
               </p>
 
               <p className="text-neutral-500 text-xs leading-relaxed">{product.description}</p>
@@ -149,7 +149,7 @@ export default function ProductsPage() {
               </div>
               <p className="text-xs text-orange-600 flex items-center gap-1 mb-6">
                 <span className="w-1.5 h-1.5 bg-orange-500 rounded-full animate-pulse" />
-                {t.productsPage.cat === 'Chat' ? `Seulement ${product.stockCount} en stock` : `Only ${product.stockCount} left in stock`}
+                {t.productsPage.stockText.replace('{count}', product.stockCount.toString())}
               </p>
 
               <div className="border-t border-neutral-100 mb-6" />
@@ -270,21 +270,16 @@ export default function ProductsPage() {
             </div>
             <div>
               <span className="inline-block bg-blue-50 text-blue-700 text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wider mb-4">
-                {t.productsPage.cat === 'Chat' ? 'Fournitures' : 'Supplies'}
+                {t.header.fournitures}
               </span>
               <h2 className="text-2xl md:text-3xl font-bold text-neutral-900 tracking-tight mb-4">
-                {t.productsPage.cat === 'Chat' ? "L'Eau en Mouvement, la Santé en Action" : 'Moving Water, Healthy Cat'}
+                {t.productsPage.fountainTitle}
               </h2>
               <p className="text-neutral-500 text-sm leading-relaxed mb-4">
-                {t.productsPage.cat === 'Chat'
-                  ? "Les chats sont naturellement attirés par l'eau en mouvement. Notre fontaine Purr Fountain F1 utilise la technologie MagDrive™ sans pompe pour offrir une eau fraîche, filtrée et silencieuse — encourageant votre chat à boire plus et prévenant les problèmes rénaux."
-                  : "Cats are naturally attracted to moving water. Our Purr Fountain F1 uses pumpless MagDrive™ technology to deliver fresh, filtered, silent water — encouraging your cat to drink more and preventing kidney problems."}
+                {t.productsPage.fountainDesc}
               </p>
               <ul className="space-y-2 mb-6">
-                {(t.productsPage.cat === 'Chat'
-                  ? ['Sans pompe — ultra silencieuse (<30dB)', 'Capteur intelligent — détecte votre chat', 'Séparation eau-électricité — 100% sécuritaire', 'Filtration triple — eau toujours propre']
-                  : ['Pumpless — ultra quiet (<30dB)', 'Smart sensor — detects your cat', 'Water-electrical separation — 100% safe', 'Triple filtration — always clean water']
-                ).map((item, i) => (
+                {t.productsPage.fountainFeatures.map((item, i) => (
                   <li key={i} className="flex items-center gap-2 text-neutral-600 text-sm">
                     <span className="w-1.5 h-1.5 bg-blue-500 rounded-full flex-shrink-0" />
                     {item}
@@ -295,7 +290,7 @@ export default function ProductsPage() {
                 href="/fournitures"
                 className="inline-flex items-center gap-2 bg-brand hover:bg-brand-dark text-white font-medium px-6 py-3 rounded-full text-sm transition-all"
               >
-                {t.productsPage.cat === 'Chat' ? 'Découvrir la Purr Fountain F1' : 'Discover the Purr Fountain F1'}
+                {t.productsPage.discoverFountain}
               </Link>
             </div>
           </div>
