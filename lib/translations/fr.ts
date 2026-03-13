@@ -118,6 +118,9 @@ export const fr = {
     viewDetails: "Voir Détails",
     learnMore: "En Savoir Plus",
     stockText: "Seulement {count} en stock",
+    heroBannerAlt: "Collection de Brosses Électriques BetterClean",
+    featuredProductAlt: "Brosse Électrique BetterClean Pro",
+    fountainAlt: "Système de Nettoyage BetterClean",
     fountainTitle: "Eau en Mouvement, Maison en Santé",
     fountainDesc: "Le système BetterClean utilise une technologie avancée pour offrir un nettoyage puissant et efficace — rendant votre maison plus propre et votre vie plus facile.",
     fountainFeatures: [

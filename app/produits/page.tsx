@@ -35,7 +35,7 @@ export default function ProductsPage() {
       <section className="relative h-[140px] md:h-[200px] overflow-hidden">
         <Image
           src="https://res.cloudinary.com/dhhdhilja/image/upload/v1770517587/purrball/CollectionPage-cat-banner.jpg.webp"
-          alt="Cat Toys"
+          alt={t.productsPage.heroBannerAlt}
           fill
           sizes="100vw"
           className="object-cover object-center"
@@ -62,7 +62,7 @@ export default function ProductsPage() {
             <div className="relative aspect-[4/3] rounded-2xl overflow-hidden mb-6">
               <Image
                 src="https://res.cloudinary.com/dhhdhilja/image/upload/v1770517604/purrball/Section2_-_Featured_Cat_Toy.jpg.webp"
-                alt="Smart Interactive Ball"
+                alt={t.productsPage.featuredProductAlt}
                 fill
                 sizes="100vw"
                 className="object-cover"
@@ -172,7 +172,7 @@ export default function ProductsPage() {
             <div className="relative aspect-[4/5] rounded-2xl overflow-hidden shadow-lg">
               <Image
                 src="https://res.cloudinary.com/dhhdhilja/image/upload/v1770517604/purrball/Section2_-_Featured_Cat_Toy.jpg.webp"
-                alt="Chat jouant avec la Smart Interactive Ball"
+                alt={t.productsPage.featuredProductAlt}
                 fill
                 sizes="50vw"
                 className="object-cover"
@@ -261,7 +261,7 @@ export default function ProductsPage() {
             <div className="relative aspect-square rounded-2xl overflow-hidden bg-white border border-neutral-100">
               <Image
                 src="https://res.cloudinary.com/dhhdhilja/image/upload/v1770517651/purrball/e__pumpless_design.webp"
-                alt="Purr Fountain F1"
+                alt={t.productsPage.fountainAlt}
                 fill
                 sizes="(max-width: 1024px) 100vw, 50vw"
                 className="object-cover"

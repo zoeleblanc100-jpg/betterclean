@@ -118,6 +118,9 @@ export const en = {
     viewDetails: "View Details",
     learnMore: "Learn More",
     stockText: "Only {count} left in stock",
+    heroBannerAlt: "BetterClean Electric Scrubber Collection",
+    featuredProductAlt: "BetterClean Pro Electric Scrubber",
+    fountainAlt: "BetterClean Cleaning System",
     fountainTitle: "Moving Water, Healthy Home",
     fountainDesc: "The BetterClean system uses advanced technology to deliver powerful, efficient cleaning — making your home cleaner and your life easier.",
     fountainFeatures: [
