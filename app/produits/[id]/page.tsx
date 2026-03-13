@@ -3,7 +3,7 @@
 import { useState, use, useEffect } from "react"
 import Image from "next/image"
 import Link from "next/link"
-import { Star, Check, ChevronDown, ChevronUp, Shield, Truck } from "lucide-react"
+import { Star, Check, ChevronDown, ChevronUp, Shield, Truck, ChevronLeft, ChevronRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useCart } from "@/lib/cart-context"
 import { ttqTrack } from "@/lib/tiktok"
@@ -20,7 +20,7 @@ export default function ProductPage({ params }: ProductPageProps) {
   const { id } = use(params)
   const { addItem, setCartOpen } = useCart()
   const [selectedImageIndex, setSelectedImageIndex] = useState(0)
-  const [selectedBundle, setSelectedBundle] = useState("buy2")
+  const [selectedBundle, setSelectedBundle] = useState("buy1")
   const [openFaq, setOpenFaq] = useState<number | null>(null)
 
   const productImages = [
@@ -178,47 +178,73 @@ export default function ProductPage({ params }: ProductPageProps) {
       <section className="px-4 py-8 bg-white">
         <div className="max-w-6xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
-            {/* Product Image Gallery */}
+            {/* Product Image Gallery - Improved swipeable gallery */}
             <div className="relative">
-              {/* Main Image */}
-              <div className="aspect-square bg-white rounded-lg overflow-hidden relative">
-                <Image 
-                  src={productImages[selectedImageIndex]} 
-                  alt={product.name}
-                  fill
-                  className="object-cover"
-                  priority
-                  quality={100}
-                  unoptimized
-                  sizes="(max-width: 768px) 90vw, (max-width: 1024px) 50vw, 40vw"
-                />
-                
-                {/* Thumbnail Images - Positioned at bottom with horizontal scroll */}
-                <div className="absolute bottom-4 left-4 right-4">
-                  <div className="flex gap-2 overflow-x-auto scrollbar-hide pb-1" style={{scrollbarWidth: 'none', msOverflowStyle: 'none'}}>
-                    {productImages.map((image, index) => (
-                      <button
-                        key={index}
-                        onClick={() => setSelectedImageIndex(index)}
-                        className={`relative w-12 h-12 bg-white rounded-lg overflow-hidden flex-shrink-0 border-2 transition-all ${
-                          selectedImageIndex === index 
-                            ? 'border-black' 
-                            : 'border-white/80'
-                        }`}
-                      >
-                        <Image 
-                          src={image}
-                          alt={`${product.name} view ${index + 1}`}
-                          fill
-                          className="object-cover"
-                          quality={100}
-                          unoptimized
-                          sizes="48px"
-                        />
-                      </button>
-                    ))}
-                  </div>
+              {/* Main Image with Swipe Support */}
+              <div className="relative aspect-square bg-white rounded-2xl overflow-hidden shadow-sm">
+                <div 
+                  className="flex h-full transition-transform duration-300 ease-out"
+                  style={{ transform: `translateX(-${selectedImageIndex * 100}%)` }}
+                >
+                  {productImages.map((image, index) => (
+                    <div key={index} className="w-full h-full flex-shrink-0 relative">
+                      <Image 
+                        src={image}
+                        alt={`${product.name} view ${index + 1}`}
+                        fill
+                        className="object-contain"
+                        priority={index === 0}
+                        quality={100}
+                        unoptimized
+                        sizes="(max-width: 768px) 90vw, (max-width: 1024px) 50vw, 40vw"
+                      />
+                    </div>
+                  ))}
                 </div>
+                
+                {/* Navigation Arrows */}
+                <button 
+                  onClick={() => setSelectedImageIndex(prev => prev > 0 ? prev - 1 : productImages.length - 1)}
+                  className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/90 hover:bg-white rounded-full flex items-center justify-center shadow-lg transition-all z-10"
+                >
+                  <ChevronLeft className="w-5 h-5 text-gray-800" />
+                </button>
+                <button 
+                  onClick={() => setSelectedImageIndex(prev => prev < productImages.length - 1 ? prev + 1 : 0)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/90 hover:bg-white rounded-full flex items-center justify-center shadow-lg transition-all z-10"
+                >
+                  <ChevronRight className="w-5 h-5 text-gray-800" />
+                </button>
+
+                {/* Image Counter */}
+                <div className="absolute top-4 right-4 bg-black/50 text-white text-sm px-3 py-1 rounded-full z-10">
+                  {selectedImageIndex + 1} / {productImages.length}
+                </div>
+              </div>
+              
+              {/* Thumbnail Images - Horizontal scroll below main image */}
+              <div className="mt-4 flex gap-2 overflow-x-auto pb-2 scrollbar-hide px-1">
+                {productImages.map((image, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setSelectedImageIndex(index)}
+                    className={`relative w-16 h-16 flex-shrink-0 rounded-lg overflow-hidden border-2 transition-all ${
+                      selectedImageIndex === index 
+                        ? 'border-[#5a9ea8] ring-2 ring-[#5a9ea8]/20' 
+                        : 'border-gray-200 hover:border-gray-300'
+                    }`}
+                  >
+                    <Image 
+                      src={image}
+                      alt={`${product.name} view ${index + 1}`}
+                      fill
+                      className="object-cover"
+                      quality={100}
+                      unoptimized
+                      sizes="64px"
+                    />
+                  </button>
+                ))}
               </div>
             </div>
 
