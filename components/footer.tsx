@@ -13,10 +13,10 @@ export default function Footer() {
   ]
 
   const paymentMethods = [
-    { name: "Visa", src: "https://cdn.shopify.com/shopifycloud/checkout-web/assets/0169695890db3db16bfe.svg" },
-    { name: "Mastercard", src: "https://cdn.shopify.com/shopifycloud/checkout-web/assets/8f9c63fb8a5d9a7b5f52.svg" },
-    { name: "American Express", src: "https://cdn.shopify.com/shopifycloud/checkout-web/assets/c2e96f8b0d4cbe0df8ad.svg" },
-    { name: "Discover", src: "https://cdn.shopify.com/shopifycloud/checkout-web/assets/e3e6b97a0d8c7b83e56c.svg" },
+    { name: "Visa", src: "https://js.stripe.com/v3/fingerprinted/img/visa-729c05aad3a0d5f83e30.svg" },
+    { name: "Mastercard", src: "https://js.stripe.com/v3/fingerprinted/img/mastercard-7b2f208c983b23ca67e5.svg" },
+    { name: "American Express", src: "https://js.stripe.com/v3/fingerprinted/img/amex-a49b82f0fe31d1e9a28e.svg" },
+    { name: "Discover", src: "https://js.stripe.com/v3/fingerprinted/img/discover-1debe7215f3b9f8ca24e.svg" },
   ]
 
   return (
