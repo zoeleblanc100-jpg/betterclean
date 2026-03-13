@@ -1,9 +1,9 @@
 export const en = {
   // Header
   header: {
-    toys: "Toys",
-    fournitures: "Supplies",
-    guide: "Cat Care Guide",
+    toys: "Shop",
+    fournitures: "Accessories", 
+    guide: "User Guide",
     about: "About Us",
     tracking: "Track Order",
     contact: "Contact",
@@ -11,30 +11,30 @@ export const en = {
 
   // Hero Section
   hero: {
-    title: "Smart Interactive Ball",
-    subtitle: "The smart toy for curious cats",
+    title: "BetterClean Electric Scrubber",
+    subtitle: "Deep clean without the effort",
     shopNow: "SHOP NOW",
-    desktopSubtitle: "Designed for curious cats",
-    desktopTitle: "The toy your cat deserves.",
-    desktopDescription: "Stimulate your cat's natural instincts with our smart interactive ball. Fast shipping across Canada.",
-    buyButton: "Buy — CA$4.99",
+    desktopSubtitle: "Effortless deep cleaning",
+    desktopTitle: "The power scrubber your home deserves.",
+    desktopDescription: "Remove stubborn grime fast with our powerful electric scrubber. 300 RPM motor, 90min battery life, waterproof IPX7. Free shipping across Canada.",
+    buyButton: "Buy — CA$26.97",
     learnMore: "Learn more →",
   },
 
   // Top Picks
   topPicks: {
-    title: "Elevate Your Cat's Life with Top Picks",
-    subtitle: "Discover curated products designed for your pet's well-being and happiness, because smart choices lead to smarter, healthier pets.",
+    title: "Transform Your Cleaning Routine",
+    subtitle: "Discover the power of effortless cleaning with our premium electric scrubber designed for your home's toughest messes.",
     addToCart: "ADD TO CART",
   },
 
   // Shop by Category
   shopByCategory: {
     title: "Shop by Category",
-    toys: "Toys",
-    toysDesc: "Premium cat toys designed to stimulate your cat's play instinct, promote exercise and strengthen the bond with your companion. Because a cat that plays is a happy cat.",
-    fournitures: "Supplies",
-    fournituresDesc: "Everything your cat needs for a healthy and happy life. Water fountains, accessories and more.",
+    toys: "Scrubbers",
+    toysDesc: "Professional-grade electric scrubbers designed to cut through grime, soap scum, and tough stains with minimal effort. Because a clean home is a happy home.",
+    fournitures: "Accessories",
+    fournituresDesc: "Everything you need for a complete cleaning system. Replacement brush heads, extension handles, and more.",
   },
 
   // Features Section
@@ -54,8 +54,8 @@ export const en = {
 
   // Loved by Families
   lovedByFamilies: {
-    title: "Loved by Pet Families Worldwide",
-    subtitle: "Discover why thousands of families trust Purrball for their companions' happiness.",
+    title: "Loved by Homeowners Worldwide",
+    subtitle: "Discover why thousands of families trust BetterClean for their home's cleanliness.",
   },
 
   // Benefits Section
@@ -82,8 +82,8 @@ export const en = {
   footer: {
     shop: "Shop",
     allProducts: "All Products",
-    toys: "Toys",
-    fournitures: "Supplies",
+    toys: "Scrubbers",
+    fournitures: "Accessories",
     help: "Help",
     contact: "Contact",
     faq: "FAQ",
@@ -97,17 +97,16 @@ export const en = {
     madeWith: "Made with ❤️ in Vancouver",
   },
 
-  // Products Page (Toys)
+  // Products Page
   productsPage: {
-    title: "Toys",
+    title: "BetterClean Pro",
     trending: "Trending This Month",
     allProducts: "All Products",
-    addToCart: "ADD TO CART",
-    viewDetails: "VIEW DETAILS",
-    learnMore: "LEARN MORE",
+    cat: "Scrubber",
     save: "Save",
-    cat: "Cat",
-    seeInAction: "See in action",
+    addToCart: "Add to Cart",
+    viewDetails: "View Details",
+    learnMore: "Learn More",
   },
 
   // Fournitures Page

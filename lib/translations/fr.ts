@@ -1,9 +1,9 @@
 export const fr = {
   // Header
   header: {
-    toys: "Toys",
-    fournitures: "Fournitures",
-    guide: "Guide Soins Chat",
+    toys: "Magasiner",
+    fournitures: "Accessoires",
+    guide: "Guide Utilisateur",
     about: "À Propos",
     tracking: "Suivre Commande",
     contact: "Contact",
@@ -11,30 +11,30 @@ export const fr = {
 
   // Hero Section
   hero: {
-    title: "Smart Interactive Ball",
-    subtitle: "Le jouet intelligent pour chats curieux",
-    shopNow: "SHOP NOW",
-    desktopSubtitle: "Conçu pour les chats curieux",
-    desktopTitle: "Le jouet que votre chat mérite.",
-    desktopDescription: "Stimulez l'instinct naturel de votre félin avec notre balle interactive intelligente. Livraison rapide partout au Canada.",
-    buyButton: "Acheter — CA$4.99",
+    title: "BetterClean Electric Scrubber",
+    subtitle: "Nettoyage en profondeur sans effort",
+    shopNow: "MAGASINER",
+    desktopSubtitle: "Nettoyage en profondeur sans effort",
+    desktopTitle: "La brosse électrique que votre maison mérite.",
+    desktopDescription: "Éliminez la saleté tenace rapidement avec notre puissante brosse électrique. Moteur 300 RPM, batterie 90min, étanche IPX7. Livraison gratuite partout au Canada.",
+    buyButton: "Acheter — 26,97 CA$",
     learnMore: "En savoir plus →",
   },
 
   // Top Picks
   topPicks: {
-    title: "Améliorez la Vie de Votre Chat avec Nos Coups de Cœur",
-    subtitle: "Découvrez des produits soigneusement sélectionnés pour le bien-être et le bonheur de votre animal, car les bons choix mènent à des animaux plus intelligents et en meilleure santé.",
+    title: "Transformez Votre Routine de Nettoyage",
+    subtitle: "Découvrez la puissance du nettoyage sans effort avec notre brosse électrique premium conçue pour les salissures les plus tenaces de votre maison.",
     addToCart: "AJOUTER AU PANIER",
   },
 
   // Shop by Category
   shopByCategory: {
     title: "Magasiner par Catégorie",
-    toys: "Jouets",
-    toysDesc: "Des jouets pour chats premium conçus pour stimuler l'instinct de jeu de votre félin, favoriser l'exercice et renforcer le lien avec votre compagnon. Parce qu'un chat qui joue est un chat heureux.",
-    fournitures: "Fournitures",
-    fournituresDesc: "Tout ce dont votre chat a besoin pour une vie saine et heureuse. Fontaines à eau, accessoires et plus encore.",
+    toys: "Brosses",
+    toysDesc: "Brosses électriques professionnelles conçues pour éliminer la saleté, la mousse de savon et les taches tenaces avec un minimum d'effort. Parce qu'une maison propre est une maison heureuse.",
+    fournitures: "Accessoires",
+    fournituresDesc: "Tout ce dont vous avez besoin pour un système de nettoyage complet. Têtes de brosse de rechange, poignées d'extension, et plus encore.",
   },
 
   // Features Section
@@ -54,13 +54,13 @@ export const fr = {
 
   // Loved by Families
   lovedByFamilies: {
-    title: "Adoré par les Familles d'Animaux du Monde Entier",
-    subtitle: "Découvrez pourquoi des milliers de familles font confiance à Purrball pour le bonheur de leurs compagnons.",
+    title: "Adoré par les Propriétaires du Monde Entier",
+    subtitle: "Découvrez pourquoi des milliers de familles font confiance à BetterClean pour la propreté de leur maison.",
   },
 
   // Benefits Section
   benefits: {
-    title: "Bon pour votre chat. Bon pour vous.",
+    title: "Bon pour votre maison. Bon pour vous.",
     subtitle: "AVANTAGES",
   },
 
@@ -73,7 +73,7 @@ export const fr = {
   // Newsletter
   newsletter: {
     title: "Restez Informé",
-    subtitle: "Recevez nos offres exclusives et conseils pour votre chat.",
+    subtitle: "Recevez nos offres exclusives et conseils de nettoyage.",
     placeholder: "Votre adresse email",
     button: "S'abonner",
   },
@@ -82,8 +82,8 @@ export const fr = {
   footer: {
     shop: "Boutique",
     allProducts: "Tous les Produits",
-    toys: "Jouets",
-    fournitures: "Fournitures",
+    toys: "Brosses",
+    fournitures: "Accessoires",
     help: "Aide",
     contact: "Contact",
     faq: "FAQ",
@@ -97,23 +97,22 @@ export const fr = {
     madeWith: "Fait avec ❤️ à Vancouver",
   },
 
-  // Products Page (Toys)
+  // Products Page
   productsPage: {
-    title: "Jouets",
-    trending: "Tendances du Mois",
+    title: "BetterClean Pro",
+    trending: "Tendance Ce Mois",
     allProducts: "Tous les Produits",
-    addToCart: "AJOUTER AU PANIER",
-    viewDetails: "VOIR DÉTAILS",
-    learnMore: "EN SAVOIR PLUS",
+    cat: "Brosse",
     save: "Économisez",
-    cat: "Chat",
-    seeInAction: "Voir en action",
+    addToCart: "Ajouter au Panier",
+    viewDetails: "Voir Détails",
+    learnMore: "En Savoir Plus",
   },
 
   // Fournitures Page
   fournituresPage: {
     title: "Fournitures",
-    subtitle: "Tout ce dont votre chat a besoin pour une vie saine et heureuse.",
+    subtitle: "Tout ce dont votre maison a besoin pour un système de nettoyage complet.",
     collection: "Collection",
     new: "Nouveau",
     productSubtitle: "La fontaine à eau intelligente sans pompe qui garde votre chat hydraté avec de l'eau fraîche et filtrée.",

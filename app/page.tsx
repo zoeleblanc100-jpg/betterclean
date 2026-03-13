@@ -7,9 +7,11 @@ import { Zap, Battery, Droplets } from "lucide-react"
 import Header from "@/components/header"
 import Footer from "@/components/footer"
 import ReviewsSection from "@/components/reviews-section"
+import { useI18n } from "@/lib/i18n-context"
 
 export default function LandingPage() {
   const [mounted, setMounted] = useState(false)
+  const { t } = useI18n()
 
   useEffect(() => {
     setMounted(true)
@@ -24,17 +26,17 @@ export default function LandingPage() {
       <section className="px-4 py-16 md:py-24 bg-white">
         <div className="max-w-6xl mx-auto text-center">
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 text-[#1a1a1a] font-[var(--font-dm-sans)]">
-            Spend Less. Clean More
+            {t.hero.title}
           </h1>
           <p className="text-lg md:text-xl mb-8 max-w-2xl mx-auto text-gray-600 font-[var(--font-dm-sans)]">
-            A powerful electric scrubber that removes grime fast, without the effort.
+            {t.hero.subtitle}
           </p>
           <Link href="/produits/betterclean-pro-1">
             <Button 
               size="lg" 
               className="bg-[#5a9ea8] hover:bg-[#4a8a94] text-white px-8 py-4 text-lg font-semibold rounded-full"
             >
-              Get Yours Now 👉
+              {t.hero.shopNow} 👉
             </Button>
           </Link>
         </div>
@@ -47,7 +49,7 @@ export default function LandingPage() {
             <div className="relative w-full h-auto">
               <Image 
                 src="/image_amelioree.png" 
-                alt="BetterClean Electric Scrubber"
+                alt={t.hero.title}
                 width={600}
                 height={400}
                 className="w-full h-auto object-contain rounded-3xl"
@@ -69,7 +71,7 @@ export default function LandingPage() {
                   size="lg" 
                   className="bg-[#5a9ea8] hover:bg-[#4a8a94] text-white px-8 py-4 text-lg font-semibold rounded-full"
                 >
-                  Get Yours Now 👉
+                  {t.hero.shopNow} 👉
                 </Button>
               </Link>
             </div>
@@ -93,14 +95,14 @@ export default function LandingPage() {
                   size="lg" 
                   className="bg-[#5a9ea8] hover:bg-[#4a8a94] text-white px-8 py-4 text-lg font-semibold rounded-full"
                 >
-                  Get Yours Now 👉
+                  {t.hero.shopNow} 👉
                 </Button>
               </Link>
             </div>
             <div className="relative w-full h-auto">
               <Image 
                 src="/image2_amelioree.png" 
-                alt="BetterClean in Action"
+                alt={t.hero.title}
                 width={600}
                 height={400}
                 className="w-full h-auto object-contain rounded-3xl"
@@ -118,7 +120,7 @@ export default function LandingPage() {
       <section className="px-4 py-16 md:py-20 bg-white">
         <div className="max-w-6xl mx-auto text-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-12 text-[#1a1a1a] font-[var(--font-dm-sans)]">
-            Why Choose BetterClean?
+            {t.benefits.title}
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="text-center">
