@@ -40,7 +40,7 @@ export default function OrderSuccess() {
   useEffect(() => {
     const loadOrder = async () => {
       try {
-        const latestOrderNumber = localStorage.getItem('purrball-latest-order')
+        const latestOrderNumber = localStorage.getItem('bettercleans-latest-order')
         if (latestOrderNumber) {
           let orderData: OrderRecord | null = null
 
@@ -79,7 +79,7 @@ export default function OrderSuccess() {
             setOrder(orderData)
 
             // Send confirmation email (only once per order)
-            const emailSentKey = `purrball-email-sent-${latestOrderNumber}`
+            const emailSentKey = `bettercleans-email-sent-${latestOrderNumber}`
             if (!localStorage.getItem(emailSentKey)) {
               try {
                 await fetch('/api/send-confirmation', {
@@ -106,7 +106,7 @@ export default function OrderSuccess() {
                 localStorage.setItem(emailSentKey, 'true')
 
                 // TikTok Purchase event (only once per order)
-                const ttPurchaseKey = `purrball-tt-purchase-${latestOrderNumber}`
+                const ttPurchaseKey = `bettercleans-tt-purchase-${latestOrderNumber}`
                 if (!localStorage.getItem(ttPurchaseKey)) {
                   const contents = (orderData.items || []).map((item: any) => ({
                     content_id: item.id,
@@ -189,7 +189,7 @@ export default function OrderSuccess() {
             {isFr ? 'Commande confirmée !' : 'Order Confirmed!'}
           </h1>
           <p className="text-lg text-neutral-400 mb-8">
-            {isFr ? 'Merci pour votre achat ! Votre chat va adorer ses nouveaux jouets.' : 'Thank you for your purchase! Your cat will love their new toys.'}
+            {isFr ? 'Merci pour votre achat ! Votre maison sera impeccable avec BetterClean.' : 'Thank you for your purchase! Your home will be spotless with BetterClean.'}
           </p>
 
           <div className="bg-white rounded-xl shadow-lg p-6 mb-8 text-left">

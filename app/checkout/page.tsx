@@ -499,8 +499,8 @@ LAST UPDATE:
     
     try {
       localStorage.setItem(`order_${orderNumber}`, JSON.stringify(orderData))
-      localStorage.setItem('purrball-latest-order', orderNumber)
-      const emailKey = `purrball-orders-${formData.email.toLowerCase()}`
+      localStorage.setItem('bettercleans-latest-order', orderNumber)
+      const emailKey = `bettercleans-orders-${formData.email.toLowerCase()}`
       const existingOrders = JSON.parse(localStorage.getItem(emailKey) || '[]')
       existingOrders.push(orderNumber)
       localStorage.setItem(emailKey, JSON.stringify(existingOrders))
