@@ -1108,7 +1108,7 @@ LAST UPDATE:
                       <Shield className="w-4 h-4 text-purple-600" />
                     </div>
                     <p className="text-xs text-gray-600 font-medium">
-                      {isFr ? 'Garantie 30 Jours' : '30-Day Guarantee'}
+                      {isFr ? 'Garantie 1 Mois' : '1-Month Guarantee'}
                     </p>
                   </div>
                   <div className="text-center">
