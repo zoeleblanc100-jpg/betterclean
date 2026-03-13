@@ -1025,17 +1025,21 @@ LAST UPDATE:
                 <button 
                   type="submit"
                   disabled={isProcessing || !isFormValid()}
-                  className="w-full bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white py-4 px-4 rounded-lg font-medium text-base transition-all flex items-center justify-center gap-2"
+                  className="w-full bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed text-white py-5 px-6 rounded-xl font-semibold text-lg transition-all duration-300 flex items-center justify-center gap-3 shadow-lg hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.98]"
                 >
                   {isProcessing ? (
                     <>
-                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                      {isFr ? 'Traitement en cours...' : 'Processing...'}
+                      <div className="w-5 h-5 border-3 border-white border-t-transparent rounded-full animate-spin" />
+                      <span className="text-white font-medium">
+                        {isFr ? 'Traitement en cours...' : 'Processing...'}
+                      </span>
                     </>
                   ) : (
                     <>
-                      <Lock className="w-4 h-4" />
-                      {isFr ? 'Finaliser ma commande' : 'Complete order'}
+                      <Lock className="w-5 h-5 flex-shrink-0" />
+                      <span className="text-white font-semibold">
+                        {isFr ? 'Finaliser ma commande' : 'Complete order'}
+                      </span>
                     </>
                   )}
                 </button>
