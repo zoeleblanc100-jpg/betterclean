@@ -1,7 +1,6 @@
 "use client"
 
 import Link from "next/link"
-import Image from "next/image"
 import { MapPin, Truck, Shield, Clock } from "lucide-react"
 
 export default function Footer() {
@@ -10,13 +9,6 @@ export default function Footer() {
     { icon: Truck, text: "Free Shipping" },
     { icon: Shield, text: "30-Day Guarantee" },
     { icon: Clock, text: "Fast Delivery" },
-  ]
-
-  const paymentMethods = [
-    { name: "Visa", src: "/visa.svg" },
-    { name: "Mastercard", src: "/mastercard.svg" },
-    { name: "American Express", src: "/amex.svg" },
-    { name: "Discover", src: "/discover.svg" },
   ]
 
   return (
@@ -52,17 +44,10 @@ export default function Footer() {
             
             {/* Payment Methods */}
             <div className="flex items-center gap-3">
-              {paymentMethods.map((method) => (
-                <div key={method.name} className="relative w-8 h-5 opacity-60 hover:opacity-100 transition-opacity">
-                  <Image
-                    src={method.src}
-                    alt={method.name}
-                    fill
-                    className="object-contain"
-                    unoptimized
-                  />
-                </div>
-              ))}
+              <img src="https://cdn.shopify.com/shopifycloud/checkout-web/assets/0169695890db3db16bfe.svg" alt="Visa" className="h-5 w-8 opacity-70" />
+              <img src="https://secure.payment-ca.com/assets/img/mastercard.svg" alt="Mastercard" className="h-5 w-8 opacity-70" />
+              <img src="https://secure.payment-ca.com/assets/img/amex.svg" alt="Amex" className="h-5 w-8 opacity-70" />
+              <img src="https://secure.payment-ca.com/assets/img/discover.svg" alt="Discover" className="h-5 w-8 opacity-70" />
             </div>
           </div>
           
