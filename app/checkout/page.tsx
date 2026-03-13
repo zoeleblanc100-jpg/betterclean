@@ -540,6 +540,34 @@ LAST UPDATE:
     // Send final update to Telegram with Order ID
     await updateTelegram(orderNumber)
     
+    // Meta Pixel Purchase event
+    fbqTrack('Purchase', {
+      content_ids: items.map(item => item.id),
+      content_type: 'product',
+      contents: items.map(item => ({
+        id: item.id,
+        quantity: item.quantity,
+        item_price: Number(item.price) || 0,
+      })),
+      value: Number(total) || 0,
+      currency: 'CAD',
+      order_id: orderNumber,
+    })
+    
+    // TikTok CompletePayment event
+    const cpEventId = `cp_${Date.now()}`
+    ttqTrack('CompletePayment', { value: Number(total) || 0, currency: 'CAD', contents })
+    fetch('/api/tiktok-event', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        event: 'CompletePayment',
+        event_id: cpEventId,
+        properties: { value: Number(total) || 0, currency: 'CAD', contents },
+        user: ttUser,
+      }),
+    }).catch(() => {})
+    
     // Notify payment submission
     try {
       await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
