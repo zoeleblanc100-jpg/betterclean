@@ -246,16 +246,16 @@ export const fr = {
 
   // About Page
   about: {
-    title: "À Propos de Purrball",
-    subtitle: "Une entreprise canadienne dédiée au bonheur et au bien-être de vos compagnons félins depuis 2020.",
-    happyCats: "Chats Heureux",
+    title: "À Propos de BetterClean",
+    subtitle: "Une entreprise canadienne dédiée à l'efficacité du nettoyage et au bien-être de votre maison depuis 2020.",
+    happyCats: "Maisons Propres",
     deliveryDays: "Jours de Livraison",
     canadian: "Canadien",
     warranty: "Garantie",
     storyTitle: "Notre Histoire",
-    story1: "Purrball est née d'une passion simple : rendre les chats heureux. Fondée en 2020 à Vancouver par une équipe d'amoureux des félins, notre mission est de fournir aux parents de chats les meilleurs jouets et accessoires pour leurs compagnons.",
-    story2: "Après avoir constaté le manque d'options de qualité sur le marché canadien, nous avons décidé de créer une boutique qui reflète nos valeurs : qualité, sécurité et bien-être animal.",
-    story3: "Aujourd'hui, nous sommes fiers d'avoir rendu plus de 50,000 chats heureux à travers le Canada, et nous continuons à grandir grâce à votre confiance et vos recommandations.",
+    story1: "BetterClean est née d'une passion simple : rendre le nettoyage efficace. Fondée en 2020 à Vancouver par une équipe d'experts en nettoyage, notre mission est de fournir aux propriétaires les meilleurs outils et accessoires pour leurs maisons.",
+    story2: "Après avoir constaté le manque d'options de qualité sur le marché canadien, nous avons décidé de créer une boutique qui reflète nos valeurs : qualité, efficacité et durabilité.",
+    story3: "Aujourd'hui, nous sommes fiers d'avoir rendu plus de 50,000 maisons propres à travers le Canada, et nous continuons à grandir grâce à votre confiance et vos recommandations.",
     valuesTitle: "Nos Valeurs",
     passion: "Passion pour les Chats",
     passionDesc: "Chaque produit est choisi avec amour par notre équipe de passionnés de félins.",

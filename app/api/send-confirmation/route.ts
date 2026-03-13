@@ -152,11 +152,11 @@ export async function POST(req: NextRequest) {
     }
 
     const subject = isFr
-      ? `Commande confirmee - Purrball #${orderNumber}`
-      : `Order Confirmed - Purrball #${orderNumber}`
+      ? `Commande confirmée - BetterClean #${orderNumber}`
+      : `Order Confirmed - BetterClean #${orderNumber}`
 
     const { data, error } = await resend.emails.send({
-      from: 'Purrball <noreply@bettercleans.ca>',
+      from: 'BetterClean <noreply@bettercleans.ca>',
       to: [email],
       subject,
       html,
