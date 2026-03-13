@@ -4,7 +4,6 @@ import { useCart } from "@/lib/cart-context"
 import Image from "next/image"
 import Link from "next/link"
 import { Minus, Plus, Trash2, ShoppingCart, ArrowLeft, PartyPopper, Truck, CheckCircle, Lock, RotateCcw, Shield } from "lucide-react"
-import Footer from "@/components/footer"
 import { useI18n } from "@/lib/i18n-context"
 
 export default function CartPage() {
@@ -235,8 +234,6 @@ export default function CartPage() {
           </div>
         </div>
       </div>
-      
-      <Footer />
     </div>
   )
 }
