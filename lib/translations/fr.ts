@@ -335,5 +335,8 @@ export const fr = {
     viewDetails: "Voir détails",
     learnMore: "En savoir plus",
     freeShipping: "LIVRAISON GRATUITE OFFERTE",
+    ok: "OK",
+    plus: "plus",
+    neSorte: "ne sorte",
   },
 }

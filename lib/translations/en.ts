@@ -335,5 +335,8 @@ export const en = {
     viewDetails: "View Details",
     learnMore: "Learn more",
     freeShipping: "FREE SHIPPING OFFERED",
+    ok: "OK",
+    plus: "plus",
+    neSorte: "ne sorte",
   },
 }
