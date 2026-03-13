@@ -415,17 +415,36 @@ export default function ProductPage({ params }: ProductPageProps) {
         </div>
       </section>
 
-      {/* Simple Delivery Promise */}
+      {/* Smart Delivery Promise */}
       <div className="bg-green-50 border-2 border-green-200 rounded-xl p-4 mb-12">
         <div className="text-center">
           <div className="flex justify-center items-center gap-3 mb-2">
             <Truck className="w-8 h-8 text-green-600" />
             <h3 className="text-lg font-bold text-green-800">
-              {isFr ? `Livraison demain au Québec si commande avant 15h` : `Delivery tomorrow to Quebec if ordered before 3PM`}
+              {(() => {
+                // Simplified detection - would use actual timezone in production
+                const userLocation = isFr ? 'Toronto' : 'Toronto' // Default
+                if (userLocation === 'Vancouver') {
+                  return isFr ? 'Livraison demain à Vancouver si commande avant 9h' : 'Delivery tomorrow to Vancouver if ordered before 9AM'
+                } else if (userLocation === 'Toronto') {
+                  return isFr ? 'Livraison demain à Toronto si commande avant 9h' : 'Delivery tomorrow to Toronto if ordered before 9AM'
+                } else {
+                  return isFr ? 'Livraison demain au Québec si commande avant 15h' : 'Delivery tomorrow to Quebec if ordered before 3PM'
+                }
+              })()}
             </h3>
           </div>
           <p className="text-green-700 text-sm font-[var(--font-dm-sans)]">
-            {isFr ? '*Valable pour les commandes avant 15h au Québec uniquement.' : '*Valid for orders before 3PM in Quebec only.'}
+            {(() => {
+              const userLocation = isFr ? 'Toronto' : 'Toronto'
+              if (userLocation === 'Vancouver') {
+                return isFr ? '*Valable pour les commandes avant 9h à Vancouver uniquement.' : '*Valid for orders before 9AM in Vancouver only.'
+              } else if (userLocation === 'Toronto') {
+                return isFr ? '*Valable pour les commandes avant 9h à Toronto uniquement.' : '*Valid for orders before 9AM in Toronto only.'
+              } else {
+                return isFr ? '*Valable pour les commandes avant 15h au Québec uniquement.' : '*Valid for orders before 3PM in Quebec only.'
+              }
+            })()}
           </p>
         </div>
       </div>
