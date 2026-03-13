@@ -415,34 +415,17 @@ export default function ProductPage({ params }: ProductPageProps) {
         </div>
       </section>
 
-      {/* Amazon-style Delivery Promise */}
-      <div className="bg-green-50 border-2 border-green-200 rounded-xl p-6 mb-12">
+      {/* Simple Delivery Promise */}
+      <div className="bg-green-50 border-2 border-green-200 rounded-xl p-4 mb-12">
         <div className="text-center">
-          <div className="flex justify-center mb-4">
-            <Truck className="w-12 h-12 text-green-600" />
+          <div className="flex justify-center items-center gap-3 mb-2">
+            <Truck className="w-8 h-8 text-green-600" />
+            <h3 className="text-lg font-bold text-green-800">
+              {isFr ? `Livraison demain au Québec si commande avant 15h` : `Delivery tomorrow to Quebec if ordered before 3PM`}
+            </h3>
           </div>
-          <h3 className="text-xl font-bold text-green-800 mb-2">
-            {isFr ? 'Livraison Avant 15h Demain' : 'Order Before 3PM, Get it Tomorrow'}
-          </h3>
-          <p className="text-green-700 font-[var(--font-dm-sans)] mb-4">
-            {isFr ? 'Commandez avant 15h et recevez votre commande demain partout en Ontario*' : 'Order before 3PM and get it tomorrow anywhere in Ontario*'}
-          </p>
-          <div className="text-sm text-gray-600 space-y-2">
-            <div className="flex items-center gap-2">
-              <Check className="w-4 h-4 text-green-600" />
-              <span>{isFr ? 'Livraison le jour suivant' : 'Next-day delivery'}</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Check className="w-4 h-4 text-green-600" />
-              <span>{isFr ? 'Suivi en temps réel' : 'Real-time tracking'}</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Check className="w-4 h-4 text-green-600" />
-              <span>{isFr ? 'Aucun frais supplémentaire' : 'No extra fees'}</span>
-            </div>
-          </div>
-          <p className="text-xs text-gray-500 mt-4">
-            {isFr ? '*Valable pour les commandes avant 15h en Ontario uniquement. Conditions applicables.' : '*Valid for orders before 3PM in Ontario only. Conditions apply.'}
+          <p className="text-green-700 text-sm font-[var(--font-dm-sans)]">
+            {isFr ? '*Valable pour les commandes avant 15h au Québec uniquement.' : '*Valid for orders before 3PM in Quebec only.'}
           </p>
         </div>
       </div>
