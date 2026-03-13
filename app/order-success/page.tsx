@@ -11,25 +11,81 @@ import { getOrderByNumber, type OrderRecord } from "@/lib/orders"
 import { ttqTrack, ttqIdentify } from "@/lib/tiktok"
 import { fbqTrack, fbqIdentify } from "@/lib/meta"
 
+function detectUserProvince(): string {
+  // Get timezone to detect province
+  const timezone = 'America/Toronto' // Simplified for now
+  
+  // Map timezones to provinces
+  const timezoneToProvince: Record<string, string> = {
+    'America/Toronto': 'ON',
+    'America/Montreal': 'QC',
+    'America/Vancouver': 'BC',
+    'America/Edmonton': 'AB',
+    'America/Winnipeg': 'MB',
+    'America/Halifax': 'NS',
+    'America/Fredericton': 'NB',
+    'America/St_Johns': 'NL',
+    'America/Regina': 'SK',
+    'America/Charlottetown': 'PE',
+    'America/Whitehorse': 'YT',
+    'America/Yellowknife': 'NT',
+    'America/Iqaluit': 'NU'
+  }
+  
+  // Default to Ontario if timezone detection fails
+  return timezoneToProvince[timezone] || 'ON'
+}
+
 function getEstimatedDelivery(orderDate: string, isFr: boolean): string {
   const date = new Date(orderDate)
-  const start = new Date(date)
-  start.setDate(start.getDate() + 2)
-  const end = new Date(date)
-  end.setDate(end.getDate() + 3)
+  const now = new Date()
+  const orderHour = now.getHours()
+  const province = detectUserProvince()
+  
+  // Check if order was placed before 11am and is in Ontario
+  const isOntarioBefore11am = province === 'ON' && orderHour < 11
+  
+  let start = new Date(date)
+  let end = new Date(date)
+  
+  if (isOntarioBefore11am) {
+    // Next day delivery for Ontario orders before 11am
+    start.setDate(start.getDate() + 1)
+    end.setDate(end.getDate() + 1)
+  } else {
+    // Standard 2-3 day delivery for other provinces/times
+    start.setDate(start.getDate() + 2)
+    end.setDate(end.getDate() + 3)
+  }
   
   const months = isFr 
     ? ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre']
     : ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
   
+  const provinceNames: Record<string, { fr: string; en: string }> = {
+    'ON': { fr: 'Ontario', en: 'Ontario' },
+    'QC': { fr: 'Québec', en: 'Quebec' },
+    'BC': { fr: 'Colombie-Britannique', en: 'British Columbia' },
+    'AB': { fr: 'Alberta', en: 'Alberta' },
+    'MB': { fr: 'Manitoba', en: 'Manitoba' },
+    'NS': { fr: 'Nouvelle-Écosse', en: 'Nova Scotia' },
+    'NB': { fr: 'Nouveau-Brunswick', en: 'New Brunswick' },
+    'NL': { fr: 'Terre-Neuve-et-Labrador', en: 'Newfoundland and Labrador' },
+    'SK': { fr: 'Saskatchewan', en: 'Saskatchewan' },
+    'PE': { fr: 'Île-du-Prince-Édouard', en: 'Prince Edward Island' },
+    'YT': { fr: 'Yukon', en: 'Yukon' },
+    'NT': { fr: 'Territoires du Nord-Ouest', en: 'Northwest Territories' },
+    'NU': { fr: 'Nunavut', en: 'Nunavut' }
+  }
+  
   if (start.getMonth() === end.getMonth()) {
     return isFr
-      ? `${start.getDate()}-${end.getDate()} ${months[start.getMonth()]} ${start.getFullYear()}`
-      : `${months[start.getMonth()]} ${start.getDate()}-${end.getDate()}, ${start.getFullYear()}`
+      ? `${start.getDate()} ${months[start.getMonth()]} ${start.getFullYear()} (${provinceNames[province].fr})`
+      : `${months[start.getMonth()]} ${start.getDate()}, ${start.getFullYear()} (${provinceNames[province].en})`
   }
   return isFr
-    ? `${start.getDate()} ${months[start.getMonth()]} - ${end.getDate()} ${months[end.getMonth()]} ${start.getFullYear()}`
-    : `${months[start.getMonth()]} ${start.getDate()} - ${months[end.getMonth()]} ${end.getDate()}, ${start.getFullYear()}`
+    ? `${start.getDate()} ${months[start.getMonth()]} - ${end.getDate()} ${months[end.getMonth()]} ${start.getFullYear()} (${provinceNames[province].fr})`
+    : `${months[start.getMonth()]} ${start.getDate()} - ${months[end.getMonth()]} ${end.getDate()}, ${start.getFullYear()} (${provinceNames[province].en})`
 }
 
 export default function OrderSuccess() {
