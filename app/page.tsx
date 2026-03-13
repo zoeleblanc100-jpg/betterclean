@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Zap, Battery, Droplets } from "lucide-react"
 import Header from "@/components/header"
 import Footer from "@/components/footer"
+import ReviewsSection from "@/components/reviews-section"
 
 export default function LandingPage() {
   const [mounted, setMounted] = useState(false)
@@ -156,7 +157,10 @@ export default function LandingPage() {
           </div>
         </div>
       </section>
-      
+
+      {/* Reviews Section */}
+      <ReviewsSection />
+
       {/* Footer */}
       <Footer />
     </div>
