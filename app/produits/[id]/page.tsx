@@ -421,11 +421,11 @@ export default function ProductPage({ params }: ProductPageProps) {
           <div className="flex justify-center items-center gap-3 mb-2">
             <Truck className="w-8 h-8 text-green-600" />
             <h3 className="text-lg font-bold text-green-800">
-              {isFr ? 'Livraison demain au Québec si commande avant 15h' : 'Delivery tomorrow to Quebec if ordered before 3PM'}
+              {isFr ? 'Livraison demain au Québec si commande avant 21h' : 'Delivery tomorrow to Quebec if ordered before 9PM'}
             </h3>
           </div>
           <p className="text-green-700 text-sm font-[var(--font-dm-sans)]">
-            {isFr ? '*Valable pour les commandes avant 15h au Québec uniquement.' : '*Valid for orders before 3PM in Quebec only.'}
+            {isFr ? '*Valable pour les commandes avant 21h au Québec uniquement.' : '*Valid for orders before 9PM in Quebec only.'}
           </p>
         </div>
       </div>
