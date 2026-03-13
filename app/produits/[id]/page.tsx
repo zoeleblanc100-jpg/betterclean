@@ -387,7 +387,7 @@ export default function ProductPage({ params }: ProductPageProps) {
               {/* Features List */}
               <div className="mb-8">
                 <h3 className="text-lg font-semibold mb-4 text-[#1a1a1a] font-[var(--font-dm-sans)]">
-                  Key Features
+                  {isFr ? 'Caractéristiques Clés' : 'Key Features'}
                 </h3>
                 <div className="space-y-2">
                   {product.features.map((feature, index) => (
@@ -407,7 +407,7 @@ export default function ProductPage({ params }: ProductPageProps) {
       <section className="px-4 py-16 bg-gray-50">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-6 text-[#1a1a1a] font-[var(--font-dm-sans)]">
-            Product Description
+            {isFr ? 'Description du Produit' : 'Product Description'}
           </h2>
           <p className="text-lg text-gray-700 leading-relaxed font-[var(--font-dm-sans)]">
             {product.description}
@@ -420,7 +420,7 @@ export default function ProductPage({ params }: ProductPageProps) {
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold mb-4 text-[#1a1a1a] font-[var(--font-dm-sans)]">
-              Why Choose BetterClean?
+              {isFr ? 'Pourquoi Choisir BetterClean ?' : 'Why Choose BetterClean?'}
             </h2>
             <p className="text-lg text-gray-600 font-[var(--font-dm-sans)]">
               {isFr ? 'Rejoignez des milliers de clients satisfaits qui ont transformé leur routine de nettoyage' : 'Join thousands of satisfied customers who\'ve transformed their cleaning routine'}
