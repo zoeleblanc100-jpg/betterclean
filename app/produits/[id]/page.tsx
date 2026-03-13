@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button"
 import { useCart } from "@/lib/cart-context"
 import { ttqTrack } from "@/lib/tiktok"
 import { fbqTrack } from "@/lib/meta"
+import { useI18n } from "@/lib/i18n-context"
 import Header from "@/components/header"
 import Footer from "@/components/footer"
 import ReviewsSection from "@/components/reviews-section"
@@ -19,6 +20,8 @@ interface ProductPageProps {
 export default function ProductPage({ params }: ProductPageProps) {
   const { id } = use(params)
   const { addItem, setCartOpen } = useCart()
+  const { t, formatPrice, locale } = useI18n()
+  const isFr = locale === 'fr'
   const [selectedImageIndex, setSelectedImageIndex] = useState(0)
   const [selectedBundle, setSelectedBundle] = useState("buy1")
   const [openFaq, setOpenFaq] = useState<number | null>(null)
@@ -33,13 +36,22 @@ export default function ProductPage({ params }: ProductPageProps) {
 
   const product = {
     id: "betterclean-pro-1",
-    name: "BetterClean Electric Scrubber",
+    name: isFr ? "Brosse Électrique BetterClean" : "BetterClean Electric Scrubber",
     rating: 4.8,
     totalReviews: 32,
     price: 26.97,
     originalPrice: 56.99,
-    description: "Cut your cleaning time in half while getting better results - BetterClean Electric Scrubber delivers professional-grade power that makes stubborn stains disappear with zero elbow grease.",
-    features: [
+    description: isFr 
+      ? "Réduisez votre temps de nettoyage de moitié tout en obtenant de meilleurs résultats - la brosse électrique BetterClean offre une puissance professionnelle qui fait disparaître les taches tenaces avec un effort minimal."
+      : "Cut your cleaning time in half while getting better results - BetterClean Electric Scrubber delivers professional-grade power that makes stubborn stains disappear with zero elbow grease.",
+    features: isFr ? [
+      "Un outil, possibilités infinies",
+      "Conçu pour durer",
+      "Résultats dignes d'une photo",
+      "Moteur puissant",
+      "Longue autonomie de batterie",
+      "Conception étanche"
+    ] : [
       "One Tool, Endless Possibilities",
       "Built to Last",
       "Photo Worthy Results",
@@ -52,32 +64,53 @@ export default function ProductPage({ params }: ProductPageProps) {
   const bundles = [
     {
       id: "buy1",
-      name: "Buy 1",
+      name: isFr ? "Acheter 1" : "Buy 1",
       price: 26.97,
       originalPrice: 56.99,
       savings: 30.02,
-      description: "Single BetterClean Electric Scrubber"
+      description: isFr ? "Une brosse électrique BetterClean" : "Single BetterClean Electric Scrubber"
     },
     {
       id: "buy2",
-      name: "Buy 2 & Save",
+      name: isFr ? "Acheter 2 & Économiser" : "Buy 2 & Save",
       price: 49.99,
       originalPrice: 113.98,
       savings: 63.99,
-      description: "Two BetterClean Electric Scrubbers",
+      description: isFr ? "Deux brosses électriques BetterClean" : "Two BetterClean Electric Scrubbers",
       popular: true
     },
     {
       id: "buy3",
-      name: "Buy 3 & Save",
+      name: isFr ? "Acheter 3 & Économiser" : "Buy 3 & Save",
       price: 69.99,
       originalPrice: 170.97,
       savings: 100.98,
-      description: "Three BetterClean Electric Scrubbers"
+      description: isFr ? "Trois brosses électriques BetterClean" : "Three BetterClean Electric Scrubbers"
     }
   ]
 
-  const faqs = [
+  const faqs = isFr ? [
+    {
+      q: "Sur quelles surfaces puis-je utiliser le BetterClean Pro ?",
+      a: "Cette brosse est sécuritaire à utiliser sur la plupart des surfaces domestiques courantes, y compris les carreaux, les joints, les éviers, les baignoires, les douches, les cuisinières et la vaisselle. Avec les différentes brosses incluses, vous pouvez passer entre un nettoyage doux et un frottement plus intense selon la surface."
+    },
+    {
+      q: "Est-elle assez puissante pour éliminer la saleté tenace et les taches ?",
+      a: "Oui. Le moteur rotatif à grande vitesse est conçu pour éliminer le crasse accumulée, le savon, la graisse et les taches avec un effort minimal. Vous n'avez pas besoin d'appuyer fort, laissez simplement le BetterClean Pro faire le travail pour vous."
+    },
+    {
+      q: "Combien de temps dure la batterie avec une charge complète ?",
+      a: "La durée de vie de la batterie peut varier selon le réglage de vitesse et la surface nettoyée, mais elle est conçue pour un usage pratique quotidien jusqu'à 2 heures."
+    },
+    {
+      q: "La brosse est-elle étanche et sécuritaire à utiliser autour de l'eau ?",
+      a: "Oui, le BetterClean Pro est conçu pour gérer les environnements humides comme les salles de bain et les cuisines, avec une classification IPX7. Il est sécuritaire à utiliser avec de l'eau et des solutions de nettoyage, ce qui le rend idéal pour les éviers, les douches et la vaisselle."
+    },
+    {
+      q: "Est-ce qu'elle vient avec des têtes de brosse de rechange ?",
+      a: "Oui. La brosse est livrée avec plusieurs têtes interchangeables, vous permettant de nettoyer différentes zones plus efficacement. Les têtes de rechange peuvent également être changées facilement au besoin, vous permettant de continuer à utiliser le même appareil à long terme."
+    },
+  ] : [
     {
       q: "What surfaces can I use the BetterClean Pro on?",
       a: "This scrubber is safe to use on most common household surfaces including tiles, grout, sinks, bathtubs, showers, stovetops and dishes. With the different brush heads included, you can switch between gentle cleaning and tougher scrubbing depending on the surface.",
