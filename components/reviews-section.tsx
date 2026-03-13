@@ -81,7 +81,7 @@ export default function ReviewsSection() {
             {isFr ? 'Apprécié par des milliers' : 'Loved by Thousands'}
           </h2>
           <p className="text-lg text-gray-600 mb-6 max-w-2xl mx-auto font-[var(--font-dm-sans)]">
-            {isFr ? 'Rejoignez plus de 100 000 clients satisfaits qui ont transformé leur routine de nettoyage' : 'Join 100,000+ happy customers who transformed their cleaning routine'}
+            {isFr ? 'Rejoignez plus de 5000 clients locaux satisfaits qui ont transformé leur routine de nettoyage avec notre livraison rapide' : 'Join 5000+ local happy customers who transformed their cleaning routine with our fast ship'}
           </p>
           
           {/* Rating Summary */}
