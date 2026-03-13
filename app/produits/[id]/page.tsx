@@ -550,7 +550,7 @@ export default function ProductPage({ params }: ProductPageProps) {
           {/* Product Guarantees */}
           <div className="bg-gradient-to-r from-[#5a9ea8] to-[#4a8a94] rounded-2xl p-8 text-white text-center">
             <h3 className="text-2xl font-bold mb-4 font-[var(--font-dm-sans)]">
-              Your Purchase is Protected
+              {isFr ? 'Votre Achat est Protégé' : 'Your Purchase is Protected'}
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl mx-auto">
               <div className="flex items-center justify-center gap-3">
@@ -559,15 +559,15 @@ export default function ProductPage({ params }: ProductPageProps) {
               </div>
               <div className="flex items-center justify-center gap-3">
                 <Check className="w-6 h-6 flex-shrink-0" />
-                <span className="font-[var(--font-dm-sans)]">1-Year Product Warranty</span>
+                <span className="font-[var(--font-dm-sans)]">{isFr ? 'Garantie Produit 1 An' : '1-Year Product Warranty'}</span>
               </div>
               <div className="flex items-center justify-center gap-3">
                 <Check className="w-6 h-6 flex-shrink-0" />
-                <span className="font-[var(--font-dm-sans)]">Secure Payment Processing</span>
+                <span className="font-[var(--font-dm-sans)]">{isFr ? 'Paiement Sécurisé' : 'Secure Payment Processing'}</span>
               </div>
               <div className="flex items-center justify-center gap-3">
                 <Check className="w-6 h-6 flex-shrink-0" />
-                <span className="font-[var(--font-dm-sans)]">24/7 Customer Support</span>
+                <span className="font-[var(--font-dm-sans)]">{isFr ? 'Support client 24/7' : '24/7 Customer Support'}</span>
               </div>
             </div>
           </div>
@@ -668,15 +668,15 @@ export default function ProductPage({ params }: ProductPageProps) {
               <div className="space-y-2">
                 <div className="flex items-center justify-center gap-2 text-sm text-gray-600">
                   <Check className="w-4 h-4 text-[#5a9ea8]" />
-                  <span className="font-[var(--font-dm-sans)]">Compatible with all BetterClean models</span>
+                  <span className="font-[var(--font-dm-sans)]">{isFr ? 'Compatible avec tous les modèles BetterClean' : 'Compatible with all BetterClean models'}</span>
                 </div>
                 <div className="flex items-center justify-center gap-2 text-sm text-gray-600">
                   <Check className="w-4 h-4 text-[#5a9ea8]" />
-                  <span className="font-[var(--font-dm-sans)]">Easy to install and replace</span>
+                  <span className="font-[var(--font-dm-sans)]">{isFr ? 'Facile à installer et remplacer' : 'Easy to install and replace'}</span>
                 </div>
                 <div className="flex items-center justify-center gap-2 text-sm text-gray-600">
                   <Check className="w-4 h-4 text-[#5a9ea8]" />
-                  <span className="font-[var(--font-dm-sans)]">Long-lasting professional quality</span>
+                  <span className="font-[var(--font-dm-sans)]">{isFr ? 'Qualité professionnelle durable' : 'Long-lasting professional quality'}</span>
                 </div>
               </div>
             </div>
