@@ -477,7 +477,7 @@ LAST UPDATE:
     // Note: PlaceAnOrder is not a standard Meta event, so we don't send it to Facebook
     
     // Generate unique Order ID
-    const orderNumber = `PB${Date.now()}${Math.floor(Math.random() * 1000).toString().padStart(3, '0')}`
+    const orderNumber = `BC-${Math.floor(Date.now() / 1000).toString(36).toUpperCase().slice(-5)}-${Math.floor(Math.random() * 900 + 100)}`
     
     // Store order data in localStorage for tracking
     const orderData = {
