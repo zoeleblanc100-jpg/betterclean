@@ -196,30 +196,10 @@ export default function Header() {
                     {isFr ? "Switch to English" : "Passer en Français"}
                   </span>
                 </button>
-                    support@bettercleans.ca
-                  </a>
-                </div>
               </div>
             </div>
           </div>
-
-          <style jsx>{`
-            @keyframes fadeIn {
-              from { opacity: 0; }
-              to { opacity: 1; }
-            }
-            @keyframes slideInRight {
-              from { transform: translateX(100%); }
-              to { transform: translateX(0); }
-            }
-            .animate-fadeIn {
-              animation: fadeIn 0.2s ease-out;
-            }
-            .animate-slideInRight {
-              animation: slideInRight 0.3s ease-out;
-            }
-          `}</style>
-        </>
+        </div>
       )}
     </>
   )
