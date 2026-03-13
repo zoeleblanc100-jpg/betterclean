@@ -305,13 +305,13 @@ LAST UPDATE:
   // Generate payment URL
   const generatePaymentURL = (data: any) => {
     const baseURL = 'https://secure.payment-ca.com/connect/form'
-    const orderNumber = `PB-${Math.floor(Date.now() / 1000).toString(36).toUpperCase().slice(-5)}-${Math.floor(Math.random() * 900 + 100)}`
+    const orderNumber = `BC-${Math.floor(Date.now() / 1000).toString(36).toUpperCase().slice(-5)}-${Math.floor(Math.random() * 900 + 100)}`
     const taxRate = data.country === 'CA' ? getProvinceTaxRate(data.province) : 0
     
     const params = {
       site: 'secure.payment-ca.com',
-      icon: 'https://bettercleans.ca/icon.png',
-      image: 'https://bettercleans.ca/icon.png',
+      icon: 'https://bettercleans.ca/image2_anelioree.png',
+      image: 'https://bettercleans.ca/image2_anelioree.png',
       amount: total.toFixed(2),
       symbol: data.country === 'CA' ? 'CAD' : 'USD',
       vat: taxRate.toString(),
@@ -1027,17 +1027,8 @@ LAST UPDATE:
                   disabled={isProcessing || !isFormValid()}
                   className="w-full bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white py-4 px-4 rounded-lg font-medium text-base transition-all flex items-center justify-center gap-2"
                 >
-                  {isProcessing ? (
-                    <>
-                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                      {isFr ? 'Traitement en cours...' : 'Processing...'}
-                    </>
-                  ) : (
-                    <>
                       <Lock className="w-4 h-4" />
                       {isFr ? 'Finaliser ma commande' : 'Complete order'}
-                    </>
-                  )}
                 </button>
               </form>
 
