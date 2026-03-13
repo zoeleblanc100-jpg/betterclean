@@ -1,6 +1,6 @@
 "use client"
 
-import { Menu, Search, User, ShoppingCart, X, Home, ShoppingBag, HelpCircle, FileText, Phone, Globe } from "lucide-react"
+import { Menu, User, ShoppingCart, X, Home, ShoppingBag, HelpCircle, FileText, Phone, Globe } from "lucide-react"
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import { useCart } from "@/lib/cart-context"
@@ -58,23 +58,8 @@ export default function Header() {
       <nav className="sticky top-0 z-50 bg-white border-b border-gray-200 shadow-sm">
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex items-center justify-between h-16">
-            {/* Left - Search Icon */}
+            {/* Left - Language Toggle */}
             <div className="flex items-center gap-1">
-              <button className="w-10 h-10 text-gray-600 hover:text-gray-900 flex items-center justify-center">
-                <Search className="w-5 h-5" />
-              </button>
-            </div>
-
-            {/* Center - Logo */}
-            <div className="flex items-center">
-              <Link href="/" className="text-xl font-bold text-[#1a1a1a] font-[var(--font-dm-sans)]">
-                BetterClean
-              </Link>
-            </div>
-
-            {/* Right - Account, Cart, and Language Toggle */}
-            <div className="flex items-center space-x-1">
-              {/* Language Toggle - More Visible */}
               <button
                 onClick={toggleLanguage}
                 className="flex items-center gap-1 px-3 py-1.5 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors"
@@ -85,7 +70,17 @@ export default function Header() {
                   {isFr ? "FR" : "EN"}
                 </span>
               </button>
+            </div>
 
+            {/* Center - Logo */}
+            <div className="flex items-center">
+              <Link href="/" className="text-xl font-bold text-[#1a1a1a] font-[var(--font-dm-sans)]">
+                BetterClean
+              </Link>
+            </div>
+
+            {/* Right - Account and Cart */}
+            <div className="flex items-center space-x-2">
               <Link href="/order-tracking" className="w-10 h-10 text-gray-600 hover:text-gray-900 flex items-center justify-center">
                 <User className="w-5 h-5" />
               </Link>
