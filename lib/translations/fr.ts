@@ -19,6 +19,10 @@ export const fr = {
     desktopDescription: "Éliminez la saleté tenace rapidement avec notre puissante brosse électrique. Moteur 300 RPM, batterie 90min, étanche IPX7. Livraison gratuite partout au Canada.",
     buyButton: "Acheter — 26,97 CA$",
     learnMore: "En savoir plus →",
+    feature1Title: "Nettoyage en Profondeur Sans Effort",
+    feature1Desc: "Conçu pour gérer le désordre pour vous. Le nettoyage en profondeur n'a jamais été aussi facile. Le moteur puissant fait tout le travail difficile pendant que vous le guidez sans effort.",
+    feature2Title: "Laissez-le Faire le Travail",
+    feature2Desc: "Le BetterClean Pro est conçu pour être dur avec la saleté. Facile pour vous. Plus besoin de frotter jusqu'à ce que vos bras vous fassent mal - guidez simplement et laissez la puissance faire le reste.",
   },
 
   // Top Picks
@@ -62,6 +66,12 @@ export const fr = {
   benefits: {
     title: "Bon pour votre maison. Bon pour vous.",
     subtitle: "AVANTAGES",
+    motorTitle: "Moteur Puissant",
+    motorDesc: "L'action rotative à grande vitesse élimine la saleté tenace avec un minimum d'effort de votre part.",
+    batteryTitle: "Longue Autonomie de Batterie",
+    batteryDesc: "Jusqu'à 2 heures de puissance de nettoyage continue avec une seule charge.",
+    waterproofTitle: "Conception Étanche",
+    waterproofDesc: "Classé IPX7 pour une utilisation sécurisée dans les environnements humides comme les salles de bain et les cuisines.",
   },
 
   // FAQ

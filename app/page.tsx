@@ -61,10 +61,10 @@ export default function LandingPage() {
             </div>
             <div>
               <h2 className="text-4xl md:text-5xl font-bold italic mb-6 text-[#1a1a1a] font-[var(--font-playfair-display)]">
-                Effortless Deep Cleaning
+                {t.hero.feature1Title}
               </h2>
               <p className="text-lg text-gray-600 mb-8 leading-relaxed font-[var(--font-dm-sans)]">
-                Built to handle the mess for you. Deep cleaning has never been this easy. The powerful motor does all the hard work while you guide it effortlessly.
+                {t.hero.feature1Desc}
               </p>
               <Link href="/produits/betterclean-pro-1">
                 <Button 
@@ -85,10 +85,10 @@ export default function LandingPage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div>
               <h2 className="text-4xl md:text-5xl font-bold italic mb-6 text-[#1a1a1a] font-[var(--font-playfair-display)]">
-                Let It Do The Work
+                {t.hero.feature2Title}
               </h2>
               <p className="text-lg text-gray-600 mb-8 leading-relaxed font-[var(--font-dm-sans)]">
-                The BetterClean Pro is engineered to be tough on the grime. Easy on you. No more scrubbing until your arms ache - just guide and let the power do the rest.
+                {t.hero.feature2Desc}
               </p>
               <Link href="/produits/betterclean-pro-1">
                 <Button 
@@ -128,10 +128,10 @@ export default function LandingPage() {
                 <Zap className="w-8 h-8 text-white" />
               </div>
               <h3 className="text-xl font-bold mb-3 text-[#1a1a1a] font-[var(--font-dm-sans)]">
-                Powerful Motor
+                {t.benefits.motorTitle}
               </h3>
               <p className="text-gray-600 font-[var(--font-dm-sans)]">
-                High-speed rotating action removes stubborn grime with minimal effort from you.
+                {t.benefits.motorDesc}
               </p>
             </div>
             <div className="text-center">
@@ -139,10 +139,10 @@ export default function LandingPage() {
                 <Battery className="w-8 h-8 text-white" />
               </div>
               <h3 className="text-xl font-bold mb-3 text-[#1a1a1a] font-[var(--font-dm-sans)]">
-                Long Battery Life
+                {t.benefits.batteryTitle}
               </h3>
               <p className="text-gray-600 font-[var(--font-dm-sans)]">
-                Up to 2 hours of continuous cleaning power on a single charge.
+                {t.benefits.batteryDesc}
               </p>
             </div>
             <div className="text-center">
@@ -150,10 +150,10 @@ export default function LandingPage() {
                 <Droplets className="w-8 h-8 text-white" />
               </div>
               <h3 className="text-xl font-bold mb-3 text-[#1a1a1a] font-[var(--font-dm-sans)]">
-                Waterproof Design
+                {t.benefits.waterproofTitle}
               </h3>
               <p className="text-gray-600 font-[var(--font-dm-sans)]">
-                IPX7 rated for safe use in wet environments like bathrooms and kitchens.
+                {t.benefits.waterproofDesc}
               </p>
             </div>
           </div>

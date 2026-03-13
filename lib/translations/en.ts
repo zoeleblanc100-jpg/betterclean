@@ -19,6 +19,10 @@ export const en = {
     desktopDescription: "Remove stubborn grime fast with our powerful electric scrubber. 300 RPM motor, 90min battery life, waterproof IPX7. Free shipping across Canada.",
     buyButton: "Buy — CA$26.97",
     learnMore: "Learn more →",
+    feature1Title: "Effortless Deep Cleaning",
+    feature1Desc: "Built to handle the mess for you. Deep cleaning has never been this easy. The powerful motor does all the hard work while you guide it effortlessly.",
+    feature2Title: "Let It Do The Work",
+    feature2Desc: "The BetterClean Pro is engineered to be tough on the grime. Easy on you. No more scrubbing until your arms ache - just guide and let the power do the rest.",
   },
 
   // Top Picks
@@ -60,8 +64,14 @@ export const en = {
 
   // Benefits Section
   benefits: {
-    title: "Good for your cat. Good for you.",
+    title: "Good for your home. Good for you.",
     subtitle: "BENEFITS",
+    motorTitle: "Powerful Motor",
+    motorDesc: "High-speed rotating action removes stubborn grime with minimal effort from you.",
+    batteryTitle: "Long Battery Life",
+    batteryDesc: "Up to 2 hours of continuous cleaning power on a single charge.",
+    waterproofTitle: "Waterproof Design",
+    waterproofDesc: "IPX7 rated for safe use in wet environments like bathrooms and kitchens.",
   },
 
   // FAQ
