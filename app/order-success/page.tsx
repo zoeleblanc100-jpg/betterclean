@@ -260,7 +260,7 @@ export default function OrderSuccess() {
                 </div>
                 <div>
                   <p className="font-medium text-neutral-900">{isFr ? 'Préparation de votre commande' : 'Order preparation'}</p>
-                  <p className="text-sm text-neutral-400">{isFr ? 'Nous préparons vos jouets avec le plus grand soin' : 'We prepare your toys with the greatest care'}</p>
+                  <p className="text-sm text-neutral-400">{isFr ? 'Nous préparons vos produits avec le plus grand soin' : 'We prepare your products with the greatest care'}</p>
                 </div>
               </div>
               <div className="flex items-center gap-3 text-left">
@@ -292,7 +292,7 @@ export default function OrderSuccess() {
               <Heart className="w-5 h-5 text-red-500" />
             </div>
             <p className="text-neutral-400">
-              {isFr ? "Chez Purrball, nous nous engageons à offrir les meilleurs jouets pour rendre votre chat heureux. N'hésitez pas à nous contacter si vous avez des questions !" : "At Purrball, we're committed to offering the best toys to make your cat happy. Don't hesitate to contact us if you have any questions!"}
+              {isFr ? "Chez BetterClean, nous nous engageons à offrir les meilleurs produits de nettoyage pour rendre votre maison impeccable. N'hésitez pas à nous contacter si vous avez des questions !" : "At BetterClean, we're committed to offering the best cleaning products to make your home spotless. Don't hesitate to contact us if you have any questions!"}
             </p>
           </div>
         </div>
