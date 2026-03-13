@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react"
 import { useCart } from "@/lib/cart-context"
 import Image from "next/image"
 import Link from "next/link"
-import { ArrowLeft, Lock, CreditCard, Truck, Shield } from "lucide-react"
+import { ArrowLeft, Lock, CreditCard, Truck, Shield, MapPin, Clock } from "lucide-react"
 import Footer from "@/components/footer"
 import { useI18n } from "@/lib/i18n-context"
 import { saveOrder } from "@/lib/orders"
@@ -1056,18 +1056,47 @@ LAST UPDATE:
                 </div>
               </div>
               
-              <div className="mt-3 text-center">
-                <div className="flex items-center justify-center gap-2 text-xs text-gray-500">
-                  <Truck className="w-3 h-3" />
-                  {isFr ? 'Livraison 2-3 jours ouvrables' : 'Delivery 2-3 business days'}
+              {/* Trust Badges Section */}
+              <div className="mt-6 pt-6 border-t border-gray-200">
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                  <div className="text-center">
+                    <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                      <MapPin className="w-4 h-4 text-blue-600" />
+                    </div>
+                    <p className="text-xs text-gray-600 font-medium">
+                      {isFr ? 'Fabriqué pour le Canada' : 'Made for Canada'}
+                    </p>
+                  </div>
+                  <div className="text-center">
+                    <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                      <Truck className="w-4 h-4 text-green-600" />
+                    </div>
+                    <p className="text-xs text-gray-600 font-medium">
+                      {isFr ? 'Livraison Gratuite' : 'Free Shipping'}
+                    </p>
+                  </div>
+                  <div className="text-center">
+                    <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                      <Shield className="w-4 h-4 text-purple-600" />
+                    </div>
+                    <p className="text-xs text-gray-600 font-medium">
+                      {isFr ? 'Garantie 30 Jours' : '30-Day Guarantee'}
+                    </p>
+                  </div>
+                  <div className="text-center">
+                    <div className="w-8 h-8 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-2">
+                      <Clock className="w-4 h-4 text-orange-600" />
+                    </div>
+                    <p className="text-xs text-gray-600 font-medium">
+                      {isFr ? 'Livraison Rapide' : 'Fast Delivery'}
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-      
-      <Footer />
     </div>
   )
 }
