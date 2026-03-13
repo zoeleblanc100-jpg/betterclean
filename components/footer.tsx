@@ -2,13 +2,17 @@
 
 import Link from "next/link"
 import { MapPin, Truck, Shield, Clock } from "lucide-react"
+import { useI18n } from "@/lib/i18n-context"
 
 export default function Footer() {
+  const { t, locale } = useI18n()
+  const isFr = locale === 'fr'
+  
   const guarantees = [
-    { icon: MapPin, text: "Made for Canada" },
-    { icon: Truck, text: "Free Shipping" },
-    { icon: Shield, text: "30-Day Guarantee" },
-    { icon: Clock, text: "Fast Delivery" },
+    { icon: MapPin, text: isFr ? "Fabriqué pour le Canada" : "Made for Canada" },
+    { icon: Truck, text: isFr ? "Livraison Gratuite" : "Free Shipping" },
+    { icon: Shield, text: isFr ? "Garantie 30 Jours" : "30-Day Guarantee" },
+    { icon: Clock, text: isFr ? "Livraison Rapide" : "Fast Delivery" },
   ]
 
   return (
@@ -32,13 +36,13 @@ export default function Footer() {
             <div className="flex items-center gap-6 text-sm">
               <span className="font-bold text-[#1a1a1a] font-[var(--font-dm-sans)]">BetterClean</span>
               <Link href="/contact" className="text-gray-600 hover:text-[#5a9ea8] transition-colors font-[var(--font-dm-sans)]">
-                Contact
+                {isFr ? 'Contact' : 'Contact'}
               </Link>
               <Link href="/order-tracking" className="text-gray-600 hover:text-[#5a9ea8] transition-colors font-[var(--font-dm-sans)]">
-                Track Order
+                {isFr ? 'Suivre Commande' : 'Track Order'}
               </Link>
               <Link href="/returns" className="text-gray-600 hover:text-[#5a9ea8] transition-colors font-[var(--font-dm-sans)]">
-                Returns
+                {isFr ? 'Retours' : 'Returns'}
               </Link>
             </div>
             
