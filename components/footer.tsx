@@ -13,10 +13,10 @@ export default function Footer() {
   ]
 
   const paymentMethods = [
-    { name: "Visa", src: "https://js.stripe.com/v3/fingerprinted/img/visa-729c05aad3a0d5f83e30.svg" },
-    { name: "Mastercard", src: "https://js.stripe.com/v3/fingerprinted/img/mastercard-7b2f208c983b23ca67e5.svg" },
-    { name: "American Express", src: "https://js.stripe.com/v3/fingerprinted/img/amex-a49b82f0fe31d1e9a28e.svg" },
-    { name: "Discover", src: "https://js.stripe.com/v3/fingerprinted/img/discover-1debe7215f3b9f8ca24e.svg" },
+    { name: "Visa", src: "/visa.svg" },
+    { name: "Mastercard", src: "/mastercard.svg" },
+    { name: "American Express", src: "/amex.svg" },
+    { name: "Discover", src: "/discover.svg" },
   ]
 
   return (
