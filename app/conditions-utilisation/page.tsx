@@ -20,7 +20,7 @@ export default function ConditionsUtilisationPage() {
     { title: "8. Garanties et responsabilité", content: "Garantie de 2 ans sur tous nos produits. Remplacement gratuit en cas de défaut de fabrication. Notre responsabilité est limitée au montant payé pour le produit." },
     { title: "9. Résiliation", content: "Nous nous réservons le droit de suspendre ou résilier votre accès au site en cas de violation de ces conditions d'utilisation." },
     { title: "10. Droit applicable", content: "Ces conditions sont régies par les lois du Canada. Tout litige sera soumis à la juridiction exclusive des tribunaux canadiens compétents." },
-    { title: "11. Contact", content: "Pour toute question concernant ces conditions d'utilisation, contactez-nous : support@happycattoys.ca | 1-800-CAT-TOYS" },
+    { title: "11. Contact", content: "Pour toute question concernant ces conditions d'utilisation, contactez-nous : support@betterclean.com | 1-800-BETTERCLEAN" },
   ] : [
     { title: "1. Acceptance of Terms", content: "By accessing and using the Happy Cat Toys website, you agree to be bound by these terms of use. If you do not accept these terms, please do not use our site." },
     { title: "2. Service Description", content: "Happy Cat Toys is an online store specializing in the sale of toys and accessories for cats. We offer premium quality products, 100% Canadian, with fast delivery across Canada." },
@@ -32,7 +32,7 @@ export default function ConditionsUtilisationPage() {
     { title: "8. Warranties and Liability", content: "2-year warranty on all products. Free replacement for manufacturing defects. Our liability is limited to the amount paid for the product." },
     { title: "9. Termination", content: "We reserve the right to suspend or terminate your access to the site in case of violation of these terms of use." },
     { title: "10. Applicable Law", content: "These terms are governed by the laws of Canada. Any dispute will be subject to the exclusive jurisdiction of the competent Canadian courts." },
-    { title: "11. Contact", content: "For any questions regarding these terms of use, contact us: support@happycattoys.ca | 1-800-CAT-TOYS" },
+    { title: "11. Contact", content: "For any questions regarding these terms of use, contact us: support@betterclean.com | 1-800-BETTERCLEAN" },
   ]
 
   return (

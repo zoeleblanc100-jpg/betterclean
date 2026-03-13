@@ -66,13 +66,13 @@ export default function RetoursEchangesPage() {
             </h2>
             <div className="space-y-6">
               {(isFr ? [
-                { step: "1", title: "Contactez notre équipe", desc: "Envoyez-nous un email à support@happycattoys.ca avec votre numéro de commande, nom du produit, raison du retour et photos si défectueux." },
+                { step: "1", title: "Contactez notre équipe", desc: "Envoyez-nous un email à support@betterclean.com avec votre numéro de commande, nom du produit, raison du retour et photos si défectueux." },
                 { step: "2", title: "Recevez votre étiquette de retour", desc: "Nous vous enverrons par email une étiquette de retour prépayée dans les 24h." },
                 { step: "3", title: "Emballez soigneusement", desc: "Utilisez l'emballage original si possible. Incluez tous les accessoires. Protégez le produit." },
                 { step: "4", title: "Expédiez votre retour", desc: "Déposez le colis à un point de collecte Postes Canada. Gardez le reçu comme preuve." },
                 { step: "5", title: "Recevez votre remboursement", desc: "Inspection sous 1-2 jours, remboursement traité sous 3-5 jours ouvrables." },
               ] : [
-                { step: "1", title: "Contact our team", desc: "Send us an email at support@happycattoys.ca with your order number, product name, return reason and photos if defective." },
+                { step: "1", title: "Contact our team", desc: "Send us an email at support@betterclean.com with your order number, product name, return reason and photos if defective." },
                 { step: "2", title: "Receive your return label", desc: "We'll email you a prepaid return label within 24h." },
                 { step: "3", title: "Pack carefully", desc: "Use original packaging if possible. Include all accessories. Protect the product." },
                 { step: "4", title: "Ship your return", desc: "Drop off the package at a Canada Post collection point. Keep the receipt as proof." },
@@ -133,12 +133,12 @@ export default function RetoursEchangesPage() {
               <div className="grid md:grid-cols-2 gap-4">
                 <div>
                   <p className="text-neutral-900 font-medium">📧 Email</p>
-                  <p className="text-neutral-400">support@happycattoys.ca</p>
+                  <p className="text-neutral-400">support@betterclean.com</p>
                   <p className="text-neutral-400 text-sm">{isFr ? 'Réponse sous 24h garantie' : 'Guaranteed response within 24h'}</p>
                 </div>
                 <div>
                   <p className="text-neutral-900 font-medium">📞 {isFr ? 'Téléphone' : 'Phone'}</p>
-                  <p className="text-neutral-400">1-800-CAT-TOYS</p>
+                  <p className="text-neutral-400">1-800-BETTERCLEAN</p>
                   <p className="text-neutral-400 text-sm">{isFr ? 'Lun-Ven 9h-17h (EST)' : 'Mon-Fri 9am-5pm (EST)'}</p>
                 </div>
               </div>
