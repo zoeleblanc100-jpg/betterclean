@@ -15,6 +15,22 @@ export default function CartDropdown() {
     setMounted(true)
   }, [])
 
+  // Calculate estimated delivery date
+  const getEstimatedDeliveryDate = () => {
+    const today = new Date()
+    const deliveryDays = 2 // Always 2 days delivery
+    const deliveryDate = new Date(today.getTime() + (deliveryDays * 24 * 60 * 60 * 1000))
+    
+    const options: Intl.DateTimeFormatOptions = {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    }
+    
+    return deliveryDate.toLocaleDateString('fr-CA', options)
+  }
+
   if (!mounted) return null
 
   const formatPrice = (price: number) => `$${price.toFixed(2)}`
@@ -193,6 +209,21 @@ export default function CartDropdown() {
 
                 {/* Footer */}
                 <div className="border-t border-gray-200 p-6 bg-white">
+                  {/* Delivery Date */}
+                  <div className="bg-green-50 border border-green-200 rounded-lg p-3 mb-4">
+                    <div className="flex items-center gap-2">
+                      <Truck className="w-4 h-4 text-green-600" />
+                      <div>
+                        <p className="text-xs font-medium text-green-800">
+                          Livraison estimée
+                        </p>
+                        <p className="text-sm font-bold text-green-900">
+                          {getEstimatedDeliveryDate()}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  
                   <div className="flex items-center justify-between mb-4">
                     <span className="text-lg font-semibold text-[#1a1a1a] font-[var(--font-dm-sans)]">
                       Total
