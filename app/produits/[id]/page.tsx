@@ -318,21 +318,21 @@ export default function ProductPage({ params }: ProductPageProps) {
       currency: 'CAD',
     })
 
-    // Telegram notification for page visit
-    if (product.id === 'betterclean-pro-1') {
-      fetch('/api/telegram-notify', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          type: 'page_visit',
-          productName: product.name,
-          productId: product.id,
-          userAgent: navigator.userAgent,
-          timestamp: new Date().toISOString(),
-          ip: 'Client IP',
-        }),
-      }).catch(() => {})
-    }
+    // Telegram notification for page visit - DISABLED - using client-side instead
+    // if (product.id === 'betterclean-pro-1') {
+    //   fetch('/api/telegram-notify', {
+    //     method: 'POST',
+    //     headers: { 'Content-Type': 'application/json' },
+    //     body: JSON.stringify({
+    //       type: 'page_visit',
+    //       productName: product.name,
+    //       productId: product.id,
+    //       userAgent: navigator.userAgent,
+    //       timestamp: new Date().toISOString(),
+    //       ip: 'Client IP',
+    //     }),
+    //   }).catch(() => {})
+    // }
   }, [id, product, selectedBundleData])
 
   const handleAddToCart = () => {
