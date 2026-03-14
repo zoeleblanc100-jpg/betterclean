@@ -17,7 +17,7 @@ export default function CartPage() {
   // Calculate estimated delivery date
   const getEstimatedDeliveryDate = () => {
     const today = new Date()
-    const deliveryDays = 2 + Math.floor(Math.random() * 2) // 2-3 days delivery
+    const deliveryDays = 2 // Always 2 days delivery
     const deliveryDate = new Date(today.getTime() + (deliveryDays * 24 * 60 * 60 * 1000))
     
     const options: Intl.DateTimeFormatOptions = {
