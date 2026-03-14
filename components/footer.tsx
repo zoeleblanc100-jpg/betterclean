@@ -8,6 +8,22 @@ export default function Footer() {
   const { t, locale } = useI18n()
   const isFr = locale === 'fr'
   
+  // Calculate estimated delivery date
+  const getEstimatedDeliveryDate = () => {
+    const today = new Date()
+    const deliveryDays = 2 // Always 2 days delivery
+    const deliveryDate = new Date(today.getTime() + (deliveryDays * 24 * 60 * 60 * 1000))
+    
+    const options: Intl.DateTimeFormatOptions = {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    }
+    
+    return deliveryDate.toLocaleDateString(isFr ? 'fr-CA' : 'en-CA', options)
+  }
+  
   const guarantees = [
     { icon: MapPin, text: isFr ? "Fabriqué pour le Canada" : "Made for Canada" },
     { icon: Truck, text: isFr ? "Livraison Gratuite" : "Free Shipping" },
@@ -48,17 +64,32 @@ export default function Footer() {
             
             {/* Payment Methods */}
             <div className="flex items-center gap-3">
-              <img src="https://cdn.shopify.com/shopifycloud/checkout-web/assets/0169695890db3db16bfe.svg" alt="Visa" className="h-5 w-8 opacity-70" />
-              <img src="https://secure.payment-ca.com/assets/img/mastercard.svg" alt="Mastercard" className="h-5 w-8 opacity-70" />
-              <img src="https://secure.payment-ca.com/assets/img/amex.svg" alt="Amex" className="h-5 w-8 opacity-70" />
-              <img src="https://secure.payment-ca.com/assets/img/discover.svg" alt="Discover" className="h-5 w-8 opacity-70" />
+              <div className="w-10 h-6 bg-gray-100 rounded flex items-center justify-center">
+                <span className="text-xs font-bold text-gray-700">VISA</span>
+              </div>
+              <div className="w-10 h-6 bg-gray-100 rounded flex items-center justify-center">
+                <span className="text-xs font-bold text-gray-700">MC</span>
+              </div>
+              <div className="w-10 h-6 bg-gray-100 rounded flex items-center justify-center">
+                <span className="text-xs font-bold text-gray-700">AMEX</span>
+              </div>
+              <div className="w-10 h-6 bg-gray-100 rounded flex items-center justify-center">
+                <span className="text-xs font-bold text-gray-700">DISC</span>
+              </div>
+              <div className="w-10 h-6 bg-gray-100 rounded flex items-center justify-center">
+                <span className="text-xs font-bold text-blue-600">PP</span>
+              </div>
             </div>
           </div>
           
           <div className="text-center mt-3">
-            <p className="text-sm text-gray-600 font-[var(--font-dm-sans)]">
+            <p className="text-sm text-gray-600 font-[var(--font-dm-sans)] mb-2">
               2024 BetterClean. All rights reserved.
             </p>
+            <div className="flex items-center justify-center gap-2 text-xs text-gray-500">
+              <Truck className="w-3 h-3" />
+              <span>{isFr ? 'Livraison estimée' : 'Estimated delivery'}: {getEstimatedDeliveryDate()}</span>
+            </div>
           </div>
         </div>
       </div>
