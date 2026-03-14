@@ -86,6 +86,7 @@ export default function RootLayout({
   return (
     <html lang="fr">
       <head>
+        <link rel="icon" type="image/png" href="https://i.imgur.com/AxyPpKY.png" />
         <link rel="preconnect" href="https://res.cloudinary.com" />
         <link rel="dns-prefetch" href="https://res.cloudinary.com" />
         <link rel="preload" as="image" href="/Section7-3_Interactive_Modes.gif" />
