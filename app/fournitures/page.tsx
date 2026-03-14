@@ -15,7 +15,7 @@ export default function FournituresPage() {
   const { addItem } = useCart()
   const { t, formatPrice } = useI18n()
   const { localize } = useLocalizedProduct()
-  const fountain = localize(products.find(p => p.id === "purr-fountain-f1")!)
+  const product = localize(products.find(p => p.id === "betterclean-pro-1")!)
   const videoRef = useRef<HTMLVideoElement>(null)
   const [isPlaying, setIsPlaying] = useState(false)
 
@@ -42,12 +42,12 @@ export default function FournituresPage() {
 
   const handleAddToCart = () => {
     addItem({
-      id: fountain.id,
-      name: fountain.name,
-      price: fountain.price,
-      originalPrice: fountain.originalPrice,
-      image: fountain.image,
-      variant: `#PAWPAW -${Math.round((1 - fountain.price / fountain.originalPrice) * 100)}% appliqué`,
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      originalPrice: product.originalPrice,
+      image: product.image,
+      variant: `#PAWPAW -${Math.round((1 - product.price / product.originalPrice) * 100)}% appliqué`,
     })
   }
 
@@ -105,15 +105,15 @@ export default function FournituresPage() {
             {/* Left: Main Product Image */}
             <div className="relative aspect-square bg-white rounded-2xl overflow-hidden border border-neutral-100">
               <Image
-                src={fountain.image}
-                alt={fountain.name}
+                src={product.image}
+                alt={product.name}
                 fill
                 sizes="(max-width: 1024px) 100vw, 50vw"
                 className="object-contain p-6"
                 loading="lazy"
               />
               <span className="absolute top-4 right-4 bg-red-500 text-white text-xs font-bold px-3 py-1.5 rounded-full">
-                -{Math.round((1 - fountain.price / fountain.originalPrice) * 100)}%
+                -{Math.round((1 - product.price / product.originalPrice) * 100)}%
               </span>
             </div>
 
@@ -122,41 +122,41 @@ export default function FournituresPage() {
               <div className="flex items-center gap-2 mb-4">
                 <span className="border border-neutral-200 text-neutral-500 text-[11px] font-medium px-3 py-1 rounded-full uppercase tracking-wide">{t.fournituresPage.title}</span>
                 <span className="bg-red-500 text-white text-[11px] font-semibold px-3 py-1 rounded-full">
-                  {t.fournituresPage.save} {Math.round((1 - fountain.price / fountain.originalPrice) * 100)}%
+                  {t.fournituresPage.save} {Math.round((1 - product.price / product.originalPrice) * 100)}%
                 </span>
               </div>
 
-              <h3 className="text-3xl font-bold text-neutral-900 tracking-tight mb-3">{fountain.name}</h3>
+              <h3 className="text-3xl font-bold text-neutral-900 tracking-tight mb-3">{product.name}</h3>
 
               <div className="flex items-center gap-1.5 mb-4">
                 <div className="flex">
                   {[...Array(5)].map((_, i) => (
-                    <Star key={i} className={`w-4 h-4 ${i < Math.floor(fountain.rating) ? 'text-yellow-400 fill-yellow-400' : 'text-neutral-200'}`} />
+                    <Star key={i} className={`w-4 h-4 ${i < Math.floor(product.rating) ? 'text-yellow-400 fill-yellow-400' : 'text-neutral-200'}`} />
                   ))}
                 </div>
-                <span className="text-xs text-neutral-400 ml-1">{fountain.rating} ({fountain.reviewCount} {t.fournituresPage.reviews})</span>
+                <span className="text-xs text-neutral-400 ml-1">{product.rating} ({product.reviewCount} {t.fournituresPage.reviews})</span>
               </div>
 
               <div className="flex items-center gap-3 mb-3">
-                <span className="text-3xl font-bold text-red-600">{formatPrice(fountain.price)}</span>
-                <span className="text-lg text-neutral-300 line-through">{formatPrice(fountain.originalPrice)}</span>
+                <span className="text-3xl font-bold text-red-600">{formatPrice(product.price)}</span>
+                <span className="text-lg text-neutral-300 line-through">{formatPrice(product.originalPrice)}</span>
               </div>
 
               {/* #PAWPAW discount badge */}
               <div className="inline-flex items-center gap-1.5 bg-green-50 border border-green-200 rounded-full px-3 py-1.5 mb-6">
                 <span className="w-1.5 h-1.5 bg-green-500 rounded-full" />
-                <span className="text-green-700 text-xs font-medium">{t.fournituresPage.discount} <span className="font-bold">#PAWPAW</span> -{Math.round((1 - fountain.price / fountain.originalPrice) * 100)}% {t.fournituresPage.discountApplied}</span>
+                <span className="text-green-700 text-xs font-medium">{t.fournituresPage.discount} <span className="font-bold">#PAWPAW</span> -{Math.round((1 - product.price / product.originalPrice) * 100)}% {t.fournituresPage.discountApplied}</span>
               </div>
 
               <p className="text-xs text-orange-600 flex items-center gap-1 mb-4">
                 <span className="w-1.5 h-1.5 bg-orange-500 rounded-full animate-pulse" />
-                {t.fournituresPage.title === 'Fournitures' ? `Seulement ${fountain.stockCount} en stock` : `Only ${fountain.stockCount} left in stock`}
+                {t.fournituresPage.title === 'Fournitures' ? `Seulement ${product.stockCount} en stock` : `Only ${product.stockCount} left in stock`}
               </p>
 
-              <p className="text-neutral-600 text-sm leading-relaxed mb-6">{fountain.description}</p>
+              <p className="text-neutral-600 text-sm leading-relaxed mb-6">{product.description}</p>
 
               <ul className="text-neutral-600 text-sm space-y-2 mb-8">
-                {fountain.features.slice(0, 5).map((feature, i) => (
+                {product.features.slice(0, 5).map((feature, i) => (
                   <li key={i} className="flex items-start gap-2">
                     <span className="w-1.5 h-1.5 bg-brand rounded-full mt-1.5 flex-shrink-0" />
                     {feature}
@@ -173,7 +173,7 @@ export default function FournituresPage() {
                   {t.fournituresPage.addToCart}
                 </button>
                 <Link
-                  href={`/produits/${fountain.id}`}
+                  href={`/produits/${product.id}`}
                   className="flex-1 border border-brand text-brand hover:bg-brand hover:text-white py-3.5 rounded-full font-medium text-sm uppercase tracking-wider transition-all text-center"
                 >
                   {t.fournituresPage.viewDetails}
@@ -203,15 +203,15 @@ export default function FournituresPage() {
               {t.fournituresPage.ctaSubtitle}
             </p>
             <div className="flex items-center justify-center gap-3 mb-4">
-              <span className="text-3xl font-bold text-white">CA${fountain.price.toFixed(2)}</span>
-              <span className="text-lg text-neutral-500 line-through">CA${fountain.originalPrice.toFixed(2)}</span>
+              <span className="text-3xl font-bold text-white">CA${product.price.toFixed(2)}</span>
+              <span className="text-lg text-neutral-500 line-through">CA${product.originalPrice.toFixed(2)}</span>
             </div>
             <button
               onClick={handleAddToCart}
               className="bg-brand hover:bg-brand-dark text-white px-10 py-4 rounded-full font-medium text-sm uppercase tracking-wider transition-all inline-flex items-center gap-2"
             >
               <ShoppingCart className="w-4 h-4" />
-              {t.fournituresPage.addToCart} — CA${fountain.price.toFixed(2)}
+              {t.fournituresPage.addToCart} — CA${product.price.toFixed(2)}
             </button>
           </div>
         </div>
@@ -238,7 +238,7 @@ export default function FournituresPage() {
             {!isPlaying && (
               <div className="absolute inset-0 flex items-center justify-center">
                 <Image
-                  src="https://res.cloudinary.com/dhhdhilja/image/upload/v1770517681/purrball/pet_fountain_elfin_e1_plus_video_post_image_1.jpg.webp"
+                  src="https://res.cloudinary.com/dhhdhilja/image/upload/v1770517681/purrball/pet_product_elfin_e1_plus_video_post_image_1.jpg.webp"
                   alt="Purr Fountain F1 Video"
                   fill
                   sizes="(max-width: 1024px) 100vw, 896px"
