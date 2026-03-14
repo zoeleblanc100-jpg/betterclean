@@ -251,6 +251,22 @@ export default function ProductPage({ params }: ProductPageProps) {
 
   const selectedBundleData = bundles.find(b => b.id === selectedBundle) || bundles[1]
 
+  // Calculate estimated delivery date
+  const getEstimatedDeliveryDate = () => {
+    const today = new Date()
+    const deliveryDays = 2 // Always 2 days delivery
+    const deliveryDate = new Date(today.getTime() + (deliveryDays * 24 * 60 * 60 * 1000))
+    
+    const options: Intl.DateTimeFormatOptions = {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    }
+    
+    return deliveryDate.toLocaleDateString(isFr ? 'fr-CA' : 'en-CA', options)
+  }
+
   // TikTok ViewContent event + Telegram notification
   useEffect(() => {
     const eventId = `vc_${id}_${Date.now()}`
@@ -419,7 +435,7 @@ export default function ProductPage({ params }: ProductPageProps) {
 
               {/* Pricing */}
               <div className="mb-6">
-                <div className="flex items-baseline gap-2 mb-4">
+                <div className="flex items-baseline gap-2 mb-2">
                   <span className="text-lg text-gray-500 line-through">
                     ${product.originalPrice} CAD
                   </span>
@@ -429,6 +445,17 @@ export default function ProductPage({ params }: ProductPageProps) {
                   <span className="bg-blue-500 text-white text-xs font-medium px-2 py-1 rounded">
                     Sale
                   </span>
+                </div>
+                
+                {/* Delivery Date */}
+                <div className="text-xs text-gray-600">
+                  <div className="flex items-center gap-1">
+                    <Truck className="w-3 h-3" />
+                    <span>{isFr ? 'Livraison estimée' : 'Estimated delivery'}</span>
+                  </div>
+                  <div className="font-medium text-black mt-1">
+                    {getEstimatedDeliveryDate()}
+                  </div>
                 </div>
               </div>
 
