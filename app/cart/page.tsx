@@ -13,6 +13,22 @@ export default function CartPage() {
 
   const remainingForFreeShipping = Math.max(0, freeShippingThreshold - itemCount)
   const finalTotal = total + shipping
+  
+  // Calculate estimated delivery date
+  const getEstimatedDeliveryDate = () => {
+    const today = new Date()
+    const deliveryDays = 2 + Math.floor(Math.random() * 2) // 2-3 days delivery
+    const deliveryDate = new Date(today.getTime() + (deliveryDays * 24 * 60 * 60 * 1000))
+    
+    const options: Intl.DateTimeFormatOptions = {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    }
+    
+    return deliveryDate.toLocaleDateString(isFr ? 'fr-CA' : 'en-CA', options)
+  }
 
   if (items.length === 0) {
     return (
@@ -159,6 +175,21 @@ export default function CartPage() {
               <h2 className="text-base font-semibold text-neutral-900 mb-4">
                 {isFr ? 'Résumé de commande' : 'Order Summary'}
               </h2>
+              
+              {/* Estimated Delivery Date */}
+              <div className="bg-green-50 border border-green-200 rounded-lg p-3 mb-4">
+                <div className="flex items-center gap-2">
+                  <Truck className="w-5 h-5 text-green-600" />
+                  <div>
+                    <p className="text-sm font-medium text-green-800">
+                      {isFr ? 'Livraison estimée' : 'Estimated Delivery'}
+                    </p>
+                    <p className="text-lg font-bold text-green-900">
+                      {getEstimatedDeliveryDate()}
+                    </p>
+                  </div>
+                </div>
+              </div>
               
               <div className="space-y-3 mb-4">
                 <div className="flex justify-between text-sm">
