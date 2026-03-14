@@ -35,12 +35,40 @@ export default function ProductPage({ params }: ProductPageProps) {
   // Province detection for localized delivery messages
   const [userProvince, setUserProvince] = useState<string | null>(null)
   
-  // Detect user's province (simplified for demo - in production, use geolocation API)
+  // Detect user's province based on IP location
   useEffect(() => {
-    // For demo purposes, randomly assign provinces - replace with actual geolocation
-    const provinces = ['Quebec', 'Ontario', 'British Columbia', 'Alberta', 'Manitoba', 'Saskatchewan', 'Nova Scotia', 'New Brunswick', 'Newfoundland', 'PEI', 'Northwest Territories', 'Yukon', 'Nunavut']
-    const randomProvince = provinces[Math.floor(Math.random() * provinces.length)]
-    setUserProvince(randomProvince)
+    const detectProvince = async () => {
+      try {
+        // Use a free IP geolocation API to detect province
+        const response = await fetch('https://ipapi.co/json/')
+        const data = await response.json()
+        
+        // Map regions to provinces
+        const provinceMap: { [key: string]: string } = {
+          'QC': 'Quebec',
+          'ON': 'Ontario', 
+          'BC': 'British Columbia',
+          'AB': 'Alberta',
+          'MB': 'Manitoba',
+          'SK': 'Saskatchewan',
+          'NS': 'Nova Scotia',
+          'NB': 'New Brunswick',
+          'NL': 'Newfoundland',
+          'PE': 'PEI',
+          'NT': 'Northwest Territories',
+          'YT': 'Yukon',
+          'NU': 'Nunavut'
+        }
+        
+        const province = provinceMap[data.region_code] || 'Ontario' // Default to Ontario
+        setUserProvince(province)
+      } catch (error) {
+        // Fallback to Ontario if IP detection fails
+        setUserProvince('Ontario')
+      }
+    }
+    
+    detectProvince()
   }, [])
   
   // Get localized delivery message based on province
@@ -432,6 +460,25 @@ export default function ProductPage({ params }: ProductPageProps) {
                   ({product.totalReviews})
                 </span>
               </div>
+
+              {/* Province-based Delivery Message */}
+              {userProvince && (
+                <div className="mb-4">
+                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+                    <div className="flex items-center gap-2">
+                      <Truck className="w-4 h-4 text-blue-600" />
+                      <div>
+                        <p className="text-sm font-medium text-blue-800">
+                          {isFr ? 'Livraison à' : 'Deliver to'} {userProvince}
+                        </p>
+                        <p className="text-xs text-blue-600 mt-1">
+                          {isFr ? 'Livraison rapide dans votre province' : 'Fast delivery to your province'}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
 
               {/* Pricing */}
               <div className="mb-6">
