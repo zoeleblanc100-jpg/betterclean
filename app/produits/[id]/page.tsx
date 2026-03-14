@@ -32,6 +32,92 @@ export default function ProductPage({ params }: ProductPageProps) {
   
   const minSwipeDistance = 50
   
+  // Province detection for localized delivery messages
+  const [userProvince, setUserProvince] = useState<string | null>(null)
+  
+  // Detect user's province (simplified for demo - in production, use geolocation API)
+  useEffect(() => {
+    // For demo purposes, randomly assign provinces - replace with actual geolocation
+    const provinces = ['Quebec', 'Ontario', 'British Columbia', 'Alberta', 'Manitoba', 'Saskatchewan', 'Nova Scotia', 'New Brunswick', 'Newfoundland', 'PEI', 'Northwest Territories', 'Yukon', 'Nunavut']
+    const randomProvince = provinces[Math.floor(Math.random() * provinces.length)]
+    setUserProvince(randomProvince)
+  }, [])
+  
+  // Get localized delivery message based on province
+  const getDeliveryMessage = () => {
+    if (!userProvince) return null
+    
+    const deliveryTimes = {
+      'Quebec': {
+        fr: 'Livraison demain au Québec si commande avant 21h',
+        en: 'Delivery tomorrow to Quebec if ordered before 9PM',
+        condition: { fr: '*Valable pour les commandes avant 21h au Québec uniquement.', en: '*Valid for orders before 9PM in Quebec only.' }
+      },
+      'Ontario': {
+        fr: 'Livraison demain en Ontario si commande avant 21h',
+        en: 'Delivery tomorrow to Ontario if ordered before 9PM',
+        condition: { fr: '*Valable pour les commandes avant 21h en Ontario uniquement.', en: '*Valid for orders before 9PM in Ontario only.' }
+      },
+      'British Columbia': {
+        fr: 'Livraison demain en Colombie-Britannique si commande avant 21h',
+        en: 'Delivery tomorrow to British Columbia if ordered before 9PM',
+        condition: { fr: '*Valable pour les commandes avant 21h en Colombie-Britannique uniquement.', en: '*Valid for orders before 9PM in British Columbia only.' }
+      },
+      'Alberta': {
+        fr: 'Livraison demain en Alberta si commande avant 21h',
+        en: 'Delivery tomorrow to Alberta if ordered before 9PM',
+        condition: { fr: '*Valable pour les commandes avant 21h en Alberta uniquement.', en: '*Valid for orders before 9PM in Alberta only.' }
+      },
+      'Manitoba': {
+        fr: 'Livraison demain au Manitoba si commande avant 21h',
+        en: 'Delivery tomorrow to Manitoba if ordered before 9PM',
+        condition: { fr: '*Valable pour les commandes avant 21h au Manitoba uniquement.', en: '*Valid for orders before 9PM in Manitoba only.' }
+      },
+      'Saskatchewan': {
+        fr: 'Livraison demain en Saskatchewan si commande avant 21h',
+        en: 'Delivery tomorrow to Saskatchewan if ordered before 9PM',
+        condition: { fr: '*Valable pour les commandes avant 21h en Saskatchewan uniquement.', en: '*Valid for orders before 9PM in Saskatchewan only.' }
+      },
+      'Nova Scotia': {
+        fr: 'Livraison demain en Nouvelle-Écosse si commande avant 21h',
+        en: 'Delivery tomorrow to Nova Scotia if ordered before 9PM',
+        condition: { fr: '*Valable pour les commandes avant 21h en Nouvelle-Écosse uniquement.', en: '*Valid for orders before 9PM in Nova Scotia only.' }
+      },
+      'New Brunswick': {
+        fr: 'Livraison demain au Nouveau-Brunswick si commande avant 21h',
+        en: 'Delivery tomorrow to New Brunswick if ordered before 9PM',
+        condition: { fr: '*Valable pour les commandes avant 21h au Nouveau-Brunswick uniquement.', en: '*Valid for orders before 9PM in New Brunswick only.' }
+      },
+      'Newfoundland': {
+        fr: 'Livraison demain à Terre-Neuve si commande avant 21h',
+        en: 'Delivery tomorrow to Newfoundland if ordered before 9PM',
+        condition: { fr: '*Valable pour les commandes avant 21h à Terre-Neuve uniquement.', en: '*Valid for orders before 9PM in Newfoundland only.' }
+      },
+      'PEI': {
+        fr: 'Livraison demain à l\'Île-du-Prince-Édouard si commande avant 21h',
+        en: 'Delivery tomorrow to PEI if ordered before 9PM',
+        condition: { fr: '*Valable pour les commandes avant 21h à l\'Île-du-Prince-Édouard uniquement.', en: '*Valid for orders before 9PM in PEI only.' }
+      },
+      'Northwest Territories': {
+        fr: 'Livraison demain aux Territoires du Nord-Ouest si commande avant 21h',
+        en: 'Delivery tomorrow to Northwest Territories if ordered before 9PM',
+        condition: { fr: '*Valable pour les commandes avant 21h aux Territoires du Nord-Ouest uniquement.', en: '*Valid for orders before 9PM in Northwest Territories only.' }
+      },
+      'Yukon': {
+        fr: 'Livraison demain au Yukon si commande avant 21h',
+        en: 'Delivery tomorrow to Yukon if ordered before 9PM',
+        condition: { fr: '*Valable pour les commandes avant 21h au Yukon uniquement.', en: '*Valid for orders before 9PM in Yukon only.' }
+      },
+      'Nunavut': {
+        fr: 'Livraison demain au Nunavut si commande avant 21h',
+        en: 'Delivery tomorrow to Nunavut if ordered before 9PM',
+        condition: { fr: '*Valable pour les commandes avant 21h au Nunavut uniquement.', en: '*Valid for orders before 9PM in Nunavut only.' }
+      }
+    }
+    
+    return deliveryTimes[userProvince as keyof typeof deliveryTimes] || deliveryTimes['Quebec']
+  }
+  
   const onTouchStart = (e: React.TouchEvent) => {
     touchEndX.current = 0
     touchStartX.current = e.targetTouches[0].clientX
@@ -449,19 +535,21 @@ export default function ProductPage({ params }: ProductPageProps) {
       </section>
 
       {/* Smart Delivery Promise */}
-      <div className="bg-green-50 border-2 border-green-200 rounded-xl p-4 mb-12">
-        <div className="text-center">
-          <div className="flex justify-center items-center gap-3 mb-2">
-            <Truck className="w-8 h-8 text-green-600" />
-            <h3 className="text-lg font-bold text-green-800">
-              {isFr ? 'Livraison demain au Québec si commande avant 21h' : 'Delivery tomorrow to Quebec if ordered before 9PM'}
-            </h3>
+      {userProvince && getDeliveryMessage() && (
+        <div className="bg-green-50 border-2 border-green-200 rounded-xl p-4 mb-12">
+          <div className="text-center">
+            <div className="flex justify-center items-center gap-3 mb-2">
+              <Truck className="w-8 h-8 text-green-600" />
+              <h3 className="text-lg font-bold text-green-800">
+                {isFr ? getDeliveryMessage()?.fr : getDeliveryMessage()?.en}
+              </h3>
+            </div>
+            <p className="text-green-700 text-sm font-[var(--font-dm-sans)]">
+              {isFr ? getDeliveryMessage()?.condition.fr : getDeliveryMessage()?.condition.en}
+            </p>
           </div>
-          <p className="text-green-700 text-sm font-[var(--font-dm-sans)]">
-            {isFr ? '*Valable pour les commandes avant 21h au Québec uniquement.' : '*Valid for orders before 9PM in Quebec only.'}
-          </p>
         </div>
-      </div>
+      )}
 
       {/* Trust & Confidence Section */}
       <section className="px-4 py-16 bg-gray-50">
