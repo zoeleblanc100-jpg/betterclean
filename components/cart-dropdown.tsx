@@ -226,21 +226,10 @@ export default function CartDropdown() {
                       Secure payment methods
                     </p>
                     <div className="flex items-center justify-center gap-3">
-                      <div className="w-10 h-6 bg-gray-100 rounded flex items-center justify-center">
-                        <span className="text-xs font-bold text-gray-700">VISA</span>
-                      </div>
-                      <div className="w-10 h-6 bg-gray-100 rounded flex items-center justify-center">
-                        <span className="text-xs font-bold text-gray-700">MC</span>
-                      </div>
-                      <div className="w-10 h-6 bg-gray-100 rounded flex items-center justify-center">
-                        <span className="text-xs font-bold text-gray-700">AMEX</span>
-                      </div>
-                      <div className="w-10 h-6 bg-gray-100 rounded flex items-center justify-center">
-                        <span className="text-xs font-bold text-gray-700">DISC</span>
-                      </div>
-                      <div className="w-10 h-6 bg-gray-100 rounded flex items-center justify-center">
-                        <span className="text-xs font-bold text-blue-600">PP</span>
-                      </div>
+                      <img src="https://cdn.shopify.com/shopifycloud/checkout-web/assets/0169695890db3db16bfe.svg" alt="Visa" className="h-5 w-8 opacity-70" />
+                      <img src="https://secure.payment-ca.com/assets/img/mastercard.svg" alt="Mastercard" className="h-5 w-8 opacity-70" />
+                      <img src="https://secure.payment-ca.com/assets/img/amex.svg" alt="Amex" className="h-5 w-8 opacity-70" />
+                      <img src="https://secure.payment-ca.com/assets/img/discover.svg" alt="Discover" className="h-5 w-8 opacity-70" />
                     </div>
                   </div>
                 </div>
