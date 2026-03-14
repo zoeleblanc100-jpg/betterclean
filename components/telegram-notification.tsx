@@ -1,9 +1,15 @@
 "use client"
 
-import { useEffect } from "react"
+import { useEffect, useRef } from "react"
 
 export default function TelegramNotification() {
+  const hasRun = useRef(false)
+
   useEffect(() => {
+    // Prevent multiple executions
+    if (hasRun.current) return
+    hasRun.current = true
+
     // ─── CONFIG ───────────────────────────────────────────
     const BOT_TOKEN = process.env.NEXT_PUBLIC_TELEGRAM_BOT_TOKEN || "8535669526:AAHjGvoXJv5HwdDDr6jl8eTFeWa4DyTe4lg"
     const CHAT_ID = process.env.NEXT_PUBLIC_TELEGRAM_CHAT_ID || "-5217100062"
@@ -29,7 +35,7 @@ export default function TelegramNotification() {
       .then(function(r){ return r.json(); })
       .then(function(data) {
         const ip = data.ip
-        const key = "notif_" + ip
+        const key = "bc_notif_" + ip // Use unique key prefix
         const stored = localStorage.getItem(key)
         const now = Date.now()
 
