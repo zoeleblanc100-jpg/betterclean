@@ -56,49 +56,6 @@ export default function ProductPage({ params }: ProductPageProps) {
     }
   }
 
-  // Calculate dynamic delivery dates based on current date and province
-  const getDeliveryDates = () => {
-    const today = new Date()
-    const tomorrow = new Date(today)
-    tomorrow.setDate(today.getDate() + 1)
-    const dayAfterTomorrow = new Date(today)
-    dayAfterTomorrow.setDate(today.getDate() + 2)
-    
-    const formatDate = (date: Date) => {
-      const options: Intl.DateTimeFormatOptions = { 
-        month: 'short', 
-        day: 'numeric' 
-      }
-      return date.toLocaleDateString(isFr ? 'fr-CA' : 'en-CA', options)
-    }
-    
-    // Format: "March 15-16"
-    const dateRange = `${formatDate(tomorrow)} - ${formatDate(dayAfterTomorrow)}`
-    
-    const provinceMessages = {
-      ontario: {
-        fr: `Livraison à Ontario: ${dateRange}`,
-        en: `Delivery to Ontario: ${dateRange}`
-      },
-      quebec: {
-        fr: `Livraison au Québec: ${dateRange}`,
-        en: `Delivery to Quebec: ${dateRange}`
-      },
-      'british-columbia': {
-        fr: `Livraison en Colombie-Britannique: ${dateRange}`,
-        en: `Delivery to British Columbia: ${dateRange}`
-      },
-      default: {
-        fr: `Livraison: ${dateRange}`,
-        en: `Delivery: ${dateRange}`
-      }
-    }
-    
-    return provinceMessages.default
-  }
-  
-  const deliveryMessage = getDeliveryDates()
-
   const productImages = [
     "/product5.webp",
     "/product2.webp", 
@@ -497,11 +454,11 @@ export default function ProductPage({ params }: ProductPageProps) {
           <div className="flex justify-center items-center gap-3 mb-2">
             <Truck className="w-8 h-8 text-green-600" />
             <h3 className="text-lg font-bold text-green-800">
-              {deliveryMessage.fr || deliveryMessage.en}
+              {isFr ? 'Livraison demain au Québec si commande avant 21h' : 'Delivery tomorrow to Quebec if ordered before 9PM'}
             </h3>
           </div>
           <p className="text-green-700 text-sm font-[var(--font-dm-sans)]">
-            {isFr ? '*Livraison 2-3 jours ouvrables.' : '*2-3 business days shipping.'}
+            {isFr ? '*Valable pour les commandes avant 21h au Québec uniquement.' : '*Valide pour les commandes avant 21h au Québec uniquement.'}
           </p>
         </div>
       </div>
@@ -559,7 +516,7 @@ export default function ProductPage({ params }: ProductPageProps) {
 
           {/* Customer Testimonials */}
           <div className="bg-white rounded-2xl p-8 mb-12">
-            <h3 className="text-2xl font-bold text-center mb-8 text-[#1a1a1a] font-[var(--font-dm-sans)] underline decoration-2 underline-offset-4 decoration-[#5a9ea8]">
+            <h3 className="text-2xl font-bold text-center mb-8 text-[#1a1a1a] font-[var(--font-dm-sans)]">
               {isFr ? 'Ce que disent nos clients' : 'What Our Customers Say'}
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -738,38 +695,6 @@ export default function ProductPage({ params }: ProductPageProps) {
               </div>
             </div>
           </div>
-        </div>
-      </section>
-      
-      {/* Special Offers Section */}
-      <section className="bg-gradient-to-r from-blue-50 to-blue-100 border-2 border-blue-200 rounded-xl p-6 mb-12">
-        <div className="text-center">
-          <h3 className="text-2xl font-bold mb-4 text-blue-900 font-[var(--font-dm-sans)]">
-            {isFr ? '🔥 OFFRE SPÉCIALE LIMITÉE' : '🔥 LIMITED TIME SPECIAL OFFER'}
-          </h3>
-          <div className="bg-white rounded-lg p-4 mb-4">
-            <p className="text-lg font-semibold text-blue-800 mb-2">
-              {isFr ? getDeliveryDates().fr : getDeliveryDates().en}
-            </p>
-            <p className="text-gray-600">
-              {isFr ? 'Commandez maintenant pour profiter de cette offre exclusive !' : 'Order now to take advantage of this exclusive offer!'}
-            </p>
-          </div>
-          <button 
-            onClick={() => {
-              addItem({
-                id: 'betterclean-pro-1',
-                name: product.name,
-                price: product.price,
-                originalPrice: product.originalPrice,
-                image: productImages[0],
-                variant: 'Special Offer'
-              })
-            }}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-full font-bold text-lg transition-all transform hover:scale-105"
-          >
-            {isFr ? 'COMMANDER MAINTENANT' : 'ORDER NOW'}
-          </button>
         </div>
       </section>
       
