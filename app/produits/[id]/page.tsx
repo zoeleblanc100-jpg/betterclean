@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, use, useEffect } from "react"
+import { useState, use, useEffect, useRef } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { Star, Check, ChevronDown, ChevronUp, Shield, Truck, ChevronLeft, ChevronRight } from "lucide-react"
@@ -25,6 +25,36 @@ export default function ProductPage({ params }: ProductPageProps) {
   const [selectedImageIndex, setSelectedImageIndex] = useState(0)
   const [selectedBundle, setSelectedBundle] = useState("buy1")
   const [openFaq, setOpenFaq] = useState<number | null>(null)
+  
+  // Touch gesture handling for mobile swipe
+  const touchStartX = useRef(0)
+  const touchEndX = useRef(0)
+  
+  const minSwipeDistance = 50
+  
+  const onTouchStart = (e: React.TouchEvent) => {
+    touchEndX.current = 0
+    touchStartX.current = e.targetTouches[0].clientX
+  }
+  
+  const onTouchMove = (e: React.TouchEvent) => {
+    touchEndX.current = e.targetTouches[0].clientX
+  }
+  
+  const onTouchEnd = () => {
+    if (!touchStartX.current || !touchEndX.current) return
+    
+    const distance = touchStartX.current - touchEndX.current
+    const isLeftSwipe = distance > minSwipeDistance
+    const isRightSwipe = distance < -minSwipeDistance
+    
+    if (isLeftSwipe && selectedImageIndex < productImages.length - 1) {
+      setSelectedImageIndex(prev => prev + 1)
+    }
+    if (isRightSwipe && selectedImageIndex > 0) {
+      setSelectedImageIndex(prev => prev - 1)
+    }
+  }
 
   const productImages = [
     "/product5.webp",
@@ -218,6 +248,9 @@ export default function ProductPage({ params }: ProductPageProps) {
                 <div 
                   className="flex h-full transition-transform duration-300 ease-out"
                   style={{ transform: `translateX(-${selectedImageIndex * 100}%)` }}
+                  onTouchStart={onTouchStart}
+                  onTouchMove={onTouchMove}
+                  onTouchEnd={onTouchEnd}
                 >
                   {productImages.map((image, index) => (
                     <div key={index} className="w-full h-full flex-shrink-0 relative">
