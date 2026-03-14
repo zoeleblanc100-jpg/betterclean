@@ -86,6 +86,54 @@ export default function RootLayout({
   return (
     <html lang="fr">
       <head>
+        {/* SEO Meta Tags */}
+        <meta charSet="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>BetterClean Pro | Electric Scrubber Brush – Brosse Électrique Nettoyage | Canada</title>
+        <meta name="description" content="BetterClean Pro – The best cordless electric scrubber brush for kitchen & bathroom. Fast shipping across Canada. / La meilleure brosse électrique rotative pour cuisine et salle de bain. Livraison rapide partout au Canada." />
+        <meta name="keywords" content="electric scrubber brush, power scrubber Canada, cordless cleaning brush, electric spin scrubber, brosse électrique nettoyage, brosse rotative électrique, nettoyeur électrique brosse, brosse de nettoyage électrique" />
+        <meta name="author" content="BetterClean Pro" />
+        <meta name="robots" content="index, follow" />
+        <link rel="canonical" href="https://betterclean.ca/" />
+        
+        {/* Open Graph (Facebook / Instagram Ads) */}
+        <meta property="og:title" content="BetterClean Pro – Electric Scrubber Brush | Canada" />
+        <meta property="og:description" content="Clean faster with BetterClean Pro cordless electric scrubber. Ships across Canada. / Nettoyez plus vite avec notre brosse électrique. Livraison partout au Canada." />
+        <meta property="og:image" content="https://i.imgur.com/AxyPpKY.png" />
+        <meta property="og:url" content="https://betterclean.ca/" />
+        <meta property="og:type" content="website" />
+        <meta property="og:locale" content="fr_CA" />
+        <meta property="og:locale:alternate" content="en_CA" />
+        <meta property="og:site_name" content="BetterClean Pro" />
+        
+        {/* Twitter Card */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="BetterClean Pro – Electric Scrubber Brush Canada" />
+        <meta name="twitter:description" content="Cordless electric scrubber brush. Ships across Canada. / Brosse électrique rotative. Livraison au Canada." />
+        <meta name="twitter:image" content="https://i.imgur.com/AxyPpKY.png" />
+        
+        {/* Schema.org (Google Rich Results) */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: `
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "BetterClean Pro",
+  "url": "https://betterclean.ca/",
+  "description": "Cordless electric scrubber brush for kitchen and bathroom cleaning. Canada shipping.",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "https://betterclean.ca/?q={search_term_string}",
+    "query-input": "required name=search_term_string"
+  }
+}
+            `,
+          }}
+        />
+        
+        {/* Favicon */}
         <link rel="icon" type="image/png" href="https://i.imgur.com/AxyPpKY.png" />
         <link rel="preconnect" href="https://res.cloudinary.com" />
         <link rel="dns-prefetch" href="https://res.cloudinary.com" />
