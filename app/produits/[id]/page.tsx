@@ -741,6 +741,38 @@ export default function ProductPage({ params }: ProductPageProps) {
         </div>
       </section>
       
+      {/* Special Offers Section */}
+      <section className="bg-gradient-to-r from-blue-50 to-blue-100 border-2 border-blue-200 rounded-xl p-6 mb-12">
+        <div className="text-center">
+          <h3 className="text-2xl font-bold mb-4 text-blue-900 font-[var(--font-dm-sans)]">
+            {isFr ? '🔥 OFFRE SPÉCIALE LIMITÉE' : '🔥 LIMITED TIME SPECIAL OFFER'}
+          </h3>
+          <div className="bg-white rounded-lg p-4 mb-4">
+            <p className="text-lg font-semibold text-blue-800 mb-2">
+              {isFr ? `Livraison garantie: ${getDeliveryDates().fr}` : `Guaranteed delivery: ${getDeliveryDates().en}`}
+            </p>
+            <p className="text-gray-600">
+              {isFr ? 'Commandez maintenant pour profiter de cette offre exclusive !' : 'Order now to take advantage of this exclusive offer!'}
+            </p>
+          </div>
+          <button 
+            onClick={() => {
+              addItem({
+                id: 'betterclean-pro-1',
+                name: product.name,
+                price: product.price,
+                originalPrice: product.originalPrice,
+                image: productImages[0],
+                variant: 'Special Offer'
+              })
+            }}
+            className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-full font-bold text-lg transition-all transform hover:scale-105"
+          >
+            {isFr ? 'COMMANDER MAINTENANT' : 'ORDER NOW'}
+          </button>
+        </div>
+      </section>
+      
       {/* Reviews Section */}
       <ReviewsSection />
 
