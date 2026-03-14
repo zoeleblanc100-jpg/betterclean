@@ -12,62 +12,9 @@ import { useI18n } from "@/lib/i18n-context"
 import Header from "@/components/header"
 import Footer from "@/components/footer"
 import ReviewsSection from "@/components/reviews-section"
-import { Metadata } from "next"
 
 interface ProductPageProps {
   params: Promise<{ id: string }>
-}
-
-export async function generateMetadata({ params }: ProductPageProps): Promise<Metadata> {
-  const { id } = await params
-  const { locale } = useI18n()
-  const isFr = locale === 'fr'
-  
-  return {
-    title: isFr 
-      ? 'BetterClean Pro Electric Scrubber – Buy in Canada | Brosse Électrique Rotative'
-      : 'BetterClean Pro Electric Scrubber – Buy in Canada | Electric Rotating Brush',
-    description: isFr
-      ? 'Buy BetterClean Pro electric scrubber brush. Perfect for tiles, grout, shower & kitchen. Free shipping in Canada. / Achetez la brosse électrique BetterClean Pro. Parfaite pour carreaux, joints, douche et cuisine. Livraison gratuite au Canada.'
-      : 'Buy BetterClean Pro electric scrubber brush. Perfect for tiles, grout, shower & kitchen. Free shipping in Canada.',
-    keywords: isFr
-      ? 'buy electric scrubber Canada, best electric scrubber brush, cordless scrubber brush bathroom, electric scrub brush shower grout, brosse électrique salle de bain, brosse rotative cuisine, acheter brosse nettoyage électrique Québec, nettoyeur électrique rotatif Canada'
-      : 'buy electric scrubber Canada, best electric scrubber brush, cordless scrubber brush bathroom, electric scrub brush shower grout',
-    openGraph: {
-      title: isFr
-        ? 'BetterClean Pro – Electric Scrubber Brush | Acheter au Canada'
-        : 'BetterClean Pro – Electric Scrubber Brush | Canada',
-      description: isFr
-        ? 'Cordless electric scrubber brush for bathroom tiles, grout & kitchen. Ships across Canada. / Brosse rotative électrique pour salle de bain et cuisine. Livraison au Canada.'
-        : 'Cordless electric scrubber brush for bathroom tiles, grout & kitchen. Ships across Canada.',
-      images: ['https://i.imgur.com/AxyPpKY.png'],
-      url: `https://betterclean.ca/produits/${id}`,
-      type: 'website',
-      locale: isFr ? 'fr_CA' : 'en_CA',
-      siteName: 'BetterClean Pro',
-    },
-    twitter: {
-      card: 'summary_large_image',
-      title: isFr
-        ? 'BetterClean Pro Electric Scrubber – Canada'
-        : 'BetterClean Pro Electric Scrubber – Canada',
-      description: isFr
-        ? 'Best cordless electric scrubber brush. Tiles, grout, shower, kitchen. Ships Canada wide.'
-        : 'Best cordless electric scrubber brush. Tiles, grout, shower, kitchen. Ships Canada wide.',
-      images: ['https://i.imgur.com/AxyPpKY.png'],
-    },
-    alternates: {
-      canonical: `https://betterclean.ca/produits/${id}`,
-      languages: {
-        'fr-CA': `https://betterclean.ca/produits/${id}`,
-        'en-CA': `https://betterclean.ca/produits/${id}`,
-      },
-    },
-    robots: {
-      index: true,
-      follow: true,
-    },
-  }
 }
 
 export default function ProductPage({ params }: ProductPageProps) {
