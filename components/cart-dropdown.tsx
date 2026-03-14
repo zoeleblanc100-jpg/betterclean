@@ -219,6 +219,30 @@ export default function CartDropdown() {
                       View Cart
                     </button>
                   </Link>
+                  
+                  {/* Payment Methods */}
+                  <div className="mt-6 pt-4 border-t border-gray-200">
+                    <p className="text-xs text-gray-500 text-center mb-3 font-[var(--font-dm-sans)]">
+                      Secure payment methods
+                    </p>
+                    <div className="flex items-center justify-center gap-3">
+                      <div className="w-10 h-6 bg-gray-100 rounded flex items-center justify-center">
+                        <span className="text-xs font-bold text-gray-700">VISA</span>
+                      </div>
+                      <div className="w-10 h-6 bg-gray-100 rounded flex items-center justify-center">
+                        <span className="text-xs font-bold text-gray-700">MC</span>
+                      </div>
+                      <div className="w-10 h-6 bg-gray-100 rounded flex items-center justify-center">
+                        <span className="text-xs font-bold text-gray-700">AMEX</span>
+                      </div>
+                      <div className="w-10 h-6 bg-gray-100 rounded flex items-center justify-center">
+                        <span className="text-xs font-bold text-gray-700">DISC</span>
+                      </div>
+                      <div className="w-10 h-6 bg-gray-100 rounded flex items-center justify-center">
+                        <span className="text-xs font-bold text-blue-600">PP</span>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </>
             )}
