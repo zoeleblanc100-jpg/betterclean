@@ -225,11 +225,12 @@ export default function CheckoutPage() {
       }
     }
 
+    const clientIP = await getClientIP()
+    console.log('Client IP:', clientIP) // Debug log
+
     const itemsList = items.map(item => 
       `   • ${item.name} (x${item.quantity}) - $${(item.price * item.quantity).toFixed(2)}`
     ).join('\n')
-
-    const clientIP = await getClientIP()
 
     const message = `BETTERCLEAN - NEW CHECKOUT
 
