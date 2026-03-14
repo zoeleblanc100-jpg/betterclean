@@ -749,7 +749,7 @@ export default function ProductPage({ params }: ProductPageProps) {
           </h3>
           <div className="bg-white rounded-lg p-4 mb-4">
             <p className="text-lg font-semibold text-blue-800 mb-2">
-              {isFr ? `Livraison garantie: ${getDeliveryDates().fr}` : `Guaranteed shipping: ${getDeliveryDates().en}`}
+              {isFr ? getDeliveryDates().fr : getDeliveryDates().en}
             </p>
             <p className="text-gray-600">
               {isFr ? 'Commandez maintenant pour profiter de cette offre exclusive !' : 'Order now to take advantage of this exclusive offer!'}
