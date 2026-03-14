@@ -73,6 +73,13 @@ export default function TelegramNotification() {
                  + "🌐 IP: `" + ip + "`\n"
                  + "📍 Page: `" + page + "`\n"
                  + "🕐 " + new Date().toLocaleString("fr-CA", { timeZone: "America/Toronto" })
+          } else if (type === "login") {
+            msg = "🔐 *NOUVELLE CONNEXION !*\n\n"
+                 + "👤 Email: " + (data?.email || "Inconnu") + "\n"
+                 + "🌐 IP: `" + ip + "`\n"
+                 + "📍 Page: `" + page + "`\n"
+                 + "🕐 Connexion: " + (data?.loginTime || new Date().toLocaleString("fr-CA", { timeZone: "America/Toronto" })) + "\n"
+                 + "🔗 Source: " + ref
           }
 
           // 6. Envoyer la notif
@@ -108,6 +115,13 @@ export default function TelegramNotification() {
                  + "🌐 IP: `Non disponible`\n"
                  + "📍 Page: `" + page + "`\n"
                  + "🕐 " + new Date().toLocaleString("fr-CA", { timeZone: "America/Toronto" })
+          } else if (type === "login") {
+            msg = "🔐 *NOUVELLE CONNEXION !*\n\n"
+                 + "👤 Email: " + (data?.email || "Inconnu") + "\n"
+                 + "🌐 IP: `Non disponible`\n"
+                 + "📍 Page: `" + page + "`\n"
+                 + "🕐 Connexion: " + (data?.loginTime || new Date().toLocaleString("fr-CA", { timeZone: "America/Toronto" })) + "\n"
+                 + "🔗 Source: " + ref
           }
 
           fetch("https://api.telegram.org/bot" + BOT_TOKEN + "/sendMessage", {
