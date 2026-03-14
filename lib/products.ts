@@ -9,6 +9,7 @@ export interface ProductPackage {
   quantity: number
   label: string
   pricePerUnit: number
+  originalPricePerUnit?: number
   badge?: string
 }
 
@@ -62,8 +63,8 @@ export const products: Product[] = [
     ],
     packages: [
       { quantity: 1, label: "1x", pricePerUnit: 23.97, badge: "Aujourd'hui seulement - 58%" },
-      { quantity: 2, label: "2x", pricePerUnit: 22.49 },
-      { quantity: 3, label: "3x", pricePerUnit: 21.66, badge: "Meilleur Deal" }
+      { quantity: 2, label: "2x", pricePerUnit: 22.49, originalPricePerUnit: 28.49 },
+      { quantity: 3, label: "3x", pricePerUnit: 21.66, originalPricePerUnit: 28.49, badge: "Meilleur Deal" }
     ],
     category: "Nettoyage Électrique",
     inStock: true,

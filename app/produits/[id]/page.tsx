@@ -217,18 +217,18 @@ export default function ProductPage({ params }: ProductPageProps) {
     {
       id: "buy2",
       name: isFr ? "Acheter 2 & Économiser" : "Buy 2 & Save",
-      price: 44.99,
-      originalPrice: 53.98,
-      savings: 69.01,
+      price: 44.98,
+      originalPrice: 113.98,
+      savings: 69.00,
       description: isFr ? "Deux brosses électriques BetterClean" : "Two BetterClean Electric Scrubbers",
       popular: true
     },
     {
       id: "buy3",
       name: isFr ? "Acheter 3 & Économiser" : "Buy 3 & Save",
-      price: 64.99,
-      originalPrice: 80.97,
-      savings: 105.98,
+      price: 64.98,
+      originalPrice: 170.97,
+      savings: 105.99,
       description: isFr ? "Trois brosses électriques BetterClean" : "Three BetterClean Electric Scrubbers"
     }
   ]
