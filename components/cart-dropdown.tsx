@@ -4,12 +4,15 @@ import { useState, useEffect } from "react"
 import { createPortal } from "react-dom"
 import { ShoppingCart, X, Plus, Minus, Truck } from "lucide-react"
 import { useCart } from "@/lib/cart-context"
+import { useI18n } from "@/lib/i18n-context"
 import Image from "next/image"
 import Link from "next/link"
 
 export default function CartDropdown() {
   const { items, removeItem, updateQuantity, total, itemCount, setCartOpen, isCartOpen } = useCart()
+  const { locale } = useI18n()
   const [mounted, setMounted] = useState(false)
+  const isFr = locale === 'fr'
 
   useEffect(() => {
     setMounted(true)
@@ -28,7 +31,7 @@ export default function CartDropdown() {
       day: 'numeric'
     }
     
-    return deliveryDate.toLocaleDateString('fr-CA', options)
+    return deliveryDate.toLocaleDateString(isFr ? 'fr-CA' : 'en-CA', options)
   }
 
   if (!mounted) return null
@@ -215,7 +218,7 @@ export default function CartDropdown() {
                       <Truck className="w-4 h-4 text-green-600" />
                       <div>
                         <p className="text-xs font-medium text-green-800">
-                          Livraison estimée
+                          {isFr ? 'Livraison estimée' : 'Estimated Delivery'}
                         </p>
                         <p className="text-sm font-bold text-green-900">
                           {getEstimatedDeliveryDate()}
