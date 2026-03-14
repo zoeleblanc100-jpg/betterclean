@@ -501,7 +501,7 @@ export default function ProductPage({ params }: ProductPageProps) {
             </h3>
           </div>
           <p className="text-green-700 text-sm font-[var(--font-dm-sans)]">
-            {isFr ? '*Livraison 2-3 jours ouvrables.' : '*2-3 business days delivery.'}
+            {isFr ? '*Livraison 2-3 jours ouvrables.' : '*2-3 business days shipping.'}
           </p>
         </div>
       </div>
@@ -749,7 +749,7 @@ export default function ProductPage({ params }: ProductPageProps) {
           </h3>
           <div className="bg-white rounded-lg p-4 mb-4">
             <p className="text-lg font-semibold text-blue-800 mb-2">
-              {isFr ? `Livraison garantie: ${getDeliveryDates().fr}` : `Guaranteed delivery: ${getDeliveryDates().en}`}
+              {isFr ? `Livraison garantie: ${getDeliveryDates().fr}` : `Guaranteed shipping: ${getDeliveryDates().en}`}
             </p>
             <p className="text-gray-600">
               {isFr ? 'Commandez maintenant pour profiter de cette offre exclusive !' : 'Order now to take advantage of this exclusive offer!'}
