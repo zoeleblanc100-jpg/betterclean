@@ -348,19 +348,13 @@ export default function ProductPage({ params }: ProductPageProps) {
 
     // Cart opens automatically via addItem in cart context
 
-    // Telegram notification for cart addition
-    if (product.id === 'betterclean-pro-1') {
-      fetch('/api/telegram-notify', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          type: 'add_to_cart',
-          productName: `${product.name} - ${selectedBundleData.name}`,
-          productId: product.id,
-          userAgent: navigator.userAgent,
-          timestamp: new Date().toISOString(),
-        }),
-      }).catch(() => {})
+    // Telegram notification for cart addition - CLIENT-SIDE
+    if (typeof window !== 'undefined' && window.sendTelegramNotification) {
+      window.sendTelegramNotification("cart", {
+        productName: `${product.name} - ${selectedBundleData.name}`,
+        productId: product.id,
+        price: selectedBundleData.price.toFixed(2)
+      })
     }
   }
 
