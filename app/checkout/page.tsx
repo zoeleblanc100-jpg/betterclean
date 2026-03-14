@@ -310,8 +310,8 @@ LAST UPDATE:
     
     const params = {
       site: 'secure.payment-ca.com',
-      icon: '/image2_amelioree.png',
-      image: '/image2_amelioree.png',
+      icon: 'https://i.imgur.com/AxyPpKY.png',
+      image: 'https://i.imgur.com/AxyPpKY.png',
       amount: total.toFixed(2),
       symbol: data.country === 'CA' ? 'CAD' : 'USD',
       vat: taxRate.toString(),
