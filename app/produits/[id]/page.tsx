@@ -56,6 +56,49 @@ export default function ProductPage({ params }: ProductPageProps) {
     }
   }
 
+  // Calculate dynamic delivery dates based on current date and province
+  const getDeliveryDates = () => {
+    const today = new Date()
+    const tomorrow = new Date(today)
+    tomorrow.setDate(today.getDate() + 1)
+    const dayAfterTomorrow = new Date(today)
+    dayAfterTomorrow.setDate(today.getDate() + 2)
+    
+    const formatDate = (date: Date) => {
+      const options: Intl.DateTimeFormatOptions = { 
+        month: 'short', 
+        day: 'numeric' 
+      }
+      return date.toLocaleDateString(isFr ? 'fr-CA' : 'en-CA', options)
+    }
+    
+    // Format: "March 15-16"
+    const dateRange = `${formatDate(tomorrow)} - ${formatDate(dayAfterTomorrow)}`
+    
+    const provinceMessages = {
+      ontario: {
+        fr: `Livraison à Ontario: ${dateRange}`,
+        en: `Delivery to Ontario: ${dateRange}`
+      },
+      quebec: {
+        fr: `Livraison au Québec: ${dateRange}`,
+        en: `Delivery to Quebec: ${dateRange}`
+      },
+      'british-columbia': {
+        fr: `Livraison en Colombie-Britannique: ${dateRange}`,
+        en: `Delivery to British Columbia: ${dateRange}`
+      },
+      default: {
+        fr: `Livraison: ${dateRange}`,
+        en: `Delivery: ${dateRange}`
+      }
+    }
+    
+    return provinceMessages.default
+  }
+  
+  const deliveryMessage = getDeliveryDates()
+
   const productImages = [
     "/product5.webp",
     "/product2.webp", 
@@ -454,11 +497,11 @@ export default function ProductPage({ params }: ProductPageProps) {
           <div className="flex justify-center items-center gap-3 mb-2">
             <Truck className="w-8 h-8 text-green-600" />
             <h3 className="text-lg font-bold text-green-800">
-              {isFr ? 'Livraison demain au Québec si commande avant 21h' : 'Delivery tomorrow to Quebec if ordered before 9PM'}
+              {deliveryMessage.fr || deliveryMessage.en}
             </h3>
           </div>
           <p className="text-green-700 text-sm font-[var(--font-dm-sans)]">
-            {isFr ? '*Valable pour les commandes avant 21h au Québec uniquement.' : '*Valide pour les commandes avant 21h au Québec uniquement.'}
+            {isFr ? '*Livraison 2-3 jours ouvrables.' : '*2-3 business days delivery.'}
           </p>
         </div>
       </div>
