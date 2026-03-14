@@ -9,11 +9,6 @@ export default function ShopByCategory() {
 
   const categories = [
     {
-      name: t.shopByCategory.toys,
-      href: "/produits",
-      image: "https://res.cloudinary.com/dhhdhilja/image/upload/v1770517604/purrball/Section2_-_Featured_Cat_Toy.jpg.webp",
-    },
-    {
       name: t.shopByCategory.fournitures,
       href: "/fournitures",
       image: "https://res.cloudinary.com/dhhdhilja/image/upload/v1770517664/purrball/in_the_box_pc.jpg.webp",
