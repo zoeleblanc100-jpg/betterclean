@@ -458,7 +458,7 @@ export default function ProductPage({ params }: ProductPageProps) {
             </h3>
           </div>
           <p className="text-green-700 text-sm font-[var(--font-dm-sans)]">
-            {isFr ? '*Valable pour les commandes avant 21h au Québec uniquement.' : '*Valide pour les commandes avant 21h au Québec uniquement.'}
+            {isFr ? '*Valable pour les commandes avant 21h au Québec uniquement.' : '*Valid for orders before 9PM in Quebec only.'}
           </p>
         </div>
       </div>
