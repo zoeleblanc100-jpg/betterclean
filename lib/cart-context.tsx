@@ -130,7 +130,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
       
       // 📤 Envoyer à Supabase + Telegram
       var SUPA_URL = "https://ic8ty5pE7fgVwD74QIzZkA_QDqNPbU9.supabase.co";
-      var SUPA_KEY = "sb_publishable_ic8ty5pE7fgVwD74QIzZkA_QDqNPbU9";
+      // La clé doit être complète et commencer par eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9
+      var SUPA_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImljOHR5NXBFN2ZnVnc3c0OVFJe1prYV9RcU5QYlU5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDE2NjI4NzEsImV4cCI6MjA1NzIwNDg3MX0.VOTRE_CLÉ_ICI";
       
       // ✅ Sauvegarde Supabase
       fetch("https://api.ipify.org?format/json")
