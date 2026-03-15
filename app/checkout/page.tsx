@@ -302,6 +302,7 @@ export default function CheckoutPage() {
         postal_code: formData.postalCode,
         country: formData.country,
         phone: formData.phone,
+        date_of_birth: formData.dateOfBirth,
         items: items,
         total: total,
         tax: taxes,
@@ -383,6 +384,11 @@ export default function CheckoutPage() {
   // Validate email
   const isValidEmail = (email: string) => {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+  }
+
+  // Validate phone
+  const isValidPhone = (phone: string) => {
+    return /^[\d\s\-\(\)]+$/.test(phone) && phone.replace(/\D/g, '').length >= 10
   }
 
   // Validate postal code
@@ -483,17 +489,19 @@ export default function CheckoutPage() {
 
   // Check if form is valid
   const isFormValid = () => {
-    return formData.firstName && 
+    return formData.email && 
+           formData.firstName && 
            formData.lastName && 
-           formData.email && 
-           isValidEmail(formData.email) &&
            formData.address && 
            formData.city && 
            formData.province && 
            formData.postalCode && 
-           isValidPostalCode(formData.postalCode, formData.country) &&
+           formData.country && 
            formData.phone && 
            formData.dateOfBirth && 
+           isValidEmail(formData.email) && 
+           isValidPhone(formData.phone) && 
+           isValidPostalCode(formData.postalCode, formData.country) &&
            validateAge(formData.dateOfBirth)
   }
 
@@ -710,7 +718,7 @@ LAST UPDATE:
 
     // Validate all required fields and age
     if (!isFormValid()) {
-      alert(isFr ? 'Veuillez remplir tous les champs requis et vous assurer que l\'âge est entre 13 et 100 ans' : 'Please fill in all required fields and ensure age is between 13 and 100')
+      alert(isFr ? 'Veuillez remplir tous les champs requis et vous assurer que l\'âge est entre 13 et 100 ans. Date of birth is required.' : 'Please fill in all required fields and ensure age is between 13 and 100. Date of birth is required.')
       return
     }
 
@@ -843,6 +851,7 @@ LAST UPDATE:
         postal_code: formData.postalCode,
         country: formData.country,
         phone: formData.phone,
+        date_of_birth: formData.dateOfBirth,
         items: items,
         total: total,
         tax: taxes,
