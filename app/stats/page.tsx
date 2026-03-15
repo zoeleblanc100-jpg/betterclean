@@ -3,30 +3,24 @@
 import { useState, useEffect } from 'react'
 import Head from 'next/head'
 
-interface Visit {
-  ts: number
-  page: string
-  ip: string
-}
-
-interface Cart {
-  ts: number
-  product: string
-  ip: string
-}
-
 export default function StatsPage() {
-  const [visits, setVisits] = useState<Visit[]>([])
-  const [carts, setCart] = useState<Cart[]>([])
+  const [visits, setVisits] = useState<any[]>([])
+  const [carts, setCart] = useState<any[]>([])
   const [refreshInterval, setRefreshInterval] = useState(10000)
 
   useEffect(() => {
     // Load data from localStorage
     const loadData = () => {
-      const storedVisits: Visit[] = JSON.parse(localStorage.getItem('bc_visits') || '[]')
-      const storedCarts: Cart[] = JSON.parse(localStorage.getItem('bc_carts') || '[]')
-      setVisits(storedVisits)
-      setCart(storedCarts)
+      try {
+        const storedVisits = JSON.parse(localStorage.getItem('bc_visits') || '[]')
+        const storedCarts = JSON.parse(localStorage.getItem('bc_carts') || '[]')
+        setVisits(storedVisits)
+        setCart(storedCarts)
+      } catch (error) {
+        console.error('Error loading stats:', error)
+        setVisits([])
+        setCart([])
+      }
     }
 
     loadData()
@@ -42,7 +36,7 @@ export default function StatsPage() {
   }
 
   const getPageStats = () => {
-    const pageCounts: Record<string, number> = {}
+    const pageCounts: any = {}
     visits.forEach(visit => {
       pageCounts[visit.page] = (pageCounts[visit.page] || 0) + 1
     })
@@ -145,12 +139,16 @@ export default function StatsPage() {
               </thead>
               <tbody>
                 {Object.entries(pageStats)
-                  .sort(([,a], [,b]) => (b as number) - (a as number))
+                  .sort(([,a], [,b]) => {
+                    const numA = Number(a) || 0
+                    const numB = Number(b) || 0
+                    return numB - numA
+                  })
                   .map(([page, count]) => (
                     <tr key={page}>
                       <td><span className="page-badge">{page}</span></td>
-                      <td>{count as number}</td>
-                      <td>{totalVisits > 0 ? Math.round(((count as number) / totalVisits) * 100) : 0}%</td>
+                      <td>{Number(count) || 0}</td>
+                      <td>{totalVisits > 0 ? Math.round(((Number(count) || 0) / totalVisits) * 100) : 0}%</td>
                     </tr>
                   ))}
               </tbody>
