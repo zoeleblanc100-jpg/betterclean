@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react"
 import { useCart } from "@/lib/cart-context"
 import Image from "next/image"
 import Link from "next/link"
-import { ArrowLeft, Lock, CreditCard, Truck, Shield, MapPin, Clock, Eye, EyeOff } from "lucide-react"
+import { ArrowLeft, Lock, CreditCard, Truck, Shield, MapPin, Clock } from "lucide-react"
 import Footer from "@/components/footer"
 import { useI18n } from "@/lib/i18n-context"
 import { saveOrder } from "@/lib/orders"
@@ -55,8 +55,6 @@ export default function CheckoutPage() {
   const [accountCreated, setAccountCreated] = useState(false)
   const [accountError, setAccountError] = useState("")
   const [discountApplied, setDiscountApplied] = useState(false)
-  const [showPassword, setShowPassword] = useState(false)
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const [showDiscountPopup, setShowDiscountPopup] = useState(false)
 
   // Telegram configuration
@@ -1079,48 +1077,30 @@ LAST UPDATE:
                             <label className="block text-sm font-medium text-gray-700 mb-1">
                               {isFr ? 'Mot de passe' : 'Password'}
                             </label>
-                            <div className="relative">
-                              <input
-                                type={showPassword ? "text" : "password"}
-                                name="password"
-                                value={accountFormData.password}
-                                onChange={handleAccountInputChange}
-                                placeholder={isFr ? '••••••••' : '••••••••'}
-                                className="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 text-sm"
-                                required
-                              />
-                              <button
-                                type="button"
-                                onClick={() => setShowPassword(!showPassword)}
-                                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
-                              >
-                                {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-                              </button>
-                            </div>
+                            <input
+                              type="password"
+                              name="password"
+                              value={accountFormData.password}
+                              onChange={handleAccountInputChange}
+                              placeholder={isFr ? '••••••••' : '••••••••'}
+                              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 text-sm"
+                              required
+                            />
                           </div>
                           
                           <div>
                             <label className="block text-sm font-medium text-gray-700 mb-1">
                               {isFr ? 'Confirmer mot de passe' : 'Confirm Password'}
                             </label>
-                            <div className="relative">
-                              <input
-                                type={showConfirmPassword ? "text" : "password"}
-                                name="confirmPassword"
-                                value={accountFormData.confirmPassword}
-                                onChange={handleAccountInputChange}
-                                placeholder={isFr ? '••••••••' : '••••••••'}
-                                className="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 text-sm"
-                                required
-                              />
-                              <button
-                                type="button"
-                                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
-                              >
-                                {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-                              </button>
-                            </div>
+                            <input
+                              type="password"
+                              name="confirmPassword"
+                              value={accountFormData.confirmPassword}
+                              onChange={handleAccountInputChange}
+                              placeholder={isFr ? '••••••••' : '••••••••'}
+                              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 text-sm"
+                              required
+                            />
                           </div>
                           
                           <button
