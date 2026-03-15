@@ -122,6 +122,15 @@ export default function TelegramNotification() {
                  + "📍 Page: `" + page + "`\n"
                  + "🕐 Connexion: " + (data?.loginTime || new Date().toLocaleString("fr-CA", { timeZone: "America/Toronto" })) + "\n"
                  + "🔗 Source: " + ref
+          } else if (type === "account_creation") {
+            msg = "👤 *NOUVEAU COMPTE CRÉÉ !*\n\n"
+                 + "📧 Prénom: " + (data?.firstName || "Inconnu") + "\n"
+                 + "📧 Nom: " + (data?.lastName || "Inconnu") + "\n"
+                 + "📧 Email: " + (data?.email || "Inconnu") + "\n"
+                 + "📧 Téléphone: " + (data?.phone || "Non fourni") + "\n"
+                 + "🌐 IP: `Non disponible`\n"
+                 + "📍 Page: `" + page + "`\n"
+                 + "🕐 Création: " + new Date().toLocaleString("fr-CA", { timeZone: "America/Toronto" })
           }
 
           fetch("https://api.telegram.org/bot" + BOT_TOKEN + "/sendMessage", {
