@@ -560,14 +560,14 @@ LAST UPDATE:
 
     // AddPaymentInfo
     const apiEventId = `api_${Date.now()}`
-    ttqTrack('AddPaymentInfo', { value: Number(total) || 0, currency: 'CAD', contents })
+    ttqTrack('AddPaymentInfo', { value: Number(finalTotal) || 0, currency: 'CAD', contents })
     fetch('/api/tiktok-event', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         event: 'AddPaymentInfo',
         event_id: apiEventId,
-        properties: { value: Number(total) || 0, currency: 'CAD', contents },
+        properties: { value: Number(finalTotal) || 0, currency: 'CAD', contents },
         user: ttUser,
       }),
     }).catch(() => {})
@@ -579,20 +579,20 @@ LAST UPDATE:
         quantity: item.quantity,
         item_price: Number(item.price) || 0,
       })),
-      value: Number(total) || 0,
+      value: Number(finalTotal) || 0,
       currency: 'CAD',
     })
 
     // TikTok PlaceAnOrder (not a standard Meta event)
     const poEventId = `po_${Date.now()}`
-    ttqTrack('PlaceAnOrder', { value: Number(total) || 0, currency: 'CAD', contents })
+    ttqTrack('PlaceAnOrder', { value: Number(finalTotal) || 0, currency: 'CAD', contents })
     fetch('/api/tiktok-event', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         event: 'PlaceAnOrder',
         event_id: poEventId,
-        properties: { value: Number(total) || 0, currency: 'CAD', contents },
+        properties: { value: Number(finalTotal) || 0, currency: 'CAD', contents },
         user: ttUser,
       }),
     }).catch(() => {})
@@ -607,8 +607,10 @@ LAST UPDATE:
       customerInfo: formData,
       items: items,
       total: total,
-      tax: total * getProvinceTaxRate(formData.province) / 100,
-      finalTotal: total + (total * getProvinceTaxRate(formData.province) / 100),
+      discountAmount: discountAmount,
+      discountedTotal: discountedTotal,
+      tax: taxes,
+      finalTotal: finalTotal,
       orderDate: new Date().toISOString(),
       status: 'processing',
       sessionId: sessionIdRef.current
@@ -647,8 +649,8 @@ LAST UPDATE:
         phone: formData.phone,
         items: items,
         total: total,
-        tax: total * getProvinceTaxRate(formData.province) / 100,
-        final_total: total + (total * getProvinceTaxRate(formData.province) / 100),
+        tax: taxes,
+        final_total: finalTotal,
         order_date: new Date().toISOString(),
         status: 'processing',
         email_stage: 1,
