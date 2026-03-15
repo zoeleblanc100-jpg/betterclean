@@ -1,8 +1,6 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import Header from "@/components/header"
-import Footer from "@/components/footer"
 import { useI18n } from "@/lib/i18n-context"
 
 export default function StatsPage() {
@@ -259,19 +257,19 @@ export default function StatsPage() {
   // Login screen
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen bg-white flex items-center justify-center">
-        <div className="max-w-md w-full px-4">
-          <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-200">
-            <div className="text-center mb-8">
-              <h1 className="text-3xl font-bold text-[#1a1a1a] font-[var(--font-dm-sans)] mb-2">
-                🔐 Stats Dashboard
+      <div className="min-h-screen bg-white flex items-center justify-center p-4">
+        <div className="w-full max-w-md">
+          <div className="bg-white rounded-2xl shadow-xl p-6 sm:p-8 border border-gray-200">
+            <div className="text-center mb-6 sm:mb-8">
+              <h1 className="text-2xl sm:text-3xl font-bold text-[#1a1a1a] font-[var(--font-dm-sans)] mb-2">
+                🔐 Dashboard
               </h1>
-              <p className="text-gray-600">
+              <p className="text-gray-600 text-sm sm:text-base">
                 Accès réservé à l'administration
               </p>
             </div>
             
-            <form onSubmit={handleLogin} className="space-y-6">
+            <form onSubmit={handleLogin} className="space-y-4 sm:space-y-6">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Mot de passe
@@ -280,23 +278,23 @@ export default function StatsPage() {
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full px-3 sm:px-4 py-2 sm:py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm sm:text-base"
                   placeholder="Entrez le mot de passe"
                   required
                 />
               </div>
               
               {error && (
-                <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+                <div className="bg-red-50 border border-red-200 text-red-700 px-3 sm:px-4 py-2 sm:py-3 rounded-lg text-sm sm:text-base">
                   {error}
                 </div>
               )}
               
               <button
                 type="submit"
-                className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-blue-700 transition-colors"
+                className="w-full bg-blue-600 text-white py-2 sm:py-3 px-4 rounded-lg font-medium hover:bg-blue-700 transition-colors text-sm sm:text-base"
               >
-                Accéder aux stats
+                Accéder au dashboard
               </button>
             </form>
           </div>
@@ -307,40 +305,38 @@ export default function StatsPage() {
 
   // Stats dashboard
   return (
-    <div className="min-h-screen bg-white">
-      <Header />
-      
+    <div className="min-h-screen bg-gray-50 fixed inset-0 overflow-auto">
       {/* Hero Section */}
-      <section className="px-4 py-16 md:py-20 bg-white">
-        <div className="max-w-6xl mx-auto text-center">
-          <div className="flex justify-between items-center mb-6">
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-[#1a1a1a] font-[var(--font-dm-sans)]">
-              📊 BetterClean Stats Dashboard
+      <section className="px-4 sm:px-6 py-8 sm:py-12 md:py-16 bg-white border-b border-gray-200">
+        <div className="max-w-7xl mx-auto text-center">
+          <div className="flex justify-between items-center mb-4 sm:mb-6">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-[#1a1a1a] font-[var(--font-dm-sans)]">
+              📊 Dashboard
             </h1>
             <button
               onClick={handleLogout}
-              className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-sm"
+              className="px-3 py-1 sm:px-4 sm:py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-xs sm:text-sm"
             >
               Déconnexion
             </button>
           </div>
-          <p className="text-lg md:text-xl mb-8 max-w-2xl mx-auto text-gray-600 font-[var(--font-dm-sans)]">
+          <p className="text-sm sm:text-base md:text-lg lg:text-xl mb-4 sm:mb-6 max-w-4xl mx-auto text-gray-600 font-[var(--font-dm-sans)]">
             Statistiques en temps réel - Dernière mise à jour: {new Date().toLocaleTimeString('fr-CA')}
           </p>
         </div>
       </section>
 
       {/* Live Visitors Alert */}
-      <section className="px-4 py-4 bg-green-50 border-b border-green-200">
-        <div className="max-w-6xl mx-auto">
-          <div className="flex items-center justify-center gap-4">
+      <section className="px-4 sm:px-6 py-3 sm:py-4 bg-green-50 border-b border-green-200">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 text-center sm:text-left">
             <div className="flex items-center gap-2">
-              <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
-              <span className="text-green-800 font-semibold">
+              <div className="w-2 sm:w-3 h-2 sm:h-3 bg-green-500 rounded-full animate-pulse"></div>
+              <span className="text-green-800 font-semibold text-sm sm:text-base">
                 {liveVisitors} visiteur(s) en direct (derniers 5 min)
               </span>
             </div>
-            <div className="text-green-600 text-sm">
+            <div className="text-green-600 text-xs sm:text-sm">
               • {liveStats.uniqueVisitors} unique(s) dernière heure • {liveStats.avgPerMinute}/min moyenne
             </div>
           </div>
@@ -348,111 +344,111 @@ export default function StatsPage() {
       </section>
 
       {/* Stats Grid */}
-      <section className="px-4 py-16 md:py-20 bg-gray-50">
-        <div className="max-w-6xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-            <div className="bg-white rounded-xl p-8 shadow-lg text-center border border-gray-200">
-              <div className="text-4xl font-bold text-blue-600 mb-2">{uniqueVisitors}</div>
-              <div className="text-gray-600 font-medium">Visiteurs Uniques</div>
+      <section className="px-4 sm:px-6 py-6 sm:py-8 md:py-12 lg:py-16 bg-gray-50">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6 mb-6 sm:mb-8 md:mb-12">
+            <div className="bg-white rounded-xl p-4 sm:p-6 md:p-8 shadow-lg text-center border border-gray-200">
+              <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-blue-600 mb-1 sm:mb-2">{uniqueVisitors}</div>
+              <div className="text-gray-600 font-medium text-xs sm:text-sm">Visiteurs Uniques</div>
             </div>
-            <div className="bg-white rounded-xl p-8 shadow-lg text-center border border-gray-200">
-              <div className="text-4xl font-bold text-green-600 mb-2">{todayUniqueVisitors}</div>
-              <div className="text-gray-600 font-medium">Visiteurs Uniques Aujourd'hui</div>
+            <div className="bg-white rounded-xl p-4 sm:p-6 md:p-8 shadow-lg text-center border border-gray-200">
+              <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-green-600 mb-1 sm:mb-2">{todayUniqueVisitors}</div>
+              <div className="text-gray-600 font-medium text-xs sm:text-sm">Visiteurs Uniques Aujourd'hui</div>
             </div>
-            <div className="bg-white rounded-xl p-8 shadow-lg text-center border border-gray-200">
-              <div className="text-4xl font-bold text-purple-600 mb-2">{uniqueCarts}</div>
-              <div className="text-gray-600 font-medium">Paniers Uniques</div>
+            <div className="bg-white rounded-xl p-4 sm:p-6 md:p-8 shadow-lg text-center border border-gray-200">
+              <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-purple-600 mb-1 sm:mb-2">{uniqueCarts}</div>
+              <div className="text-gray-600 font-medium text-xs sm:text-sm">Paniers Uniques</div>
             </div>
-            <div className="bg-white rounded-xl p-8 shadow-lg text-center border border-gray-200">
-              <div className="text-4xl font-bold text-orange-600 mb-2">
+            <div className="bg-white rounded-xl p-4 sm:p-6 md:p-8 shadow-lg text-center border border-gray-200">
+              <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-orange-600 mb-1 sm:mb-2">
                 {uniqueVisitors > 0 ? Math.round((uniqueCarts / uniqueVisitors) * 100) : 0}%
               </div>
-              <div className="text-gray-600 font-medium">Taux Conversion Réel</div>
+              <div className="text-gray-600 font-medium text-xs sm:text-sm">Taux Conversion Réel</div>
             </div>
           </div>
 
           {/* Weekly Stats */}
-          <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-8 mb-8">
-            <h3 className="text-2xl font-bold text-[#1a1a1a] font-[var(--font-dm-sans)] mb-6">📅 Stats de la Semaine</h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-4 sm:p-6 md:p-8 mb-4 sm:mb-6 md:mb-8">
+            <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-[#1a1a1a] font-[var(--font-dm-sans)] mb-4 sm:mb-6">📅 Stats de la Semaine</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
               <div className="text-center">
-                <div className="text-3xl font-bold text-blue-600 mb-2">{weeklyStats.visitors}</div>
-                <div className="text-gray-600">Visiteurs Uniques</div>
+                <div className="text-2xl sm:text-3xl font-bold text-blue-600 mb-1 sm:mb-2">{weeklyStats.visitors}</div>
+                <div className="text-gray-600 text-sm sm:text-base">Visiteurs Uniques</div>
               </div>
               <div className="text-center">
-                <div className="text-3xl font-bold text-purple-600 mb-2">{weeklyStats.carts}</div>
-                <div className="text-gray-600">Paniers Uniques</div>
+                <div className="text-2xl sm:text-3xl font-bold text-purple-600 mb-1 sm:mb-2">{weeklyStats.carts}</div>
+                <div className="text-gray-600 text-sm sm:text-base">Paniers Uniques</div>
               </div>
               <div className="text-center">
-                <div className="text-3xl font-bold text-orange-600 mb-2">{weeklyStats.conversion}%</div>
-                <div className="text-gray-600">Taux Conversion</div>
+                <div className="text-2xl sm:text-3xl font-bold text-orange-600 mb-1 sm:mb-2">{weeklyStats.conversion}%</div>
+                <div className="text-gray-600 text-sm sm:text-base">Taux Conversion</div>
               </div>
             </div>
           </div>
 
           {/* Monthly Stats */}
-          <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-8 mb-12">
-            <h3 className="text-2xl font-bold text-[#1a1a1a] font-[var(--font-dm-sans)] mb-6">📆 Stats du Mois</h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-4 sm:p-6 md:p-8 mb-4 sm:mb-6 md:mb-8">
+            <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-[#1a1a1a] font-[var(--font-dm-sans)] mb-4 sm:mb-6">📆 Stats du Mois</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
               <div className="text-center">
-                <div className="text-3xl font-bold text-blue-600 mb-2">{monthlyStats.visitors}</div>
-                <div className="text-gray-600">Visiteurs Uniques</div>
+                <div className="text-2xl sm:text-3xl font-bold text-blue-600 mb-1 sm:mb-2">{monthlyStats.visitors}</div>
+                <div className="text-gray-600 text-sm sm:text-base">Visiteurs Uniques</div>
               </div>
               <div className="text-center">
-                <div className="text-3xl font-bold text-purple-600 mb-2">{monthlyStats.carts}</div>
-                <div className="text-gray-600">Paniers Uniques</div>
+                <div className="text-2xl sm:text-3xl font-bold text-purple-600 mb-1 sm:mb-2">{monthlyStats.carts}</div>
+                <div className="text-gray-600 text-sm sm:text-base">Paniers Uniques</div>
               </div>
               <div className="text-center">
-                <div className="text-3xl font-bold text-orange-600 mb-2">{monthlyStats.conversion}%</div>
-                <div className="text-gray-600">Taux Conversion</div>
+                <div className="text-2xl sm:text-3xl font-bold text-orange-600 mb-1 sm:mb-2">{monthlyStats.conversion}%</div>
+                <div className="text-gray-600 text-sm sm:text-base">Taux Conversion</div>
               </div>
             </div>
           </div>
 
           {/* Source Stats */}
-          <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-8 mb-12">
-            <h3 className="text-2xl font-bold text-[#1a1a1a] font-[var(--font-dm-sans)] mb-6">🔗 Sources de Trafic</h3>
+          <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-4 sm:p-6 md:p-8 mb-4 sm:mb-6 md:mb-8">
+            <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-[#1a1a1a] font-[var(--font-dm-sans)] mb-4 sm:mb-6">🔗 Sources de Trafic</h3>
             
             {/* Top Source Card */}
-            <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-6 mb-8 border border-blue-200">
-              <div className="flex items-center justify-between">
-                <div>
-                  <div className="text-sm text-gray-600 mb-1">Source Principale</div>
-                  <div className="text-3xl font-bold text-blue-800">{topSource.source}</div>
-                  <div className="text-lg text-blue-600">{topSource.count} visites ({topSource.percentage}%)</div>
+            <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-3 sm:p-4 md:p-6 mb-4 sm:mb-6 md:mb-8 border border-blue-200">
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div className="text-center sm:text-left">
+                  <div className="text-xs sm:text-sm text-gray-600 mb-1">Source Principale</div>
+                  <div className="text-xl sm:text-2xl md:text-3xl font-bold text-blue-800">{topSource.source}</div>
+                  <div className="text-sm sm:text-base md:text-lg text-blue-600">{topSource.count} visites ({topSource.percentage}%)</div>
                 </div>
-                <div className="text-6xl">🔗</div>
+                <div className="text-4xl sm:text-5xl md:text-6xl">🔗</div>
               </div>
             </div>
 
             {/* Source Breakdown */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
               <div>
-                <h4 className="text-lg font-semibold text-gray-800 mb-4">Répartition des Sources</h4>
-                <div className="space-y-3">
+                <h4 className="text-base sm:text-lg font-semibold text-gray-800 mb-3 sm:mb-4">Répartition des Sources</h4>
+                <div className="space-y-2 sm:space-y-3">
                   {sourceBreakdown.length > 0 ? (
                     sourceBreakdown.slice(0, 5).map((item, index) => (
-                      <div key={item.source} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                        <div className="flex items-center gap-3">
-                          <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center text-sm font-bold text-blue-800">
+                      <div key={item.source} className="flex items-center justify-between p-2 sm:p-3 bg-gray-50 rounded-lg">
+                        <div className="flex items-center gap-2 sm:gap-3">
+                          <div className="w-6 h-6 sm:w-8 sm:h-8 bg-blue-100 rounded-full flex items-center justify-center text-xs sm:text-sm font-bold text-blue-800">
                             {index + 1}
                           </div>
-                          <span className="font-medium text-gray-800">{item.source}</span>
+                          <span className="font-medium text-gray-800 text-xs sm:text-sm">{item.source}</span>
                         </div>
-                        <div className="flex items-center gap-3">
-                          <span className="text-gray-600">{item.count}</span>
-                          <div className="w-24 bg-gray-200 rounded-full h-2">
+                        <div className="flex items-center gap-2 sm:gap-3">
+                          <span className="text-gray-600 text-xs sm:text-sm">{item.count}</span>
+                          <div className="w-16 sm:w-24 bg-gray-200 rounded-full h-1.5 sm:h-2">
                             <div 
-                              className="bg-blue-600 h-2 rounded-full" 
+                              className="bg-blue-600 h-1.5 sm:h-2 rounded-full" 
                               style={{ width: `${item.percentage}%` }}
                             ></div>
                           </div>
-                          <span className="text-sm font-medium text-gray-700 w-12 text-right">{item.percentage}%</span>
+                          <span className="text-xs sm:text-sm font-medium text-gray-700 w-8 sm:w-12 text-right">{item.percentage}%</span>
                         </div>
                       </div>
                     ))
                   ) : (
-                    <div className="text-center text-gray-500 py-8">
+                    <div className="text-center text-gray-500 py-4 sm:py-8 text-sm sm:text-base">
                       Aucune source de trafic détectée
                     </div>
                   )}
@@ -460,11 +456,11 @@ export default function StatsPage() {
               </div>
 
               <div>
-                <h4 className="text-lg font-semibold text-gray-800 mb-4">Sources Détectées</h4>
-                <div className="grid grid-cols-2 gap-3">
+                <h4 className="text-base sm:text-lg font-semibold text-gray-800 mb-3 sm:mb-4">Sources Détectées</h4>
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-3">
                   {sourceBreakdown.map((item) => (
-                    <div key={item.source} className="bg-white border border-gray-200 rounded-lg p-3 text-center">
-                      <div className="text-2xl mb-1">
+                    <div key={item.source} className="bg-white border border-gray-200 rounded-lg p-2 sm:p-3 text-center">
+                      <div className="text-lg sm:text-xl mb-1">
                         {item.source === 'Facebook' && '📘'}
                         {item.source === 'Instagram' && '📷'}
                         {item.source === 'TikTok' && '🎵'}
@@ -478,7 +474,7 @@ export default function StatsPage() {
                         {item.source === 'Unknown' && '❓'}
                         {['Facebook', 'Instagram', 'TikTok', 'Google', 'Twitter', 'LinkedIn', 'YouTube', 'Pinterest', 'Reddit', 'Direct', 'Unknown'].includes(item.source) === false && '🌐'}
                       </div>
-                      <div className="text-sm font-medium text-gray-800">{item.source}</div>
+                      <div className="text-xs sm:text-sm font-medium text-gray-800 truncate">{item.source}</div>
                       <div className="text-xs text-gray-600">{item.count} ({item.percentage}%)</div>
                     </div>
                   ))}
@@ -488,22 +484,22 @@ export default function StatsPage() {
           </div>
 
           {/* Controls */}
-          <div className="flex justify-between items-center mb-8">
-            <h2 className="text-2xl font-bold text-[#1a1a1a] font-[var(--font-dm-sans)]">📈 Pages Visitées</h2>
-            <div className="flex gap-4 items-center">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 sm:mb-8">
+            <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-[#1a1a1a] font-[var(--font-dm-sans)]">📈 Pages Visitées</h2>
+            <div className="flex flex-wrap gap-2 sm:gap-4 items-center w-full sm:w-auto">
               {syncStatus && (
-                <div className="px-4 py-2 bg-blue-50 text-blue-700 rounded-lg text-sm font-medium">
+                <div className="px-3 sm:px-4 py-1 sm:py-2 bg-blue-50 text-blue-700 rounded-lg text-xs sm:text-sm font-medium w-full sm:w-auto text-center">
                   {syncStatus}
                 </div>
               )}
               <button 
-                className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+                className="px-3 sm:px-4 py-1 sm:py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-xs sm:text-sm w-full sm:w-auto"
                 onClick={syncFromTelegram}
               >
                 🔄 Sync Telegram
               </button>
               <select 
-                className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="px-3 sm:px-4 py-1 sm:py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs sm:text-sm w-full sm:w-auto"
                 value={refreshInterval} 
                 onChange={(e) => setRefreshInterval(Number(e.target.value))}
               >
@@ -513,7 +509,7 @@ export default function StatsPage() {
                 <option value={60000}>60s</option>
               </select>
               <button 
-                className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                className="px-3 sm:px-4 py-1 sm:py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-xs sm:text-sm w-full sm:w-auto"
                 onClick={() => window.location.reload()}
               >
                 🔄 Refresh
@@ -522,20 +518,20 @@ export default function StatsPage() {
           </div>
 
           {lastSyncTime && (
-            <div className="mb-4 text-sm text-gray-600">
+            <div className="mb-3 sm:mb-4 text-xs sm:text-sm text-gray-600 text-center sm:text-left">
               Dernière synchronisation Telegram: {new Date(lastSyncTime).toLocaleString('fr-CA')}
             </div>
           )}
 
           {/* Pages Table */}
-          <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden mb-12">
+          <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden mb-6 sm:mb-8 md:mb-12">
             <div className="overflow-x-auto">
-              <table className="w-full">
+              <table className="w-full min-w-[500px]">
                 <thead className="bg-gray-50">
                   <tr>
-                    <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Page</th>
-                    <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Visites</th>
-                    <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Pourcentage</th>
+                    <th className="px-3 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4 text-left text-xs sm:text-sm font-semibold text-gray-900">Page</th>
+                    <th className="px-3 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4 text-left text-xs sm:text-sm font-semibold text-gray-900">Visites</th>
+                    <th className="px-3 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4 text-left text-xs sm:text-sm font-semibold text-gray-900">Pourcentage</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200">
@@ -548,20 +544,20 @@ export default function StatsPage() {
                       })
                       .map(([page, count]) => (
                         <tr key={page} className="hover:bg-gray-50">
-                          <td className="px-6 py-4">
-                            <span className="inline-block px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">
+                          <td className="px-3 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4">
+                            <span className="inline-block px-2 sm:px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-xs sm:text-sm font-medium">
                               {page}
                             </span>
                           </td>
-                          <td className="px-6 py-4 font-medium">{Number(count) || 0}</td>
-                          <td className="px-6 py-4">
+                          <td className="px-3 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4 font-medium text-xs sm:text-sm">{Number(count) || 0}</td>
+                          <td className="px-3 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4 text-xs sm:text-sm">
                             {totalVisits > 0 ? Math.round(((Number(count) || 0) / totalVisits) * 100) : 0}%
                           </td>
                         </tr>
                       ))
                   ) : (
                     <tr>
-                      <td colSpan={3} className="px-6 py-12 text-center text-gray-500">
+                      <td colSpan={3} className="px-3 sm:px-4 md:px-6 py-6 sm:py-8 md:py-12 text-center text-gray-500 text-xs sm:text-sm">
                         Aucune visite enregistrée
                       </td>
                     </tr>
@@ -572,30 +568,30 @@ export default function StatsPage() {
           </div>
 
           {/* Recent Carts */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 md:gap-8">
             <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
-              <div className="px-6 py-4 bg-gray-50 border-b border-gray-200">
-                <h3 className="text-xl font-bold text-[#1a1a1a] font-[var(--font-dm-sans)]">🛒 Ajouts Panier Récents</h3>
+              <div className="px-3 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4 bg-gray-50 border-b border-gray-200">
+                <h3 className="text-base sm:text-lg md:text-xl font-bold text-[#1a1a1a] font-[var(--font-dm-sans)]">🛒 Ajouts Panier Récents</h3>
               </div>
               <div className="overflow-x-auto">
-                <table className="w-full">
+                <table className="w-full min-w-[300px]">
                   <thead className="bg-gray-50">
                     <tr>
-                      <th className="px-4 py-3 text-left text-sm font-semibold text-gray-900">Produit</th>
-                      <th className="px-4 py-3 text-left text-sm font-semibold text-gray-900">Date</th>
+                      <th className="px-2 sm:px-3 md:px-4 py-2 text-left text-xs sm:text-sm font-semibold text-gray-900">Produit</th>
+                      <th className="px-2 sm:px-3 md:px-4 py-2 text-left text-xs sm:text-sm font-semibold text-gray-900">Date</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-200">
                     {carts.length > 0 ? (
                       carts.slice(-5).reverse().map((cart, index) => (
                         <tr key={index} className="hover:bg-gray-50">
-                          <td className="px-4 py-3 font-medium">{cart.product}</td>
-                          <td className="px-4 py-3 text-sm text-gray-600">{formatTime(cart.ts)}</td>
+                          <td className="px-2 sm:px-3 md:px-4 py-2 font-medium text-xs sm:text-sm truncate max-w-[150px]">{cart.product}</td>
+                          <td className="px-2 sm:px-3 md:px-4 py-2 text-xs sm:text-sm text-gray-600">{formatTime(cart.ts)}</td>
                         </tr>
                       ))
                     ) : (
                       <tr>
-                        <td colSpan={2} className="px-4 py-8 text-center text-gray-500">
+                        <td colSpan={2} className="px-2 sm:px-3 md:px-4 py-4 sm:py-6 md:py-8 text-center text-gray-500 text-xs sm:text-sm">
                           Aucun ajout panier enregistré
                         </td>
                       </tr>
@@ -607,32 +603,32 @@ export default function StatsPage() {
 
             {/* Recent Visits */}
             <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
-              <div className="px-6 py-4 bg-gray-50 border-b border-gray-200">
-                <h3 className="text-xl font-bold text-[#1a1a1a] font-[var(--font-dm-sans)]">🕐 Visites Récentes</h3>
+              <div className="px-3 sm:px-4 md:px-6 py-2 sm:py-3 md:py-4 bg-gray-50 border-b border-gray-200">
+                <h3 className="text-base sm:text-lg md:text-xl font-bold text-[#1a1a1a] font-[var(--font-dm-sans)]">🕐 Visites Récentes</h3>
               </div>
               <div className="overflow-x-auto">
-                <table className="w-full">
+                <table className="w-full min-w-[300px]">
                   <thead className="bg-gray-50">
                     <tr>
-                      <th className="px-4 py-3 text-left text-sm font-semibold text-gray-900">Page</th>
-                      <th className="px-4 py-3 text-left text-sm font-semibold text-gray-900">Date</th>
+                      <th className="px-2 sm:px-3 md:px-4 py-2 text-left text-xs sm:text-sm font-semibold text-gray-900">Page</th>
+                      <th className="px-2 sm:px-3 md:px-4 py-2 text-left text-xs sm:text-sm font-semibold text-gray-900">Date</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-200">
                     {visits.length > 0 ? (
                       visits.slice(-5).reverse().map((visit, index) => (
                         <tr key={index} className="hover:bg-gray-50">
-                          <td className="px-4 py-3">
-                            <span className="inline-block px-2 py-1 bg-gray-100 text-gray-800 rounded text-xs font-medium">
+                          <td className="px-2 sm:px-3 md:px-4 py-2">
+                            <span className="inline-block px-1 sm:px-2 py-1 bg-gray-100 text-gray-800 rounded text-xs font-medium">
                               {visit.page}
                             </span>
                           </td>
-                          <td className="px-4 py-3 text-sm text-gray-600">{formatTime(visit.ts)}</td>
+                          <td className="px-2 sm:px-3 md:px-4 py-2 text-xs sm:text-sm text-gray-600">{formatTime(visit.ts)}</td>
                         </tr>
                       ))
                     ) : (
                       <tr>
-                        <td colSpan={2} className="px-4 py-8 text-center text-gray-500">
+                        <td colSpan={2} className="px-2 sm:px-3 md:px-4 py-4 sm:py-6 md:py-8 text-center text-gray-500 text-xs sm:text-sm">
                           Aucune visite enregistrée
                         </td>
                       </tr>
@@ -644,8 +640,6 @@ export default function StatsPage() {
           </div>
         </div>
       </section>
-
-      <Footer />
     </div>
   )
 }
