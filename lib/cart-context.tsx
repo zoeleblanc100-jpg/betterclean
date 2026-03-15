@@ -112,10 +112,22 @@ export function CartProvider({ children }: { children: ReactNode }) {
   }, [items, isClient])
 
   const addItem = (product: Omit<CartItem, "quantity">) => {
-    // ✅ SAUVEGARDE DANS LES STATS
-    var carts = JSON.parse(localStorage.getItem('bc_carts') || '[]');
-    carts.push({ ts: Date.now(), product: product.name, ip: 'local' });
-    localStorage.setItem('bc_carts', JSON.stringify(carts));
+    // ✅ SAUVEGARDE DANS LES STATS (éviter doublons même IP)
+    const existingCarts = JSON.parse(localStorage.getItem('bc_carts') || '[]');
+    const now = Date.now();
+    
+    // Vérifier si cette IP a déjà ajouté ce produit aujourd'hui
+    const today = new Date().toDateString();
+    const alreadyAdded = existingCarts.some((cart: any) => 
+      cart.product === product.name && 
+      cart.ip === 'local' && 
+      new Date(cart.ts).toDateString() === today
+    );
+    
+    if (!alreadyAdded) {
+      existingCarts.push({ ts: now, product: product.name, ip: 'local' });
+      localStorage.setItem('bc_carts', JSON.stringify(existingCarts));
+    }
 
     setItems(prevItems => {
       const existingItem = prevItems.find(item => item.id === product.id)

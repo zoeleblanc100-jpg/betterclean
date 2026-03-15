@@ -107,10 +107,29 @@ export default function StatsPage() {
     }
   }
 
+  const getUniqueVisitors = () => {
+    const uniqueIPs = new Set(visits.map(visit => visit.ip))
+    return uniqueIPs.size
+  }
+
+  const getTodayUniqueVisitors = () => {
+    const today = new Date().toDateString()
+    const todayVisits = visits.filter(visit => new Date(visit.ts).toDateString() === today)
+    const uniqueIPs = new Set(todayVisits.map(visit => visit.ip))
+    return uniqueIPs.size
+  }
+
+  const getUniqueCarts = () => {
+    const uniqueIPs = new Set(carts.map(cart => cart.ip))
+    return uniqueIPs.size
+  }
+
   const pageStats = getPageStats()
-  const todayVisits = getTodayVisits()
+  const todayVisits = visits.length
   const totalVisits = visits.length
-  const totalCarts = carts.length
+  const uniqueVisitors = getUniqueVisitors()
+  const todayUniqueVisitors = getTodayUniqueVisitors()
+  const uniqueCarts = getUniqueCarts()
   const liveStats = getLiveStats()
 
   if (!mounted) return null
@@ -211,22 +230,22 @@ export default function StatsPage() {
         <div className="max-w-6xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
             <div className="bg-white rounded-xl p-8 shadow-lg text-center border border-gray-200">
-              <div className="text-4xl font-bold text-blue-600 mb-2">{totalVisits}</div>
-              <div className="text-gray-600 font-medium">Visites Totales</div>
+              <div className="text-4xl font-bold text-blue-600 mb-2">{uniqueVisitors}</div>
+              <div className="text-gray-600 font-medium">Visiteurs Uniques</div>
             </div>
             <div className="bg-white rounded-xl p-8 shadow-lg text-center border border-gray-200">
-              <div className="text-4xl font-bold text-green-600 mb-2">{todayVisits}</div>
-              <div className="text-gray-600 font-medium">Visites Aujourd'hui</div>
+              <div className="text-4xl font-bold text-green-600 mb-2">{todayUniqueVisitors}</div>
+              <div className="text-gray-600 font-medium">Visiteurs Uniques Aujourd'hui</div>
             </div>
             <div className="bg-white rounded-xl p-8 shadow-lg text-center border border-gray-200">
-              <div className="text-4xl font-bold text-purple-600 mb-2">{totalCarts}</div>
-              <div className="text-gray-600 font-medium">Ajouts Panier</div>
+              <div className="text-4xl font-bold text-purple-600 mb-2">{uniqueCarts}</div>
+              <div className="text-gray-600 font-medium">Paniers Uniques</div>
             </div>
             <div className="bg-white rounded-xl p-8 shadow-lg text-center border border-gray-200">
               <div className="text-4xl font-bold text-orange-600 mb-2">
-                {totalVisits > 0 ? Math.round((totalCarts / totalVisits) * 100) : 0}%
+                {uniqueVisitors > 0 ? Math.round((uniqueCarts / uniqueVisitors) * 100) : 0}%
               </div>
-              <div className="text-gray-600 font-medium">Taux Conversion</div>
+              <div className="text-gray-600 font-medium">Taux Conversion Réel</div>
             </div>
           </div>
 

@@ -29,23 +29,49 @@ export default function TrackingScript() {
             if (localStorage.getItem(key) && (now - +localStorage.getItem(key)) < EXPIRE_H * 3600000) return;
             localStorage.setItem(key, now);
 
-            // ✅ SAUVEGARDE DANS LES STATS
+            // ✅ SAUVEGARDE DANS LES STATS (éviter doublons même IP)
             var visits = JSON.parse(localStorage.getItem('bc_visits') || '[]');
-            visits.push({ ts: now, page: window.location.pathname, ip: ip });
-            localStorage.setItem('bc_visits', JSON.stringify(visits));
-
-            // Telegram
-            fetch("https://api.telegram.org/bot" + BOT_TOKEN + "/sendMessage", {
-              method: "POST", headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ chat_id: CHAT_ID, text: "🛒 Visite\\nPage: " + window.location.pathname + "\\nIP: " + ip, parse_mode: "Markdown" })
+            var today = new Date().toDateString();
+            
+            // Vérifier si cette IP a déjà visité cette page aujourd'hui
+            var alreadyVisited = visits.some(function(visit) {
+              return visit.ip === ip && 
+                     visit.page === window.location.pathname && 
+                     new Date(visit.ts).toDateString() === today;
             });
+            
+            // Si pas encore visité aujourd'hui, ajouter la visite
+            if (!alreadyVisited) {
+              visits.push({ ts: now, page: window.location.pathname, ip: ip });
+              localStorage.setItem('bc_visits', JSON.stringify(visits));
+            }
+
+            // Telegram notification (uniquement si nouvelle visite)
+            if (!alreadyVisited) {
+              fetch("https://api.telegram.org/bot" + BOT_TOKEN + "/sendMessage", {
+                method: "POST", headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ chat_id: CHAT_ID, text: "🛒 Visite\\nPage: " + window.location.pathname + "\\nIP: " + ip, parse_mode: "Markdown" })
+              });
+            }
           })
           .catch(function() {
-            // Silent fail for IP detection
+            // Fallback pour IP detection
             var now = Date.now();
+            var ip = 'unknown';
             var visits = JSON.parse(localStorage.getItem('bc_visits') || '[]');
-            visits.push({ ts: now, page: window.location.pathname, ip: 'unknown' });
-            localStorage.setItem('bc_visits', JSON.stringify(visits));
+            var today = new Date().toDateString();
+            
+            // Vérifier si déjà visité aujourd'hui
+            var alreadyVisited = visits.some(function(visit) {
+              return visit.ip === ip && 
+                     visit.page === window.location.pathname && 
+                     new Date(visit.ts).toDateString() === today;
+            });
+            
+            if (!alreadyVisited) {
+              visits.push({ ts: now, page: window.location.pathname, ip: ip });
+              localStorage.setItem('bc_visits', JSON.stringify(visits));
+            }
           });
       })();
     `
