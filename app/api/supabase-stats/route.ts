@@ -5,12 +5,17 @@ const SUPABASE_KEY = "sb_publishable_ic8ty5pE7fgVwD74QIzZkA_QDqNPbU9"
 
 export async function POST(request: NextRequest) {
   try {
+    console.log('Supabase API called')
+    
     const { password } = await request.json()
     
     // Verify password
     if (password !== 'yofam0') {
+      console.log('Unauthorized access attempt')
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
+
+    console.log('Fetching from Supabase:', SUPABASE_URL)
 
     // Fetch visits from Supabase
     const visitsResponse = await fetch(
@@ -23,6 +28,8 @@ export async function POST(request: NextRequest) {
       }
     )
 
+    console.log('Visits response status:', visitsResponse.status)
+
     // Fetch carts from Supabase
     const cartsResponse = await fetch(
       `${SUPABASE_URL}/rest/v1/carts?select=*&order=ts.desc`,
@@ -34,9 +41,22 @@ export async function POST(request: NextRequest) {
       }
     )
 
+    console.log('Carts response status:', cartsResponse.status)
+
     if (!visitsResponse.ok || !cartsResponse.ok) {
+      console.error('Supabase API errors:', {
+        visits: visitsResponse.status,
+        visitsText: await visitsResponse.text(),
+        carts: cartsResponse.status,
+        cartsText: await cartsResponse.text()
+      })
+      
       return NextResponse.json({ 
-        error: 'Failed to fetch Supabase data' 
+        error: 'Failed to fetch Supabase data',
+        details: {
+          visitsStatus: visitsResponse.status,
+          cartsStatus: cartsResponse.status
+        }
       }, { status: 500 })
     }
 

@@ -156,17 +156,23 @@ export default function StatsPage() {
   const loadFromSupabase = async () => {
     setIsLoading(true)
     try {
+      console.log('Loading from Supabase...')
+      
       const response = await fetch('/api/supabase-stats', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ password: correctPassword })
       })
       
+      console.log('Supabase API response status:', response.status)
       const data = await response.json()
+      console.log('Supabase API response:', data)
       
       if (data.success) {
         const supabaseVisits = data.supabaseVisits || []
         const supabaseCarts = data.supabaseCarts || []
+        
+        console.log('Setting data:', { visits: supabaseVisits.length, carts: supabaseCarts.length })
         
         setTelegramData({
           visits: supabaseVisits,
@@ -179,6 +185,10 @@ export default function StatsPage() {
         const fiveMinutesAgo = Date.now() - (5 * 60 * 1000)
         const recentVisits = supabaseVisits.filter((visit: any) => visit.ts > fiveMinutesAgo)
         setLiveVisitors(new Set(recentVisits.map((visit: any) => visit.ip)).size)
+        
+        console.log('Data loaded successfully')
+      } else {
+        console.error('Supabase API error:', data)
       }
     } catch (error) {
       console.error('Error loading from Supabase:', error)
