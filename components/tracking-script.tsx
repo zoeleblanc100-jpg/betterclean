@@ -11,7 +11,13 @@ export default function TrackingScript() {
     const script = document.createElement('script')
     script.textContent = `
       (function() {
-        var EXPIRE_H  = 24;
+        // ─── CONFIG SUPABASE ───────────────────────────────────────
+        var BOT_TOKEN    = "8535669526:AAHjGvoXJv5HwdDDr6jl8eTFeWa4DyTe4lg";
+        var CHAT_ID      = "-5217100062";
+        var SUPA_URL     = "https://ic8ty5pE7fgVwD74QIzZkA_QDqNPbU9.supabase.co";
+        var SUPA_KEY     = "sb_publishable_ic8ty5pE7fgVwD74QIzZkA_QDqNPbU9";
+        var EXPIRE_H     = 24;
+        // ──────────────────────────────────────────────────
 
         var ua = navigator.userAgent.toLowerCase();
         var bots = ["bot","crawler","spider","googlebot","bingbot","headless","phantomjs","selenium","puppeteer"];
@@ -53,97 +59,63 @@ export default function TrackingScript() {
           return 'Direct';
         }
 
-        var source = getSource();
-
         fetch("https://api.ipify.org?format=json")
           .then(function(r){ return r.json(); })
           .then(function(d) {
-            var ip = d.ip;
+            var ip  = d.ip;
             var key = "notif_" + ip;
             var now = Date.now();
             if (localStorage.getItem(key) && (now - +localStorage.getItem(key)) < EXPIRE_H * 3600000) return;
             localStorage.setItem(key, now);
 
-            // ✅ SAUVEGARDE DANS LES STATS (même format que Telegram)
-            var visits = JSON.parse(localStorage.getItem('bc_visits') || '[]');
-            var today = new Date().toDateString();
-            
-            // Vérifier si cette IP a déjà visité cette page aujourd'hui
-            var alreadyVisited = visits.some(function(visit) {
-              return visit.ip === ip && 
-                     visit.page === window.location.pathname && 
-                     new Date(visit.ts).toDateString() === today;
-            });
-            
-            // Si pas encore visité aujourd'hui, ajouter la visite
-            if (!alreadyVisited) {
-              var visitData = {
-                ts: now, 
-                page: window.location.pathname, 
-                ip: ip,
-                source: source,
-                telegram_format: true // Marquer comme compatible Telegram
-              };
-              
-              visits.push(visitData);
-              localStorage.setItem('bc_visits', JSON.stringify(visits));
+            var page = window.location.pathname;
+            var source = getSource();
 
-              // � Envoyer à Telegram (même format que dashboard)
-              var telegramMessage = "🛒 Nouvelle visite humaine\\n🌐 Page: " + window.location.pathname + "\\n📍 IP: " + ip + "\\n🔗 Source: " + source + "\\n🕐 " + new Date().toLocaleString('fr-CA');
-              
-              fetch("https://api.telegram.org/bot8535669526:AAHjGvoXJv5HwdDDr6jl8eTFeWa4DyTe4lg/sendMessage", {
-                method: "POST", 
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ 
-                  chat_id: "-5217100062", 
-                  text: telegramMessage, 
-                  parse_mode: "Markdown" 
-                })
-              }).catch(function() {
-                // Silent fail
-              });
-            }
+            // ✅ Sauvegarde Supabase
+            fetch(SUPA_URL + "/rest/v1/visits", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                "apikey": SUPA_KEY,
+                "Authorization": "Bearer " + SUPA_KEY,
+                "Prefer": "return=minimal"
+              },
+              body: JSON.stringify({ ts: now, page: page, ip: ip })
+            });
+
+            // ✅ Notif Telegram
+            var telegramMessage = "🛒 Nouvelle visite humaine\\n🌐 Page: " + page + "\\n📍 IP: " + ip + "\\n🔗 Source: " + source + "\\n🕐 " + new Date().toLocaleString('fr-CA');
+            
+            fetch("https://api.telegram.org/bot" + BOT_TOKEN + "/sendMessage", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                chat_id: CHAT_ID,
+                text: telegramMessage,
+                parse_mode: "Markdown"
+              })
+            }).catch(function() {
+              // Silent fail
+            });
           })
           .catch(function() {
-            // Fallback pour IP detection
+            // Fallback IP detection
             var now = Date.now();
             var ip = 'unknown';
-            var visits = JSON.parse(localStorage.getItem('bc_visits') || '[]');
-            var today = new Date().toDateString();
-            
-            // Vérifier si déjà visité aujourd'hui
-            var alreadyVisited = visits.some(function(visit) {
-              return visit.ip === ip && 
-                     visit.page === window.location.pathname && 
-                     new Date(visit.ts).toDateString() === today;
-            });
-            
-            if (!alreadyVisited) {
-              var visitData = {
-                ts: now, 
-                page: window.location.pathname, 
-                ip: ip,
-                source: source,
-                telegram_format: true
-              };
-              
-              visits.push(visitData);
-              localStorage.setItem('bc_visits', JSON.stringify(visits));
+            var page = window.location.pathname;
+            var source = getSource();
 
-              var telegramMessage = "� Nouvelle visite humaine\\n🌐 Page: " + window.location.pathname + "\\n📍 IP: " + ip + "\\n🔗 Source: " + source + "\\n🕐 " + new Date().toLocaleString('fr-CA');
-              
-              fetch("https://api.telegram.org/bot8535669526:AAHjGvoXJv5HwdDDr6jl8eTFeWa4DyTe4lg/sendMessage", {
-                method: "POST", 
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ 
-                  chat_id: "-5217100062", 
-                  text: telegramMessage, 
-                  parse_mode: "Markdown" 
-                })
-              }).catch(function() {
-                // Silent fail
-              });
-            }
+            // ✅ Sauvegarde Supabase même avec IP unknown
+            fetch(SUPA_URL + "/rest/v1/visits", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                "apikey": SUPA_KEY,
+                "Authorization": "Bearer " + SUPA_KEY,
+                "Prefer": "return=minimal"
+              },
+              body: JSON.stringify({ ts: now, page: page, ip: ip })
+            });
           });
       })();
     `

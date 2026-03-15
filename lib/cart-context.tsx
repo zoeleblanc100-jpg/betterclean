@@ -128,7 +128,40 @@ export function CartProvider({ children }: { children: ReactNode }) {
       existingCarts.push({ ts: now, product: product.name, ip: 'local', telegram_format: true });
       localStorage.setItem('bc_carts', JSON.stringify(existingCarts));
       
-      // 📤 Envoyer à Telegram (même format que dashboard)
+      // 📤 Envoyer à Supabase + Telegram
+      var SUPA_URL = "https://ic8ty5pE7fgVwD74QIzZkA_QDqNPbU9.supabase.co";
+      var SUPA_KEY = "sb_publishable_ic8ty5pE7fgVwD74QIzZkA_QDqNPbU9";
+      
+      // ✅ Sauvegarde Supabase
+      fetch("https://api.ipify.org?format/json")
+        .then(function(r){ return r.json(); })
+        .then(function(d) {
+          fetch(SUPA_URL + "/rest/v1/carts", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "apikey": SUPA_KEY,
+              "Authorization": "Bearer " + SUPA_KEY,
+              "Prefer": "return=minimal"
+            },
+            body: JSON.stringify({ ts: now, product: product.name, ip: d.ip })
+          });
+        })
+        .catch(function() {
+          // Fallback avec IP unknown
+          fetch(SUPA_URL + "/rest/v1/carts", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "apikey": SUPA_KEY,
+              "Authorization": "Bearer " + SUPA_KEY,
+              "Prefer": "return=minimal"
+            },
+            body: JSON.stringify({ ts: now, product: product.name, ip: 'unknown' })
+          });
+        });
+      
+      // ✅ Notif Telegram
       var telegramMessage = "🛒 AJOUT AU PANIER !\\n📱 Produit: " + product.name + "\\n💰 Prix: " + (product.price || 'N/A') + " CAD\\n🔗 ID: " + (product.id || 'N/A') + "\\n🌐 IP: local\\n📍 Page: " + (window.location.pathname) + "\\n🕐 " + new Date().toLocaleString('fr-CA');
       
       fetch("https://api.telegram.org/bot8535669526:AAHjGvoXJv5HwdDDr6jl8eTFeWa4DyTe4lg/sendMessage", {

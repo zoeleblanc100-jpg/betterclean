@@ -31,11 +31,11 @@ export default function StatsPage() {
   useEffect(() => {
     if (!mounted || !isAuthenticated) return
     
-    // Load data directly from Telegram
-    loadFromTelegram()
+    // Load data directly from Supabase
+    loadFromSupabase()
     
     // Auto-refresh every 10 seconds
-    const interval = setInterval(loadFromTelegram, refreshInterval)
+    const interval = setInterval(loadFromSupabase, refreshInterval)
     
     return () => clearInterval(interval)
   }, [mounted, isAuthenticated, refreshInterval])
@@ -152,11 +152,11 @@ export default function StatsPage() {
       }))
   }
 
-  // Load data directly from Telegram
-  const loadFromTelegram = async () => {
+  // Load data directly from Supabase
+  const loadFromSupabase = async () => {
     setIsLoading(true)
     try {
-      const response = await fetch('/api/sync-telegram-stats', {
+      const response = await fetch('/api/supabase-stats', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ password: correctPassword })
@@ -165,24 +165,23 @@ export default function StatsPage() {
       const data = await response.json()
       
       if (data.success) {
-        const telegramVisits = data.telegramVisits || []
-        const telegramCarts = data.telegramCarts || []
+        const supabaseVisits = data.supabaseVisits || []
+        const supabaseCarts = data.supabaseCarts || []
         
         setTelegramData({
-          visits: telegramVisits,
-          carts: telegramCarts
+          visits: supabaseVisits,
+          carts: supabaseCarts
         })
-        setVisits(telegramVisits)
-        setCart(telegramCarts)
+        setVisits(supabaseVisits)
+        setCart(supabaseCarts)
         
         // Calculate live visitors (visits in last 5 minutes)
         const fiveMinutesAgo = Date.now() - (5 * 60 * 1000)
-        const recentVisits = telegramVisits.filter((visit: any) => visit.ts > fiveMinutesAgo)
-        const uniqueIPs = new Set(recentVisits.map((visit: any) => visit.ip))
-        setLiveVisitors(uniqueIPs.size)
+        const recentVisits = supabaseVisits.filter((visit: any) => visit.ts > fiveMinutesAgo)
+        setLiveVisitors(new Set(recentVisits.map((visit: any) => visit.ip)).size)
       }
     } catch (error) {
-      console.error('Error loading from Telegram:', error)
+      console.error('Error loading from Supabase:', error)
     }
     setIsLoading(false)
   }
@@ -448,7 +447,7 @@ export default function StatsPage() {
             <div className="flex gap-2 sm:gap-4 items-center">
               {isLoading && (
                 <div className="px-3 sm:px-4 py-1 sm:py-2 bg-blue-50 text-blue-700 rounded-lg text-xs sm:text-sm font-medium">
-                  🔄 Chargement Telegram...
+                  🔄 Chargement Supabase...
                 </div>
               )}
               <select 
@@ -463,7 +462,7 @@ export default function StatsPage() {
               </select>
               <button 
                 className="px-3 sm:px-4 py-1 sm:py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-xs sm:text-sm"
-                onClick={loadFromTelegram}
+                onClick={loadFromSupabase}
               >
                 🔄 Refresh
               </button>
