@@ -150,11 +150,6 @@ export default function CheckoutPage() {
       setAccountCreated(true)
       setIsCreatingAccount(false)
       setShowAccountForm(false)
-      
-      // Show success message but don't proceed to payment
-      setTimeout(() => {
-        alert(isFr ? "Compte créé avec succès! Rabais de $5 appliqué. Remplissez les informations de livraison et cliquez sur 'Complete Order' pour finaliser." : "Account created successfully! $5 discount applied. Fill in shipping information and click 'Complete Order' to finalize.")
-      }, 500)
     })
     .catch(function() {
       setAccountError(isFr ? "Erreur lors de la création du compte" : "Error creating account")
