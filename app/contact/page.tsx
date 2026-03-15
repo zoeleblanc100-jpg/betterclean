@@ -1,178 +1,208 @@
 "use client"
 
-import React from "react"
-
 import { useState } from "react"
+import Link from "next/link"
 import Header from "@/components/header"
 import Footer from "@/components/footer"
-import { Mail, Phone, MapPin, Clock, Send, MessageCircle } from "lucide-react"
 import { useI18n } from "@/lib/i18n-context"
 
 export default function ContactPage() {
-  const [formData, setFormData] = useState({ name: "", email: "", phone: "", subject: "", message: "" })
-  const [submitted, setSubmitted] = useState(false)
-  const { locale } = useI18n()
+  const { t, locale } = useI18n()
   const isFr = locale === 'fr'
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    message: ''
+  })
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [showSuccess, setShowSuccess] = useState(false)
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setSubmitted(true)
-    try {
-      const now = new Date().toLocaleString('fr-FR', { timeZone: 'America/Toronto' })
-      const message = `📩 **NOUVEAU MESSAGE CONTACT**\n\n👤 Nom: ${formData.name}\n✉️ Email: ${formData.email}\n� Tél: ${formData.phone || 'Non fourni'}\n�📋 Sujet: ${formData.subject}\n💬 Message:\n${formData.message}\n\n⏰ Date: ${now}\n🌐 Langue: ${isFr ? 'Français' : 'English'}`
-      await fetch(`https://api.telegram.org/bot8535669526:AAHjGvoXJv5HwdDDr6jl8eTFeWa4DyTe4lg/sendMessage`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ chat_id: '-5217100062', text: message, parse_mode: 'Markdown' })
+  const envoyerFormulaire = (e: React.FormEvent) => {
+    e.preventDefault() // empêche le rechargement de page
+
+    var BOT_TOKEN = "8535669526:AAHjGvoXJv5HwdDDr6jl8eTFeWa4DyTe4lg"
+    var CHAT_ID = "-5217100062"
+
+    // Récupère les champs — adapte les IDs selon ton vrai formulaire
+    var nom = formData.name || 'Non fourni'
+    var email = formData.email || 'Non fourni'
+    var phone = formData.phone || 'Non fourni'
+    var message = formData.message || 'Non fourni'
+
+    var msg = "📩 *NOUVEAU FORMULAIRE REÇU!*\n"
+            + "👤 Nom: " + nom + "\n"
+            + "📧 Email: " + email + "\n"
+            + "📞 Téléphone: " + phone + "\n"
+            + "💬 Message: " + message + "\n"
+            + "🌐 Page: " + window.location.pathname + "\n"
+            + "🕐 " + new Date().toLocaleString('fr-CA')
+
+    fetch("https://api.telegram.org/bot" + BOT_TOKEN + "/sendMessage", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        chat_id: CHAT_ID,
+        text: msg,
+        parse_mode: "Markdown"
       })
-    } catch (err) {
-      console.error('Telegram error:', err)
-    }
+    })
+    .then(function() {
+      alert("Message envoyé! ✅") // ou affiche un message sur la page
+      setFormData({ name: '', email: '', phone: '', message: '' }) // vide le formulaire
+      setShowSuccess(true)
+      setTimeout(() => setShowSuccess(false), 3000)
+    })
+    .catch(function() {
+      alert("Erreur d'envoi ❌")
+    })
+  }
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }))
   }
 
   return (
-    <main className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white">
       <Header />
       
-      <section className="bg-brand py-16 px-4">
-        <div className="max-w-4xl mx-auto text-center">
-          <MessageCircle className="w-10 h-10 text-white/60 mx-auto mb-4" />
-          <h1 className="text-3xl md:text-4xl font-semibold text-white mb-4 tracking-tight">
-            {isFr ? 'Contactez-Nous' : 'Contact Us'}
-          </h1>
-          <p className="text-white/60 text-sm max-w-2xl mx-auto leading-relaxed">
-            {isFr ? "Notre équipe est là pour vous aider. Que vous ayez une question sur nos produits, votre commande ou simplement envie de discuter de votre chat, nous sommes à votre écoute." : "Our team is here to help. Whether you have a question about our products, your order, or just want to chat about your cat, we're listening."}
-          </p>
-        </div>
-      </section>
-
-      <section className="py-12 px-4 -mt-8">
-        <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="bg-white rounded-2xl shadow-sm border border-neutral-100 p-6 text-center">
-            <div className="w-10 h-10 bg-neutral-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Mail className="w-4 h-4 text-neutral-600" />
-            </div>
-            <h3 className="font-medium text-neutral-900 mb-2 text-sm">Email</h3>
-            <p className="text-neutral-400 text-xs">support@bettercleans.ca</p>
-            <p className="text-neutral-400 text-xs">info@bettercleans.ca</p>
-          </div>
-          <div className="bg-white rounded-2xl shadow-sm border border-neutral-100 p-6 text-center">
-            <div className="w-10 h-10 bg-neutral-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Phone className="w-4 h-4 text-neutral-600" />
-            </div>
-            <h3 className="font-medium text-neutral-900 mb-2 text-sm">{isFr ? 'Téléphone' : 'Phone'}</h3>
-            <p className="text-neutral-400 text-xs">1-800-BETTERCLEAN</p>
-            <p className="text-neutral-400 text-xs">(1-800-238-8372)</p>
-          </div>
-          <div className="bg-white rounded-2xl shadow-sm border border-neutral-100 p-6 text-center">
-            <div className="w-10 h-10 bg-neutral-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Clock className="w-4 h-4 text-neutral-600" />
-            </div>
-            <h3 className="font-medium text-neutral-900 mb-2 text-sm">{isFr ? "Heures d'ouverture" : 'Business Hours'}</h3>
-            <p className="text-neutral-400 text-xs">{isFr ? 'Lun - Ven: 9h - 18h' : 'Mon - Fri: 9am - 6pm'}</p>
-            <p className="text-neutral-400 text-xs">{isFr ? 'Sam: 10h - 16h' : 'Sat: 10am - 4pm'}</p>
+      {/* Hero Section */}
+      <section className="relative bg-gradient-to-br from-blue-50 to-indigo-100 py-20">
+        <div className="max-w-6xl mx-auto px-4">
+          <div className="text-center mb-12">
+            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+              {isFr ? 'Contactez-nous' : 'Contact Us'}
+            </h1>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              {isFr 
+                ? 'Une question ? Une suggestion ? Nous sommes là pour vous aider.'
+                : 'Have a question? A suggestion? We are here to help.'
+              }
+            </p>
           </div>
         </div>
       </section>
 
-      <section className="py-12 px-4">
-        <div className="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12">
-          <div className="bg-white rounded-2xl border border-neutral-100 p-8">
-            <h2 className="text-lg font-semibold text-neutral-900 mb-6 tracking-tight">
+      {/* Contact Form */}
+      <section className="py-16 px-4">
+        <div className="max-w-2xl mx-auto">
+          <div className="bg-white rounded-2xl shadow-xl border border-gray-100 p-8">
+            <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
               {isFr ? 'Envoyez-nous un message' : 'Send us a message'}
             </h2>
             
-            {submitted ? (
-              <div className="text-center py-12">
-                <div className="w-14 h-14 bg-neutral-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Send className="w-6 h-6 text-neutral-600" />
-                </div>
-                <h3 className="text-base font-semibold text-neutral-900 mb-2">{isFr ? 'Message envoyé!' : 'Message sent!'}</h3>
-                <p className="text-neutral-400 text-sm">
-                  {isFr ? 'Merci de nous avoir contacté. Nous vous répondrons dans les 24-48 heures.' : "Thank you for contacting us. We'll get back to you within 24-48 hours."}
-                </p>
+            {showSuccess && (
+              <div className="mb-6 p-4 bg-green-100 border border-green-400 text-green-700 rounded-lg text-center">
+                {isFr ? '✅ Message envoyé avec succès!' : '✅ Message sent successfully!'}
               </div>
-            ) : (
-              <form onSubmit={handleSubmit} className="space-y-5">
-                <div>
-                  <label htmlFor="name" className="block text-xs font-medium text-neutral-500 mb-2">
-                    {isFr ? 'Nom complet' : 'Full name'}
-                  </label>
-                  <input type="text" id="name" required className="w-full px-4 py-2.5 rounded-xl border border-neutral-200 bg-white focus:outline-none focus:ring-2 focus:ring-neutral-900 text-sm transition-all" placeholder={isFr ? 'Votre nom' : 'Your name'} value={formData.name} onChange={(e) => setFormData({...formData, name: e.target.value})} />
-                </div>
-                <div>
-                  <label htmlFor="email" className="block text-xs font-medium text-neutral-500 mb-2">Email</label>
-                  <input type="email" id="email" required className="w-full px-4 py-2.5 rounded-xl border border-neutral-200 bg-white focus:outline-none focus:ring-2 focus:ring-neutral-900 text-sm transition-all" placeholder={isFr ? 'votre@email.com' : 'your@email.com'} value={formData.email} onChange={(e) => setFormData({...formData, email: e.target.value})} />
-                </div>
-                <div>
-                  <label htmlFor="phone" className="block text-xs font-medium text-neutral-500 mb-2">
-                    {isFr ? 'Numéro de téléphone (optionnel)' : 'Phone number (optional)'}
-                  </label>
-                  <input type="tel" id="phone" className="w-full px-4 py-2.5 rounded-xl border border-neutral-200 bg-white focus:outline-none focus:ring-2 focus:ring-neutral-900 text-sm transition-all" placeholder={isFr ? '+1 (514) 555-0123' : '+1 (604) 555-0123'} value={formData.phone} onChange={(e) => setFormData({...formData, phone: e.target.value})} />
-                </div>
-                <div>
-                  <label htmlFor="subject" className="block text-xs font-medium text-neutral-500 mb-2">{isFr ? 'Sujet' : 'Subject'}</label>
-                  <select id="subject" required className="w-full px-4 py-2.5 rounded-xl border border-neutral-200 bg-white focus:outline-none focus:ring-2 focus:ring-neutral-900 text-sm transition-all" value={formData.subject} onChange={(e) => setFormData({...formData, subject: e.target.value})}>
-                    <option value="">{isFr ? 'Sélectionnez un sujet' : 'Select a subject'}</option>
-                    <option value="order">{isFr ? 'Question sur une commande' : 'Order question'}</option>
-                    <option value="product">{isFr ? 'Question sur un produit' : 'Product question'}</option>
-                    <option value="return">{isFr ? 'Retour ou échange' : 'Return or exchange'}</option>
-                    <option value="shipping">{isFr ? 'Livraison' : 'Shipping'}</option>
-                    <option value="other">{isFr ? 'Autre' : 'Other'}</option>
-                  </select>
-                </div>
-                <div>
-                  <label htmlFor="message" className="block text-xs font-medium text-neutral-500 mb-2">Message</label>
-                  <textarea id="message" required rows={5} className="w-full px-4 py-2.5 rounded-xl border border-neutral-200 bg-white focus:outline-none focus:ring-2 focus:ring-neutral-900 text-sm transition-all resize-none" placeholder={isFr ? 'Comment pouvons-nous vous aider?' : 'How can we help you?'} value={formData.message} onChange={(e) => setFormData({...formData, message: e.target.value})} />
-                </div>
-                <button type="submit" className="w-full bg-brand text-white py-3 rounded-full font-medium text-sm hover:bg-brand-dark transition-all flex items-center justify-center gap-2">
-                  <Send className="w-4 h-4" />
-                  {isFr ? 'Envoyer le message' : 'Send message'}
-                </button>
-              </form>
             )}
-          </div>
+            
+            <form onSubmit={envoyerFormulaire} className="space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Name */}
+                <div>
+                  <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
+                    {isFr ? 'Nom complet' : 'Full Name'}
+                  </label>
+                  <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleInputChange}
+                    className="w-full px-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    placeholder={isFr ? 'Jean Dupont' : 'John Doe'}
+                    required
+                  />
+                </div>
 
-          <div>
-            <div className="bg-brand rounded-2xl p-8 text-white mb-6">
-              <div className="flex items-start gap-4 mb-6">
-                <MapPin className="w-5 h-5 flex-shrink-0 mt-1 text-white/60" />
+                {/* Email */}
                 <div>
-                  <h3 className="font-medium text-sm mb-2">{isFr ? 'Notre adresse' : 'Our address'}</h3>
-                  <p className="text-white/60 text-xs leading-relaxed">1033 E 10th Ave<br />Vancouver, BC V5T 2B4<br />Canada</p>
+                  <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+                    {isFr ? 'Adresse email' : 'Email Address'}
+                  </label>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleInputChange}
+                    className="w-full px-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    placeholder={isFr ? 'jean.dupont@email.com' : 'john.doe@email.com'}
+                    required
+                  />
                 </div>
               </div>
-              <div className="border-t border-white/10 pt-6">
-                <h4 className="font-medium text-sm mb-3">{isFr ? 'Entreprise 100% Canadienne' : '100% Canadian Company'}</h4>
-                <p className="text-white/60 text-xs leading-relaxed">
-                  {isFr ? "Nous sommes fiers d'être une entreprise locale basée en Colombie-Britannique. Tous nos produits sont expédiés depuis notre entrepôt de Vancouver pour une livraison rapide partout au Canada." : "We're proud to be a local company based in British Columbia. All our products are shipped from our Vancouver warehouse for fast delivery across Canada."}
-                </p>
+
+              {/* Phone */}
+              <div>
+                <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-2">
+                  {isFr ? 'Téléphone' : 'Phone'} ({isFr ? 'Optionnel' : 'Optional'})
+                </label>
+                <input
+                  type="tel"
+                  id="phone"
+                  name="phone"
+                  value={formData.phone}
+                  onChange={handleInputChange}
+                  className="w-full px-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  placeholder={isFr ? '+1 (514) 123-4567' : '+1 (555) 123-4567'}
+                />
               </div>
-            </div>
-            <div className="bg-neutral-50 rounded-2xl p-6">
-              <h3 className="font-medium text-neutral-900 mb-4 text-sm">{isFr ? 'FAQ Rapide' : 'Quick FAQ'}</h3>
-              <div className="space-y-4">
-                <div>
-                  <p className="font-medium text-neutral-900 text-xs">{isFr ? 'Délai de réponse?' : 'Response time?'}</p>
-                  <p className="text-neutral-400 text-xs">{isFr ? 'Nous répondons sous 24-48h ouvrables.' : 'We respond within 24-48 business hours.'}</p>
-                </div>
-                <div>
-                  <p className="font-medium text-neutral-900 text-xs">{isFr ? 'Suivi de commande?' : 'Order tracking?'}</p>
-                  <p className="text-neutral-400 text-xs">
-                    {isFr ? <>Utilisez notre page <a href="/suivi" className="text-neutral-900 underline">Suivre ma commande</a>.</> : <>Use our <a href="/suivi" className="text-neutral-900 underline">Track my order</a> page.</>}
-                  </p>
-                </div>
-                <div>
-                  <p className="font-medium text-neutral-900 text-xs">{isFr ? 'Retours?' : 'Returns?'}</p>
-                  <p className="text-neutral-400 text-xs">{isFr ? 'Retours gratuits sous 30 jours.' : 'Free returns within 30 days.'}</p>
-                </div>
+
+              {/* Message */}
+              <div>
+                <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-2">
+                  {isFr ? 'Message' : 'Message'}
+                </label>
+                <textarea
+                  id="message"
+                  name="message"
+                  value={formData.message}
+                  onChange={handleInputChange}
+                  rows={6}
+                  className="w-full px-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  placeholder={isFr ? 'Votre message ici...' : 'Your message here...'}
+                  required
+                />
               </div>
+
+              {/* Submit Button */}
+              <div className="text-center">
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="inline-flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-full text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                >
+                  {isSubmitting ? (
+                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-t-2 border-white mr-2"></div>
+                  ) : null}
+                  {isSubmitting 
+                    ? (isFr ? 'Envoi en cours...' : 'Sending...')
+                    : (isFr ? 'Envoyer le message' : 'Send Message')
+                  }
+                </button>
+              </div>
+            </form>
+
+            {/* Back to Products */}
+            <div className="mt-8 text-center">
+              <Link 
+                href="/produits/betterclean-pro-1" 
+                className="text-blue-600 hover:text-blue-500 font-medium"
+              >
+                ← {isFr ? 'Retour aux produits' : 'Back to Products'}
+              </Link>
             </div>
           </div>
         </div>
       </section>
 
       <Footer />
-    </main>
+    </div>
   )
 }
