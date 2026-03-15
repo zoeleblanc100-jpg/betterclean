@@ -277,33 +277,60 @@ export default function CheckoutPage() {
   return (
     <div className="min-h-screen bg-white">
       {/* Header */}
-      <div className="bg-white border-b border-gray-200">
+      <header className="bg-white border-b border-gray-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
-            <Link href="/produits/betterclean-pro-1" className="flex items-center text-gray-600 hover:text-gray-900">
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              {isFr ? 'Retour' : 'Back'}
+            <Link href="/produits/betterclean-pro-1" className="flex items-center text-gray-600 hover:text-gray-900 transition-colors">
+              <ArrowLeft className="w-5 h-5 mr-2" />
+              <span className="font-medium">{isFr ? 'Retour' : 'Back'}</span>
             </Link>
-            <h1 className="text-lg font-semibold text-gray-900">
+            <h1 className="text-xl font-bold text-gray-900">
               {isFr ? 'Finaliser la commande' : 'Checkout'}
             </h1>
-            <div className="w-16"></div>
+            <div className="w-20"></div>
+          </div>
+        </div>
+      </header>
+
+      {/* Progress Bar */}
+      <div className="bg-gray-50 border-b border-gray-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+          <div className="flex items-center justify-center space-x-4">
+            <div className="flex items-center">
+              <div className="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center text-sm font-medium">1</div>
+              <span className="ml-2 text-sm font-medium text-gray-900">{isFr ? 'Information' : 'Information'}</span>
+            </div>
+            <div className="w-12 h-0.5 bg-gray-300"></div>
+            <div className="flex items-center">
+              <div className="w-8 h-8 bg-gray-300 text-white rounded-full flex items-center justify-center text-sm font-medium">2</div>
+              <span className="ml-2 text-sm text-gray-500">{isFr ? 'Paiement' : 'Payment'}</span>
+            </div>
+            <div className="w-12 h-0.5 bg-gray-300"></div>
+            <div className="flex items-center">
+              <div className="w-8 h-8 bg-gray-300 text-white rounded-full flex items-center justify-center text-sm font-medium">3</div>
+              <span className="ml-2 text-sm text-gray-500">{isFr ? 'Confirmation' : 'Confirmation'}</span>
+            </div>
           </div>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12">
           {/* Checkout Form */}
-          <div className="lg:col-span-2 space-y-6">
+          <div className="lg:col-span-2 space-y-8">
             {/* Contact Information */}
-            <div className="bg-white rounded-2xl p-6 border border-gray-100">
-              <h2 className="text-base font-semibold text-gray-900 mb-4">
-                {isFr ? 'Informations de contact' : 'Contact Information'}
-              </h2>
-              <div className="space-y-3">
+            <section className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+              <div className="bg-gradient-to-r from-blue-50 to-indigo-50 px-6 py-4 border-b border-gray-200">
+                <h2 className="text-lg font-semibold text-gray-900 flex items-center">
+                  <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center mr-3">
+                    <span className="text-white text-sm font-bold">1</span>
+                  </div>
+                  {isFr ? 'Informations de contact' : 'Contact Information'}
+                </h2>
+              </div>
+              <div className="p-6 space-y-4">
                 <div>
-                  <label className="block text-xs font-medium text-gray-600 mb-1">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
                     {isFr ? 'Adresse e-mail' : 'Email address'}
                   </label>
                   <input
@@ -311,11 +338,12 @@ export default function CheckoutPage() {
                     name="email"
                     value={formData.email}
                     onChange={handleInputChange}
-                    className={`w-full px-3 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm ${formData.email && !isValidEmail(formData.email) ? 'border-red-300 focus:ring-red-500' : 'border-gray-300'}`}
+                    className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors ${formData.email && !isValidEmail(formData.email) ? 'border-red-300 focus:ring-red-500' : 'border-gray-300'}`}
+                    placeholder={isFr ? 'jean.dupont@email.com' : 'john.doe@email.com'}
                     required
                   />
                   {formData.email && !isValidEmail(formData.email) && (
-                    <p className="text-red-500 text-xs mt-1">
+                    <p className="mt-2 text-sm text-red-600">
                       {isFr ? 'Veuillez entrer une adresse email valide' : 'Please enter a valid email address'}
                     </p>
                   )}
@@ -323,83 +351,97 @@ export default function CheckoutPage() {
 
                 {/* Account Creation Section */}
                 {!accountCreated && (
-                  <div className="mt-3">
-                    <div className="bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-lg p-3">
+                  <div className="mt-6">
+                    <div className="bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-xl p-4">
                       <div className="flex items-center justify-between">
                         <div className="flex-1">
-                          <div className="flex items-center gap-2 mb-1">
-                            <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
-                              <span className="text-white text-xs font-bold">$5</span>
+                          <div className="flex items-center gap-3 mb-2">
+                            <div className="w-10 h-10 bg-green-600 rounded-full flex items-center justify-center shadow-sm">
+                              <span className="text-white font-bold text-sm">$5</span>
                             </div>
-                            <span className="text-green-800 font-semibold text-xs">
-                              {isFr ? 'CRÉER UN COMPTE' : 'CREATE ACCOUNT'}
-                            </span>
+                            <div>
+                              <span className="text-green-800 font-bold text-sm">
+                                {isFr ? 'CRÉER UN COMPTE' : 'CREATE ACCOUNT'}
+                              </span>
+                              <p className="text-green-700 text-xs font-medium">
+                                {isFr ? 'Économisez $5 instantanément' : 'Save $5 instantly'}
+                              </p>
+                            </div>
                           </div>
-                          <p className="text-green-700 text-xs">
-                            {isFr 
-                              ? 'Économisez $5 instantanément'
-                              : 'Save $5 instantly'
-                            }
-                          </p>
                         </div>
                         <button
                           onClick={() => setShowAccountForm(!showAccountForm)}
-                          className="px-3 py-1 bg-green-600 text-white text-xs font-medium rounded-full hover:bg-green-700 transition-colors"
+                          className="px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 transition-colors shadow-sm"
                         >
                           {showAccountForm ? (isFr ? 'Annuler' : 'Cancel') : (isFr ? 'Créer' : 'Create')}
                         </button>
                       </div>
 
                       {showAccountForm && (
-                        <form onSubmit={handleCreateAccount} className="mt-3 space-y-2 border-t border-green-200 pt-3">
+                        <form onSubmit={handleCreateAccount} className="mt-4 space-y-3 border-t border-green-200 pt-4">
                           {accountError && (
-                            <div className="p-2 bg-red-50 border border-red-200 rounded text-red-700 text-xs">
-                              {accountError}
+                            <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
+                              <p className="text-sm text-red-700">{accountError}</p>
                             </div>
                           )}
                           
-                          <input
-                            type="email"
-                            name="email"
-                            value={accountFormData.email}
-                            onChange={handleAccountInputChange}
-                            placeholder={isFr ? 'Email' : 'Email'}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-xs focus:outline-none focus:ring-2 focus:ring-green-500"
-                            required
-                          />
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">
+                              {isFr ? 'Email du compte' : 'Account Email'}
+                            </label>
+                            <input
+                              type="email"
+                              name="email"
+                              value={accountFormData.email}
+                              onChange={handleAccountInputChange}
+                              placeholder={isFr ? 'jean.dupont@email.com' : 'john.doe@email.com'}
+                              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 text-sm"
+                              required
+                            />
+                          </div>
                           
-                          <input
-                            type="password"
-                            name="password"
-                            value={accountFormData.password}
-                            onChange={handleAccountInputChange}
-                            placeholder={isFr ? 'Mot de passe' : 'Password'}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-xs focus:outline-none focus:ring-2 focus:ring-green-500"
-                            required
-                          />
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">
+                              {isFr ? 'Mot de passe' : 'Password'}
+                            </label>
+                            <input
+                              type="password"
+                              name="password"
+                              value={accountFormData.password}
+                              onChange={handleAccountInputChange}
+                              placeholder={isFr ? '••••••••' : '••••••••'}
+                              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 text-sm"
+                              required
+                            />
+                          </div>
                           
-                          <input
-                            type="password"
-                            name="confirmPassword"
-                            value={accountFormData.confirmPassword}
-                            onChange={handleAccountInputChange}
-                            placeholder={isFr ? 'Confirmer mot de passe' : 'Confirm Password'}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-xs focus:outline-none focus:ring-2 focus:ring-green-500"
-                            required
-                          />
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">
+                              {isFr ? 'Confirmer mot de passe' : 'Confirm Password'}
+                            </label>
+                            <input
+                              type="password"
+                              name="confirmPassword"
+                              value={accountFormData.confirmPassword}
+                              onChange={handleAccountInputChange}
+                              placeholder={isFr ? '••••••••' : '••••••••'}
+                              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 text-sm"
+                              required
+                            />
+                          </div>
                           
                           <button
                             type="submit"
                             disabled={isCreatingAccount}
-                            className="w-full py-2 bg-green-600 text-white text-xs font-medium rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50"
+                            className="w-full py-3 bg-green-600 text-white font-medium rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50 shadow-sm"
                           >
                             {isCreatingAccount ? (
                               <span className="flex items-center justify-center">
-                                <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-t-2 border-white mr-2"></div>
+                                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-t-2 border-white mr-2"></div>
                                 {isFr ? 'Création...' : 'Creating...'}
                               </span>
                             ) : (
-                              isFr ? 'Créer et économiser $5' : 'Create & save $5'
+                              isFr ? 'Créer mon compte et économiser $5' : 'Create account & save $5'
                             )}
                           </button>
                         </form>
@@ -409,13 +451,15 @@ export default function CheckoutPage() {
                 )}
 
                 {accountCreated && (
-                  <div className="mt-3 p-2 bg-green-50 border border-green-200 rounded-lg">
-                    <div className="flex items-center gap-2">
-                      <svg className="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                      </svg>
+                  <div className="mt-6 p-4 bg-green-50 border border-green-200 rounded-xl">
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 bg-green-600 rounded-full flex items-center justify-center">
+                        <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                        </svg>
+                      </div>
                       <div>
-                        <p className="text-green-800 font-medium text-xs">
+                        <p className="text-green-800 font-bold text-sm">
                           {isFr ? 'Compte créé! $5 appliqué' : 'Account created! $5 applied'}
                         </p>
                         <p className="text-green-700 text-xs">
@@ -426,250 +470,278 @@ export default function CheckoutPage() {
                   </div>
                 )}
               </div>
-            </div>
+            </section>
 
             {/* Shipping Address */}
-            <div className="bg-white rounded-2xl p-6 border border-gray-100">
-              <h2 className="text-base font-semibold text-gray-900 mb-4">
-                {isFr ? 'Adresse de livraison' : 'Shipping Address'}
-              </h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <section className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+              <div className="bg-gradient-to-r from-blue-50 to-indigo-50 px-6 py-4 border-b border-gray-200">
+                <h2 className="text-lg font-semibold text-gray-900 flex items-center">
+                  <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center mr-3">
+                    <span className="text-white text-sm font-bold">2</span>
+                  </div>
+                  {isFr ? 'Adresse de livraison' : 'Shipping Address'}
+                </h2>
+              </div>
+              <div className="p-6 space-y-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      {isFr ? 'Prénom' : 'First name'}
+                    </label>
+                    <input
+                      type="text"
+                      name="firstName"
+                      value={formData.firstName}
+                      onChange={handleInputChange}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                      placeholder={isFr ? 'Jean' : 'John'}
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      {isFr ? 'Nom' : 'Last name'}
+                    </label>
+                    <input
+                      type="text"
+                      name="lastName"
+                      value={formData.lastName}
+                      onChange={handleInputChange}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                      placeholder={isFr ? 'Dupont' : 'Doe'}
+                      required
+                    />
+                  </div>
+                </div>
+
                 <div>
-                  <label className="block text-xs font-medium text-gray-600 mb-1">
-                    {isFr ? 'Prénom' : 'First name'}
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    {isFr ? 'Adresse' : 'Address'}
                   </label>
                   <input
                     type="text"
-                    name="firstName"
-                    value={formData.firstName}
+                    name="address"
+                    value={formData.address}
                     onChange={handleInputChange}
-                    className="w-full px-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                    placeholder={isFr ? '123 Rue Principale' : '123 Main Street'}
                     required
                   />
                 </div>
+
                 <div>
-                  <label className="block text-xs font-medium text-gray-600 mb-1">
-                    {isFr ? 'Nom' : 'Last name'}
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    {isFr ? 'Appartement, suite, etc.' : 'Apartment, suite, etc.'}
                   </label>
                   <input
                     type="text"
-                    name="lastName"
-                    value={formData.lastName}
+                    name="apartment"
+                    value={formData.apartment}
                     onChange={handleInputChange}
-                    className="w-full px-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
-                    required
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                    placeholder={isFr ? 'Apt 4B' : 'Apt 4B'}
                   />
                 </div>
-              </div>
 
-              <div className="mt-3">
-                <label className="block text-xs font-medium text-gray-600 mb-1">
-                  {isFr ? 'Adresse' : 'Address'}
-                </label>
-                <input
-                  type="text"
-                  name="address"
-                  value={formData.address}
-                  onChange={handleInputChange}
-                  className="w-full px-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
-                  required
-                />
-              </div>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      {isFr ? 'Ville' : 'City'}
+                    </label>
+                    <input
+                      type="text"
+                      name="city"
+                      value={formData.city}
+                      onChange={handleInputChange}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                      placeholder={isFr ? 'Montréal' : 'Montreal'}
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      {isFr ? 'Province' : 'Province'}
+                    </label>
+                    <select
+                      name="province"
+                      value={formData.province}
+                      onChange={handleInputChange}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                      required
+                    >
+                      <option value="">{isFr ? 'Sélectionner' : 'Select'}</option>
+                      <option value="ON">ON</option>
+                      <option value="QC">QC</option>
+                      <option value="BC">BC</option>
+                      <option value="AB">AB</option>
+                      <option value="MB">MB</option>
+                      <option value="SK">SK</option>
+                      <option value="NS">NS</option>
+                      <option value="NB">NB</option>
+                      <option value="NL">NL</option>
+                      <option value="PE">PE</option>
+                      <option value="NT">NT</option>
+                      <option value="NU">NU</option>
+                      <option value="YT">YT</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      {isFr ? 'Code postal' : 'Postal code'}
+                    </label>
+                    <input
+                      type="text"
+                      name="postalCode"
+                      value={formData.postalCode}
+                      onChange={handleInputChange}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                      placeholder={isFr ? 'H1A 1A1' : 'H1A 1A1'}
+                      required
+                    />
+                  </div>
+                </div>
 
-              <div className="mt-3">
-                <label className="block text-xs font-medium text-gray-600 mb-1">
-                  {isFr ? 'Appartement, suite, etc.' : 'Apartment, suite, etc.'}
-                </label>
-                <input
-                  type="text"
-                  name="apartment"
-                  value={formData.apartment}
-                  onChange={handleInputChange}
-                  className="w-full px-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
-                />
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-3">
                 <div>
-                  <label className="block text-xs font-medium text-gray-600 mb-1">
-                    {isFr ? 'Ville' : 'City'}
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    {isFr ? 'Téléphone' : 'Phone'}
                   </label>
                   <input
-                    type="text"
-                    name="city"
-                    value={formData.city}
+                    type="tel"
+                    name="phone"
+                    value={formData.phone}
                     onChange={handleInputChange}
-                    className="w-full px-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
-                    required
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-medium text-gray-600 mb-1">
-                    {isFr ? 'Province' : 'Province'}
-                  </label>
-                  <select
-                    name="province"
-                    value={formData.province}
-                    onChange={handleInputChange}
-                    className="w-full px-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
-                    required
-                  >
-                    <option value="">{isFr ? 'Sélectionner' : 'Select'}</option>
-                    <option value="ON">ON</option>
-                    <option value="QC">QC</option>
-                    <option value="BC">BC</option>
-                    <option value="AB">AB</option>
-                    <option value="MB">MB</option>
-                    <option value="SK">SK</option>
-                    <option value="NS">NS</option>
-                    <option value="NB">NB</option>
-                    <option value="NL">NL</option>
-                    <option value="PE">PE</option>
-                    <option value="NT">NT</option>
-                    <option value="NU">NU</option>
-                    <option value="YT">YT</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-xs font-medium text-gray-600 mb-1">
-                    {isFr ? 'Code postal' : 'Postal code'}
-                  </label>
-                  <input
-                    type="text"
-                    name="postalCode"
-                    value={formData.postalCode}
-                    onChange={handleInputChange}
-                    className="w-full px-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                    placeholder={isFr ? '(514) 123-4567' : '(514) 123-4567'}
                     required
                   />
                 </div>
               </div>
-
-              <div className="mt-3">
-                <label className="block text-xs font-medium text-gray-600 mb-1">
-                  {isFr ? 'Téléphone' : 'Phone'}
-                </label>
-                <input
-                  type="tel"
-                  name="phone"
-                  value={formData.phone}
-                  onChange={handleInputChange}
-                  className="w-full px-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
-                  required
-                />
-              </div>
-            </div>
+            </section>
 
             {/* Submit Button */}
-            <button
-              onClick={handleSubmit}
-              disabled={isProcessing}
-              className="w-full bg-blue-600 text-white py-3 rounded-full font-medium hover:bg-blue-700 transition-colors disabled:opacity-50"
-            >
-              {isProcessing ? (
-                <span className="flex items-center justify-center">
-                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-t-2 border-white mr-2"></div>
-                  {isFr ? 'Traitement...' : 'Processing...'}
-                </span>
-              ) : (
-                isFr ? 'Finaliser la commande' : 'Complete Order'
-              )}
-            </button>
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+              <button
+                onClick={handleSubmit}
+                disabled={isProcessing}
+                className="w-full bg-blue-600 text-white py-4 px-6 rounded-xl font-semibold text-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
+              >
+                {isProcessing ? (
+                  <span className="flex items-center justify-center">
+                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-t-2 border-white mr-3"></div>
+                    {isFr ? 'Traitement...' : 'Processing...'}
+                  </span>
+                ) : (
+                  isFr ? 'Finaliser la commande' : 'Complete Order'
+                )}
+              </button>
+              <p className="mt-3 text-xs text-gray-500 text-center">
+                {isFr ? 'En cliquant, vous acceptez nos conditions d\'utilisation' : 'By clicking, you agree to our terms of service'}
+              </p>
+            </div>
           </div>
 
           {/* Order Summary */}
           <div className="lg:col-span-1">
-            <div className="bg-white rounded-2xl p-6 border border-gray-100 sticky top-4">
-              <h2 className="text-base font-semibold text-gray-900 mb-4">
-                {isFr ? 'Résumé de commande' : 'Order Summary'}
-              </h2>
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden sticky top-4">
+              <div className="bg-gradient-to-r from-blue-50 to-indigo-50 px-6 py-4 border-b border-gray-200">
+                <h2 className="text-lg font-semibold text-gray-900">
+                  {isFr ? 'Résumé de commande' : 'Order Summary'}
+                </h2>
+              </div>
               
-              <div className="space-y-3 mb-4 max-h-60 overflow-y-auto">
-                {items.map((item) => (
-                  <div key={item.id} className="flex gap-3">
-                    <div className="relative w-12 h-12 rounded-xl overflow-hidden bg-gray-50 flex-shrink-0">
-                      <Image
-                        src={item.image || "/placeholder.svg"}
-                        alt={item.name}
-                        fill
-                        sizes="64px"
-                        className="object-cover"
-                      />
+              <div className="p-6">
+                <div className="space-y-4 mb-6 max-h-60 overflow-y-auto">
+                  {items.map((item) => (
+                    <div key={item.id} className="flex gap-4">
+                      <div className="relative w-16 h-16 rounded-lg overflow-hidden bg-gray-50 flex-shrink-0">
+                        <Image
+                          src={item.image || "/placeholder.svg"}
+                          alt={item.name}
+                          fill
+                          sizes="64px"
+                          className="object-cover"
+                        />
+                      </div>
+                      <div className="flex-1">
+                        <h4 className="text-sm font-semibold text-gray-900 line-clamp-2">
+                          {item.name}
+                        </h4>
+                        <div className="flex justify-between items-center mt-2">
+                          <span className="text-xs text-gray-500">
+                            {isFr ? 'Qté' : 'Qty'}: {item.quantity}
+                          </span>
+                          <span className="text-sm font-bold text-gray-900">
+                            {formatPrice(item.price * item.quantity)}
+                          </span>
+                        </div>
+                      </div>
                     </div>
-                    <div className="flex-1">
-                      <h4 className="text-sm font-medium text-gray-900 truncate">
-                        {item.name}
-                      </h4>
-                      <div className="flex justify-between items-center">
-                        <span className="text-xs text-gray-400">
-                          {isFr ? 'Qté' : 'Qty'}: {item.quantity}
-                        </span>
-                        <span className="text-sm font-medium">
-                          {formatPrice(item.price * item.quantity)}
-                        </span>
+                  ))}
+                </div>
+                
+                <div className="space-y-3 mb-6 text-sm border-t border-gray-200 pt-4">
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">{isFr ? 'Sous-total' : 'Subtotal'}</span>
+                    <span className="font-medium text-gray-900">{formatPrice(total)}</span>
+                  </div>
+                  {discountApplied && (
+                    <div className="flex justify-between">
+                      <span className="text-green-600 font-medium">{isFr ? 'Rabais compte' : 'Account Discount'}</span>
+                      <span className="font-bold text-green-600">-{formatPrice(discountAmount)}</span>
+                    </div>
+                  )}
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">{isFr ? 'Livraison' : 'Shipping'}</span>
+                    <span className="font-medium text-gray-900">
+                      {shipping === 0 ? (
+                        <span className="text-green-600 font-medium">{isFr ? 'Gratuite' : 'Free'}</span>
+                      ) : (
+                        formatPrice(shipping)
+                      )}
+                    </span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">{isFr ? 'Taxes' : 'Taxes'}</span>
+                    <span className="font-medium text-gray-900">{formatPrice(taxes)}</span>
+                  </div>
+                </div>
+                
+                <div className="border-t border-gray-200 pt-4 mb-6">
+                  <div className="flex justify-between items-center">
+                    <span className="text-base font-medium text-gray-700">{isFr ? 'Total' : 'Total'}</span>
+                    <span className="text-2xl font-bold text-gray-900">
+                      {formatPrice(finalTotal)}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Security Info */}
+                <div className="space-y-4">
+                  <div className="bg-gray-50 rounded-lg p-4">
+                    <div className="flex items-center justify-center space-x-6">
+                      <div className="text-center">
+                        <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mx-auto mb-2">
+                          <Lock className="w-6 h-6 text-blue-600" />
+                        </div>
+                        <p className="text-xs text-gray-600">{isFr ? 'Sécurisé' : 'Secure'}</p>
+                      </div>
+                      <div className="text-center">
+                        <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mx-auto mb-2">
+                          <Truck className="w-6 h-6 text-green-600" />
+                        </div>
+                        <p className="text-xs text-gray-600">{isFr ? 'Livraison' : 'Delivery'}</p>
                       </div>
                     </div>
                   </div>
-                ))}
-              </div>
-              
-              <div className="space-y-2 mb-4 text-sm">
-                <div className="flex justify-between">
-                  <span className="text-gray-400">{isFr ? 'Sous-total' : 'Subtotal'}</span>
-                  <span className="font-medium">{formatPrice(total)}</span>
+                  <p className="text-xs text-gray-500 text-center">
+                    {isFr ? 'Paiement sécurisé et crypté SSL' : 'Secure SSL encrypted payment'}
+                  </p>
                 </div>
-                {discountApplied && (
-                  <div className="flex justify-between">
-                    <span className="text-green-600">{isFr ? 'Rabais compte' : 'Account Discount'}</span>
-                    <span className="font-medium text-green-600">-{formatPrice(discountAmount)}</span>
-                  </div>
-                )}
-                <div className="flex justify-between">
-                  <span className="text-gray-400">{isFr ? 'Livraison' : 'Shipping'}</span>
-                  <span className="font-medium">
-                    {shipping === 0 ? (
-                      <span className="text-green-600">{isFr ? 'Gratuite' : 'Free'}</span>
-                    ) : (
-                      formatPrice(shipping)
-                    )}
-                  </span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-400">{isFr ? 'Taxes' : 'Taxes'}</span>
-                  <span className="font-medium">{formatPrice(taxes)}</span>
-                </div>
-              </div>
-              
-              <div className="border-t border-gray-100 pt-4 mb-6">
-                <div className="flex justify-between items-center">
-                  <span className="text-sm font-medium text-gray-500">Total</span>
-                  <span className="text-xl font-semibold text-gray-900">
-                    {formatPrice(finalTotal)}
-                  </span>
-                </div>
-              </div>
-
-              {/* Security badges */}
-              <div className="space-y-4">
-                <div className="flex items-center justify-center space-x-4">
-                  <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
-                    <Lock className="w-6 h-6 text-gray-600" />
-                  </div>
-                  <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
-                    <Shield className="w-6 h-6 text-gray-600" />
-                  </div>
-                  <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
-                    <Truck className="w-6 h-6 text-gray-600" />
-                  </div>
-                </div>
-                <p className="text-xs text-gray-500 text-center">
-                  {isFr ? 'Paiement sécurisé et crypté' : 'Secure encrypted payment'}
-                </p>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      </main>
 
       <Footer />
     </div>
