@@ -1,14 +1,36 @@
 "use client"
 
-import { useState, useEffect } from 'react'
-import Head from 'next/head'
+import { useState, useEffect } from "react"
+import Header from "@/components/header"
+import Footer from "@/components/footer"
+import { useI18n } from "@/lib/i18n-context"
 
 export default function StatsPage() {
+  const [mounted, setMounted] = useState(false)
+  const { t } = useI18n()
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [password, setPassword] = useState("")
+  const [error, setError] = useState("")
   const [visits, setVisits] = useState<any[]>([])
   const [carts, setCart] = useState<any[]>([])
   const [refreshInterval, setRefreshInterval] = useState(10000)
+  const [liveVisitors, setLiveVisitors] = useState(0)
+
+  const correctPassword = "yofam0"
 
   useEffect(() => {
+    setMounted(true)
+    
+    // Check if already authenticated
+    const auth = localStorage.getItem('stats-auth')
+    if (auth === correctPassword) {
+      setIsAuthenticated(true)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (!mounted || !isAuthenticated) return
+    
     // Load data from localStorage
     const loadData = () => {
       try {
@@ -16,6 +38,13 @@ export default function StatsPage() {
         const storedCarts = JSON.parse(localStorage.getItem('bc_carts') || '[]')
         setVisits(storedVisits)
         setCart(storedCarts)
+        
+        // Calculate live visitors (visits in last 5 minutes)
+        const fiveMinutesAgo = Date.now() - (5 * 60 * 1000)
+        const recentVisits = storedVisits.filter((visit: any) => visit.ts > fiveMinutesAgo)
+        const uniqueIPs = new Set(recentVisits.map((visit: any) => visit.ip))
+        setLiveVisitors(uniqueIPs.size)
+        
       } catch (error) {
         console.error('Error loading stats:', error)
         setVisits([])
@@ -29,7 +58,25 @@ export default function StatsPage() {
     const interval = setInterval(loadData, refreshInterval)
     
     return () => clearInterval(interval)
-  }, [refreshInterval])
+  }, [mounted, isAuthenticated, refreshInterval])
+
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault()
+    if (password === correctPassword) {
+      setIsAuthenticated(true)
+      localStorage.setItem('stats-auth', correctPassword)
+      setError("")
+    } else {
+      setError("Mot de passe incorrect")
+      setPassword("")
+    }
+  }
+
+  const handleLogout = () => {
+    setIsAuthenticated(false)
+    localStorage.removeItem('stats-auth')
+    setPassword("")
+  }
 
   const formatTime = (timestamp: number) => {
     return new Date(timestamp).toLocaleString('fr-CA')
@@ -48,74 +95,147 @@ export default function StatsPage() {
     return visits.filter(visit => new Date(visit.ts).toDateString() === today).length
   }
 
+  const getLiveStats = () => {
+    const now = Date.now()
+    const oneHourAgo = now - (60 * 60 * 1000)
+    const recentVisits = visits.filter(visit => visit.ts > oneHourAgo)
+    const uniqueIPs = new Set(recentVisits.map(visit => visit.ip))
+    return {
+      totalRecent: recentVisits.length,
+      uniqueVisitors: uniqueIPs.size,
+      avgPerMinute: Math.round(recentVisits.length / 60)
+    }
+  }
+
   const pageStats = getPageStats()
   const todayVisits = getTodayVisits()
   const totalVisits = visits.length
   const totalCarts = carts.length
+  const liveStats = getLiveStats()
 
+  if (!mounted) return null
+
+  // Login screen
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="max-w-md w-full px-4">
+          <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-200">
+            <div className="text-center mb-8">
+              <h1 className="text-3xl font-bold text-[#1a1a1a] font-[var(--font-dm-sans)] mb-2">
+                🔐 Stats Dashboard
+              </h1>
+              <p className="text-gray-600">
+                Accès réservé à l'administration
+              </p>
+            </div>
+            
+            <form onSubmit={handleLogin} className="space-y-6">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Mot de passe
+                </label>
+                <input
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  placeholder="Entrez le mot de passe"
+                  required
+                />
+              </div>
+              
+              {error && (
+                <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+                  {error}
+                </div>
+              )}
+              
+              <button
+                type="submit"
+                className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-blue-700 transition-colors"
+              >
+                Accéder aux stats
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // Stats dashboard
   return (
-    <>
-      <Head>
-        <title>BetterClean - Stats Dashboard</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <style>{`
-          * { margin: 0; padding: 0; box-sizing: border-box; }
-          body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0f172a; color: #f8fafc; }
-          .dashboard { max-width: 1200px; margin: 0 auto; padding: 20px; }
-          .header { text-align: center; margin-bottom: 40px; }
-          .header h1 { font-size: 2.5rem; font-weight: 700; margin-bottom: 10px; background: linear-gradient(135deg, #3b82f6, #10b981); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-          .header p { color: #94a3b8; font-size: 1.1rem; }
-          .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 40px; }
-          .stat-card { background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 24px; text-align: center; transition: transform 0.2s, box-shadow 0.2s; }
-          .stat-card:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
-          .stat-number { font-size: 2.5rem; font-weight: 700; color: #3b82f6; margin-bottom: 8px; }
-          .stat-label { color: #94a3b8; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.05em; }
-          .section { background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 24px; margin-bottom: 20px; }
-          .section-title { font-size: 1.3rem; font-weight: 600; margin-bottom: 20px; color: #f8fafc; }
-          .table { width: 100%; border-collapse: collapse; }
-          .table th { background: #334155; padding: 12px; text-align: left; font-weight: 600; color: #f8fafc; }
-          .table td { padding: 12px; border-bottom: 1px solid #334155; }
-          .table tr:hover { background: #334155; }
-          .page-badge { display: inline-block; padding: 4px 8px; background: #3b82f6; color: white; border-radius: 4px; font-size: 0.8rem; }
-          .refresh-btn { background: #3b82f6; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 0.9rem; }
-          .refresh-btn:hover { background: #2563eb; }
-          .controls { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-          .interval-select { background: #334155; color: #f8fafc; border: 1px solid #475569; padding: 8px 12px; border-radius: 6px; }
-          .empty { text-align: center; padding: 40px; color: #94a3b8; }
-        `}</style>
-      </Head>
-
-      <div className="dashboard">
-        <div className="header">
-          <h1>BetterClean Stats Dashboard</h1>
-          <p>📊 Statistiques en temps réel - Dernière mise à jour: {new Date().toLocaleTimeString('fr-CA')}</p>
+    <div className="min-h-screen bg-white">
+      <Header />
+      
+      {/* Hero Section */}
+      <section className="px-4 py-16 md:py-20 bg-white">
+        <div className="max-w-6xl mx-auto text-center">
+          <div className="flex justify-between items-center mb-6">
+            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-[#1a1a1a] font-[var(--font-dm-sans)]">
+              📊 BetterClean Stats Dashboard
+            </h1>
+            <button
+              onClick={handleLogout}
+              className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-sm"
+            >
+              Déconnexion
+            </button>
+          </div>
+          <p className="text-lg md:text-xl mb-8 max-w-2xl mx-auto text-gray-600 font-[var(--font-dm-sans)]">
+            Statistiques en temps réel - Dernière mise à jour: {new Date().toLocaleTimeString('fr-CA')}
+          </p>
         </div>
+      </section>
 
-        <div className="stats-grid">
-          <div className="stat-card">
-            <div className="stat-number">{totalVisits}</div>
-            <div className="stat-label">Visites Totales</div>
-          </div>
-          <div className="stat-card">
-            <div className="stat-number">{todayVisits}</div>
-            <div className="stat-label">Visites Aujourd'hui</div>
-          </div>
-          <div className="stat-card">
-            <div className="stat-number">{totalCarts}</div>
-            <div className="stat-label">Ajouts Panier</div>
-          </div>
-          <div className="stat-card">
-            <div className="stat-number">{totalVisits > 0 ? Math.round((totalCarts / totalVisits) * 100) : 0}%</div>
-            <div className="stat-label">Taux Conversion</div>
+      {/* Live Visitors Alert */}
+      <section className="px-4 py-4 bg-green-50 border-b border-green-200">
+        <div className="max-w-6xl mx-auto">
+          <div className="flex items-center justify-center gap-4">
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+              <span className="text-green-800 font-semibold">
+                {liveVisitors} visiteur(s) en direct (derniers 5 min)
+              </span>
+            </div>
+            <div className="text-green-600 text-sm">
+              • {liveStats.uniqueVisitors} unique(s) dernière heure • {liveStats.avgPerMinute}/min moyenne
+            </div>
           </div>
         </div>
+      </section>
 
-        <div className="section">
-          <div className="controls">
-            <h2 className="section-title">📈 Pages Visitées</h2>
-            <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+      {/* Stats Grid */}
+      <section className="px-4 py-16 md:py-20 bg-gray-50">
+        <div className="max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+            <div className="bg-white rounded-xl p-8 shadow-lg text-center border border-gray-200">
+              <div className="text-4xl font-bold text-blue-600 mb-2">{totalVisits}</div>
+              <div className="text-gray-600 font-medium">Visites Totales</div>
+            </div>
+            <div className="bg-white rounded-xl p-8 shadow-lg text-center border border-gray-200">
+              <div className="text-4xl font-bold text-green-600 mb-2">{todayVisits}</div>
+              <div className="text-gray-600 font-medium">Visites Aujourd'hui</div>
+            </div>
+            <div className="bg-white rounded-xl p-8 shadow-lg text-center border border-gray-200">
+              <div className="text-4xl font-bold text-purple-600 mb-2">{totalCarts}</div>
+              <div className="text-gray-600 font-medium">Ajouts Panier</div>
+            </div>
+            <div className="bg-white rounded-xl p-8 shadow-lg text-center border border-gray-200">
+              <div className="text-4xl font-bold text-orange-600 mb-2">
+                {totalVisits > 0 ? Math.round((totalCarts / totalVisits) * 100) : 0}%
+              </div>
+              <div className="text-gray-600 font-medium">Taux Conversion</div>
+            </div>
+          </div>
+
+          {/* Controls */}
+          <div className="flex justify-between items-center mb-8">
+            <h2 className="text-2xl font-bold text-[#1a1a1a] font-[var(--font-dm-sans)]">📈 Pages Visitées</h2>
+            <div className="flex gap-4 items-center">
               <select 
-                className="interval-select" 
+                className="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 value={refreshInterval} 
                 onChange={(e) => setRefreshInterval(Number(e.target.value))}
               >
@@ -124,92 +244,134 @@ export default function StatsPage() {
                 <option value={30000}>30s</option>
                 <option value={60000}>60s</option>
               </select>
-              <button className="refresh-btn" onClick={() => window.location.reload()}>🔄 Refresh</button>
+              <button 
+                className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                onClick={() => window.location.reload()}
+              >
+                🔄 Refresh
+              </button>
             </div>
           </div>
-          
-          {Object.keys(pageStats).length > 0 ? (
-            <table className="table">
-              <thead>
-                <tr>
-                  <th>Page</th>
-                  <th>Visites</th>
-                  <th>Pourcentage</th>
-                </tr>
-              </thead>
-              <tbody>
-                {Object.entries(pageStats)
-                  .sort(([,a], [,b]) => {
-                    const numA = Number(a) || 0
-                    const numB = Number(b) || 0
-                    return numB - numA
-                  })
-                  .map(([page, count]) => (
-                    <tr key={page}>
-                      <td><span className="page-badge">{page}</span></td>
-                      <td>{Number(count) || 0}</td>
-                      <td>{totalVisits > 0 ? Math.round(((Number(count) || 0) / totalVisits) * 100) : 0}%</td>
+
+          {/* Pages Table */}
+          <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden mb-12">
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Page</th>
+                    <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Visites</th>
+                    <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900">Pourcentage</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-200">
+                  {Object.entries(pageStats).length > 0 ? (
+                    Object.entries(pageStats)
+                      .sort(([,a], [,b]) => {
+                        const numA = Number(a) || 0
+                        const numB = Number(b) || 0
+                        return numB - numA
+                      })
+                      .map(([page, count]) => (
+                        <tr key={page} className="hover:bg-gray-50">
+                          <td className="px-6 py-4">
+                            <span className="inline-block px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm font-medium">
+                              {page}
+                            </span>
+                          </td>
+                          <td className="px-6 py-4 font-medium">{Number(count) || 0}</td>
+                          <td className="px-6 py-4">
+                            {totalVisits > 0 ? Math.round(((Number(count) || 0) / totalVisits) * 100) : 0}%
+                          </td>
+                        </tr>
+                      ))
+                  ) : (
+                    <tr>
+                      <td colSpan={3} className="px-6 py-12 text-center text-gray-500">
+                        Aucune visite enregistrée
+                      </td>
                     </tr>
-                  ))}
-              </tbody>
-            </table>
-          ) : (
-            <div className="empty">Aucune visite enregistrée</div>
-          )}
-        </div>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
 
-        <div className="section">
-          <h2 className="section-title">🛒 Ajouts Panier</h2>
-          {carts.length > 0 ? (
-            <table className="table">
-              <thead>
-                <tr>
-                  <th>Produit</th>
-                  <th>Date</th>
-                  <th>IP</th>
-                </tr>
-              </thead>
-              <tbody>
-                {carts.slice(-10).reverse().map((cart, index) => (
-                  <tr key={index}>
-                    <td>{cart.product}</td>
-                    <td>{formatTime(cart.ts)}</td>
-                    <td>{cart.ip}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          ) : (
-            <div className="empty">Aucun ajout panier enregistré</div>
-          )}
-        </div>
+          {/* Recent Carts */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
+              <div className="px-6 py-4 bg-gray-50 border-b border-gray-200">
+                <h3 className="text-xl font-bold text-[#1a1a1a] font-[var(--font-dm-sans)]">🛒 Ajouts Panier Récents</h3>
+              </div>
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead className="bg-gray-50">
+                    <tr>
+                      <th className="px-4 py-3 text-left text-sm font-semibold text-gray-900">Produit</th>
+                      <th className="px-4 py-3 text-left text-sm font-semibold text-gray-900">Date</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-200">
+                    {carts.length > 0 ? (
+                      carts.slice(-5).reverse().map((cart, index) => (
+                        <tr key={index} className="hover:bg-gray-50">
+                          <td className="px-4 py-3 font-medium">{cart.product}</td>
+                          <td className="px-4 py-3 text-sm text-gray-600">{formatTime(cart.ts)}</td>
+                        </tr>
+                      ))
+                    ) : (
+                      <tr>
+                        <td colSpan={2} className="px-4 py-8 text-center text-gray-500">
+                          Aucun ajout panier enregistré
+                        </td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            </div>
 
-        <div className="section">
-          <h2 className="section-title">🕐 Dernières Visites</h2>
-          {visits.length > 0 ? (
-            <table className="table">
-              <thead>
-                <tr>
-                  <th>Page</th>
-                  <th>Date</th>
-                  <th>IP</th>
-                </tr>
-              </thead>
-              <tbody>
-                {visits.slice(-10).reverse().map((visit, index) => (
-                  <tr key={index}>
-                    <td><span className="page-badge">{visit.page}</span></td>
-                    <td>{formatTime(visit.ts)}</td>
-                    <td>{visit.ip}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          ) : (
-            <div className="empty">Aucune visite enregistrée</div>
-          )}
+            {/* Recent Visits */}
+            <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden">
+              <div className="px-6 py-4 bg-gray-50 border-b border-gray-200">
+                <h3 className="text-xl font-bold text-[#1a1a1a] font-[var(--font-dm-sans)]">🕐 Visites Récentes</h3>
+              </div>
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead className="bg-gray-50">
+                    <tr>
+                      <th className="px-4 py-3 text-left text-sm font-semibold text-gray-900">Page</th>
+                      <th className="px-4 py-3 text-left text-sm font-semibold text-gray-900">Date</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-200">
+                    {visits.length > 0 ? (
+                      visits.slice(-5).reverse().map((visit, index) => (
+                        <tr key={index} className="hover:bg-gray-50">
+                          <td className="px-4 py-3">
+                            <span className="inline-block px-2 py-1 bg-gray-100 text-gray-800 rounded text-xs font-medium">
+                              {visit.page}
+                            </span>
+                          </td>
+                          <td className="px-4 py-3 text-sm text-gray-600">{formatTime(visit.ts)}</td>
+                        </tr>
+                      ))
+                    ) : (
+                      <tr>
+                        <td colSpan={2} className="px-4 py-8 text-center text-gray-500">
+                          Aucune visite enregistrée
+                        </td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-    </>
+      </section>
+
+      <Footer />
+    </div>
   )
 }
