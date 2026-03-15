@@ -13,8 +13,8 @@ export default function StatsPage() {
   const [carts, setCart] = useState<any[]>([])
   const [refreshInterval, setRefreshInterval] = useState(10000)
   const [liveVisitors, setLiveVisitors] = useState(0)
-  const [syncStatus, setSyncStatus] = useState("")
-  const [lastSyncTime, setLastSyncTime] = useState<number | null>(null)
+  const [telegramData, setTelegramData] = useState({ visits: [], carts: [] })
+  const [isLoading, setIsLoading] = useState(false)
 
   const correctPassword = "yofam0"
 
@@ -31,31 +31,11 @@ export default function StatsPage() {
   useEffect(() => {
     if (!mounted || !isAuthenticated) return
     
-    // Load data from localStorage
-    const loadData = () => {
-      try {
-        const storedVisits = JSON.parse(localStorage.getItem('bc_visits') || '[]')
-        const storedCarts = JSON.parse(localStorage.getItem('bc_carts') || '[]')
-        setVisits(storedVisits)
-        setCart(storedCarts)
-        
-        // Calculate live visitors (visits in last 5 minutes)
-        const fiveMinutesAgo = Date.now() - (5 * 60 * 1000)
-        const recentVisits = storedVisits.filter((visit: any) => visit.ts > fiveMinutesAgo)
-        const uniqueIPs = new Set(recentVisits.map((visit: any) => visit.ip))
-        setLiveVisitors(uniqueIPs.size)
-        
-      } catch (error) {
-        console.error('Error loading stats:', error)
-        setVisits([])
-        setCart([])
-      }
-    }
-
-    loadData()
+    // Load data directly from Telegram
+    loadFromTelegram()
     
     // Auto-refresh every 10 seconds
-    const interval = setInterval(loadData, refreshInterval)
+    const interval = setInterval(loadFromTelegram, refreshInterval)
     
     return () => clearInterval(interval)
   }, [mounted, isAuthenticated, refreshInterval])
@@ -172,9 +152,9 @@ export default function StatsPage() {
       }))
   }
 
-  // Sync data from Telegram
-  const syncFromTelegram = async () => {
-    setSyncStatus("Synchronisation avec Telegram...")
+  // Load data directly from Telegram
+  const loadFromTelegram = async () => {
+    setIsLoading(true)
     try {
       const response = await fetch('/api/sync-telegram-stats', {
         method: 'POST',
@@ -184,48 +164,27 @@ export default function StatsPage() {
       
       const data = await response.json()
       
-      if (!response.ok) {
-        if (data.error === 'Unauthorized') {
-          setSyncStatus("❌ Mot de passe incorrect")
-        } else if (data.error === 'Failed to fetch Telegram data') {
-          setSyncStatus("❌ Erreur API Telegram - Vérifiez le token")
-        } else if (data.error === 'Telegram API error') {
-          setSyncStatus("❌ Erreur API Telegram: " + (data.details || 'Inconnue'))
-        } else {
-          setSyncStatus("❌ Erreur: " + (data.error || 'Inconnue'))
-        }
-        return
-      }
-      
       if (data.success) {
-        // Get existing data
-        const existingVisits = JSON.parse(localStorage.getItem('bc_visits') || '[]')
-        const existingCarts = JSON.parse(localStorage.getItem('bc_carts') || '[]')
+        const telegramVisits = data.telegramVisits || []
+        const telegramCarts = data.telegramCarts || []
         
-        // Merge Telegram data with existing data
-        const mergedVisits = [...existingVisits, ...(data.telegramVisits || [])]
-        const mergedCarts = [...existingCarts, ...(data.telegramCarts || [])]
+        setTelegramData({
+          visits: telegramVisits,
+          carts: telegramCarts
+        })
+        setVisits(telegramVisits)
+        setCart(telegramCarts)
         
-        // Save merged data to localStorage
-        localStorage.setItem('bc_visits', JSON.stringify(mergedVisits))
-        localStorage.setItem('bc_carts', JSON.stringify(mergedCarts))
-        
-        setSyncStatus(`✅ Synchronisé: ${data.telegramVisits?.length || 0} nouvelles visites, ${data.telegramCarts?.length || 0} nouveaux paniers`)
-        setLastSyncTime(Date.now())
-        
-        // Force reload data
-        setTimeout(() => {
-          window.location.reload()
-        }, 2000)
-      } else {
-        setSyncStatus("❌ Échec de la synchronisation")
+        // Calculate live visitors (visits in last 5 minutes)
+        const fiveMinutesAgo = Date.now() - (5 * 60 * 1000)
+        const recentVisits = telegramVisits.filter((visit: any) => visit.ts > fiveMinutesAgo)
+        const uniqueIPs = new Set(recentVisits.map((visit: any) => visit.ip))
+        setLiveVisitors(uniqueIPs.size)
       }
     } catch (error) {
-      console.error('Sync error:', error)
-      setSyncStatus("❌ Erreur réseau - Vérifiez votre connexion")
+      console.error('Error loading from Telegram:', error)
     }
-    
-    setTimeout(() => setSyncStatus(""), 5000)
+    setIsLoading(false)
   }
 
   const getLiveStats = () => {
@@ -487,6 +446,11 @@ export default function StatsPage() {
           <div className="flex justify-between items-center mb-6 sm:mb-8">
             <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-[#1a1a1a] font-[var(--font-dm-sans)]">📈 Pages Visitées</h2>
             <div className="flex gap-2 sm:gap-4 items-center">
+              {isLoading && (
+                <div className="px-3 sm:px-4 py-1 sm:py-2 bg-blue-50 text-blue-700 rounded-lg text-xs sm:text-sm font-medium">
+                  🔄 Chargement Telegram...
+                </div>
+              )}
               <select 
                 className="px-3 sm:px-4 py-1 sm:py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs sm:text-sm"
                 value={refreshInterval} 
@@ -499,7 +463,7 @@ export default function StatsPage() {
               </select>
               <button 
                 className="px-3 sm:px-4 py-1 sm:py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-xs sm:text-sm"
-                onClick={() => window.location.reload()}
+                onClick={loadFromTelegram}
               >
                 🔄 Refresh
               </button>
