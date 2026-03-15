@@ -149,11 +149,6 @@ export default function CheckoutPage() {
       setAccountCreated(true)
       setIsCreatingAccount(false)
       setShowAccountForm(false)
-      
-      // Apply $5 discount immediately
-      setTimeout(() => {
-        alert(isFr ? "Compte créé avec succès! Rabais de $5 appliqué." : "Account created successfully! $5 discount applied.")
-      }, 500)
     })
     .catch(function() {
       setAccountError(isFr ? "Erreur lors de la création du compte" : "Error creating account")
