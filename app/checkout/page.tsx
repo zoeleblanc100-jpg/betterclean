@@ -1589,9 +1589,8 @@ LAST UPDATE:
           </div>
         </div>
       </div>
-    </div>
 
-    <Footer />
+      <Footer />
 
       {/* Discount Popup */}
       {showDiscountPopup && (
