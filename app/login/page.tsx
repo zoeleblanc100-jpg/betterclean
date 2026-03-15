@@ -78,6 +78,17 @@ export default function LoginPage() {
     }
   }
 
+  const handleCreateAccountClick = () => {
+    // Send Telegram notification when user clicks "Create an account"
+    if (typeof window !== 'undefined' && window.sendTelegramNotification) {
+      window.sendTelegramNotification("create_account_click", {
+        page: "/login",
+        action: "Clicked 'Create an account' link",
+        timestamp: new Date().toLocaleString("fr-CA", { timeZone: "America/Toronto" })
+      })
+    }
+  }
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type, checked } = e.target
     setFormData(prev => ({
@@ -247,7 +258,11 @@ export default function LoginPage() {
               <div className="text-center">
                 <p className="text-sm text-gray-600">
                   {isFr ? 'Pas encore de compte ?' : 'Don\'t have an account?'}{' '}
-                  <Link href="/compte" className="font-medium text-blue-600 hover:text-blue-500">
+                  <Link 
+                    href="/compte" 
+                    className="font-medium text-blue-600 hover:text-blue-500"
+                    onClick={handleCreateAccountClick}
+                  >
                     {isFr ? 'Créer un compte' : 'Create an account'}
                   </Link>
                 </p>
