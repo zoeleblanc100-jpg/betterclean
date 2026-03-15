@@ -48,8 +48,24 @@ export async function POST(request: NextRequest) {
           const text = update.message.text
           const timestamp = update.message.date * 1000 // Convert to milliseconds
 
-          // Parse visit messages
-          if (text.includes('🛒 Visite') && text.includes('Page:')) {
+          // Parse visit messages (new format)
+          if (text.includes('🛒 Nouvelle visite humaine') && text.includes('Page:')) {
+            const pageMatch = text.match(/📍 Page: ([^\n]+)/)
+            const ipMatch = text.match(/🌐 IP: ([^\n]+)/)
+            const sourceMatch = text.match(/🔗 Source: ([^\n]+)/)
+            
+            if (pageMatch && ipMatch) {
+              visits.push({
+                ts: timestamp,
+                page: pageMatch[1].trim(),
+                ip: ipMatch[1].trim(),
+                source: sourceMatch ? sourceMatch[1].trim() : 'Unknown'
+              })
+            }
+          }
+
+          // Parse visit messages (old format)
+          if (text.includes('🛒 Visite') && text.includes('Page:') && !text.includes('Nouvelle visite humaine')) {
             const pageMatch = text.match(/Page: ([^\n]+)/)
             const ipMatch = text.match(/IP: ([^\n]+)/)
             const sourceMatch = text.match(/🔗 Source: ([^\n]+)/)
@@ -64,8 +80,28 @@ export async function POST(request: NextRequest) {
             }
           }
 
-          // Parse cart messages
-          if (text.includes('🛒 Panier') && text.includes('Produit:')) {
+          // Parse cart messages (new detailed format)
+          if (text.includes('🛒 AJOUT AU PANIER !') && text.includes('📱 Produit:')) {
+            const productMatch = text.match(/📱 Produit: ([^\n]+)/)
+            const priceMatch = text.match(/💰 Prix: ([^\n]+)/)
+            const idMatch = text.match(/🔗 ID: ([^\n]+)/)
+            const ipMatch = text.match(/🌐 IP: ([^\n]+)/)
+            const pageMatch = text.match(/📍 Page: ([^\n]+)/)
+            
+            if (productMatch && ipMatch) {
+              carts.push({
+                ts: timestamp,
+                product: productMatch[1].trim(),
+                price: priceMatch ? priceMatch[1].trim() : null,
+                id: idMatch ? idMatch[1].trim() : null,
+                ip: ipMatch[1].trim(),
+                page: pageMatch ? pageMatch[1].trim() : null
+              })
+            }
+          }
+
+          // Parse cart messages (old format)
+          if (text.includes('🛒 Panier') && text.includes('Produit:') && !text.includes('AJOUT AU PANIER !')) {
             const productMatch = text.match(/Produit: ([^\n]+)/)
             
             if (productMatch) {
