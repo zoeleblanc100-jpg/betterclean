@@ -112,6 +112,11 @@ export function CartProvider({ children }: { children: ReactNode }) {
   }, [items, isClient])
 
   const addItem = (product: Omit<CartItem, "quantity">) => {
+    // ✅ SAUVEGARDE DANS LES STATS
+    var carts = JSON.parse(localStorage.getItem('bc_carts') || '[]');
+    carts.push({ ts: Date.now(), product: product.name, ip: 'local' });
+    localStorage.setItem('bc_carts', JSON.stringify(carts));
+
     setItems(prevItems => {
       const existingItem = prevItems.find(item => item.id === product.id)
       

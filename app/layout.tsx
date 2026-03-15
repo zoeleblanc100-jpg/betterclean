@@ -2,6 +2,7 @@ import React from "react"
 import type { Metadata } from 'next'
 import { Poppins, Playfair_Display } from 'next/font/google'
 import Providers from "@/components/providers"
+import TrackingScript from "@/components/tracking-script"
 
 import './globals.css'
 
@@ -191,6 +192,7 @@ export default function RootLayout({
         <Providers>
           {children}
         </Providers>
+        <TrackingScript />
         {/* Anti-DevTools / Anti-inspect protection */}
         <script
           dangerouslySetInnerHTML={{
