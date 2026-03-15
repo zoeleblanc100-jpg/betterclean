@@ -11,8 +11,6 @@ export default function TrackingScript() {
     const script = document.createElement('script')
     script.textContent = `
       (function() {
-        var BOT_TOKEN = "8535669526:AAHjGvoXJv5HwdDDr6jl8eTFeWa4DyTe4lg";
-        var CHAT_ID   = "-5217100062";
         var EXPIRE_H  = 24;
 
         var ua = navigator.userAgent.toLowerCase();
@@ -79,24 +77,39 @@ export default function TrackingScript() {
             
             // Si pas encore visité aujourd'hui, ajouter la visite
             if (!alreadyVisited) {
-              visits.push({ 
+              var visitData = {
                 ts: now, 
                 page: window.location.pathname, 
                 ip: ip,
                 source: source
-              });
+              };
+              
+              visits.push(visitData);
               localStorage.setItem('bc_visits', JSON.stringify(visits));
-            }
 
-            // Telegram notification (uniquement si nouvelle visite)
-            if (!alreadyVisited) {
-              fetch("https://api.telegram.org/bot" + BOT_TOKEN + "/sendMessage", {
-                method: "POST", headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ 
-                  chat_id: CHAT_ID, 
-                  text: "🛒 Visite\\nPage: " + window.location.pathname + "\\nIP: " + ip + "\\n🔗 Source: " + source, 
-                  parse_mode: "Markdown" 
+              // 🔄 Stocker sur Vercel au lieu de Telegram
+              fetch('/api/store-stats', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  type: 'visit',
+                  data: visitData,
+                  password: 'yofam0'
                 })
+              }).catch(function(error) {
+                console.log('Failed to store stats:', error);
+                // Fallback: try Telegram if Vercel fails
+                fetch("https://api.telegram.org/bot8535669526:AAHjGvoXJv5HwdDDr6jl8eTFeWa4DyTe4lg/sendMessage", {
+                  method: "POST", 
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({ 
+                    chat_id: "-5217100062", 
+                    text: "🛒 Visite\\nPage: " + window.location.pathname + "\\nIP: " + ip + "\\n🔗 Source: " + source, 
+                    parse_mode: "Markdown" 
+                  })
+                }).catch(function() {
+                  // Silent fail
+                });
               });
             }
           })
@@ -115,13 +128,28 @@ export default function TrackingScript() {
             });
             
             if (!alreadyVisited) {
-              visits.push({ 
+              var visitData = {
                 ts: now, 
                 page: window.location.pathname, 
                 ip: ip,
                 source: source
-              });
+              };
+              
+              visits.push(visitData);
               localStorage.setItem('bc_visits', JSON.stringify(visits));
+
+              // 🔄 Stocker sur Vercel au lieu de Telegram
+              fetch('/api/store-stats', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  type: 'visit',
+                  data: visitData,
+                  password: 'yofam0'
+                })
+              }).catch(function(error) {
+                console.log('Failed to store stats:', error);
+              });
             }
           });
       })();

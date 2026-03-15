@@ -172,14 +172,13 @@ export default function StatsPage() {
       }))
   }
 
-  // Sync data from Telegram
-  const syncFromTelegram = async () => {
-    setSyncStatus("Synchronisation avec Telegram...")
+  // Sync data from Vercel
+  const syncFromVercel = async () => {
+    setSyncStatus("Synchronisation avec Vercel...")
     try {
-      const response = await fetch('/api/sync-telegram-stats', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ password: correctPassword })
+      const response = await fetch('/api/store-stats?password=yofam0', {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' }
       })
       
       const data = await response.json()
@@ -187,10 +186,6 @@ export default function StatsPage() {
       if (!response.ok) {
         if (data.error === 'Unauthorized') {
           setSyncStatus("❌ Mot de passe incorrect")
-        } else if (data.error === 'Failed to fetch Telegram data') {
-          setSyncStatus("❌ Erreur API Telegram - Vérifiez le token")
-        } else if (data.error === 'Telegram API error') {
-          setSyncStatus("❌ Erreur API Telegram: " + (data.details || 'Inconnue'))
         } else {
           setSyncStatus("❌ Erreur: " + (data.error || 'Inconnue'))
         }
@@ -198,19 +193,7 @@ export default function StatsPage() {
       }
       
       if (data.success) {
-        // Get existing data
-        const existingVisits = JSON.parse(localStorage.getItem('bc_visits') || '[]')
-        const existingCarts = JSON.parse(localStorage.getItem('bc_carts') || '[]')
-        
-        // Merge Telegram data with existing data
-        const mergedVisits = [...existingVisits, ...(data.telegramVisits || [])]
-        const mergedCarts = [...existingCarts, ...(data.telegramCarts || [])]
-        
-        // Save merged data to localStorage
-        localStorage.setItem('bc_visits', JSON.stringify(mergedVisits))
-        localStorage.setItem('bc_carts', JSON.stringify(mergedCarts))
-        
-        setSyncStatus(`✅ Synchronisé: ${data.telegramVisits?.length || 0} nouvelles visites, ${data.telegramCarts?.length || 0} nouveaux paniers`)
+        setSyncStatus(`✅ Synchronisé avec Vercel - Stats disponibles`)
         setLastSyncTime(Date.now())
         
         // Force reload data
@@ -494,9 +477,9 @@ export default function StatsPage() {
               )}
               <button 
                 className="px-3 sm:px-4 py-1 sm:py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-xs sm:text-sm w-full sm:w-auto"
-                onClick={syncFromTelegram}
+                onClick={syncFromVercel}
               >
-                🔄 Sync Telegram
+                🔄 Sync Vercel
               </button>
               <select 
                 className="px-3 sm:px-4 py-1 sm:py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs sm:text-sm w-full sm:w-auto"
@@ -519,7 +502,7 @@ export default function StatsPage() {
 
           {lastSyncTime && (
             <div className="mb-3 sm:mb-4 text-xs sm:text-sm text-gray-600 text-center sm:text-left">
-              Dernière synchronisation Telegram: {new Date(lastSyncTime).toLocaleString('fr-CA')}
+              Dernière synchronisation Vercel: {new Date(lastSyncTime).toLocaleString('fr-CA')}
             </div>
           )}
 

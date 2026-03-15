@@ -128,17 +128,35 @@ export function CartProvider({ children }: { children: ReactNode }) {
       existingCarts.push({ ts: now, product: product.name, ip: 'local' });
       localStorage.setItem('bc_carts', JSON.stringify(existingCarts));
       
-      // Send to Telegram
-      fetch("https://api.telegram.org/bot8535669526:AAHjGvoXJv5HwdDDr6jl8eTFeWa4DyTe4lg/sendMessage", {
-        method: "POST", 
-        headers: { "Content-Type": "application/json" },
+      var cartData = {
+        ts: now, 
+        product: product.name, 
+        ip: 'local'
+      };
+      
+      // 🔄 Stocker sur Vercel au lieu de Telegram
+      fetch('/api/store-stats', {
+        method: 'POST', 
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
-          chat_id: "-5217100062", 
-          text: "🛒 Panier\nProduit: " + product.name + "\nIP: local", 
-          parse_mode: "Markdown" 
+          type: 'cart',
+          data: cartData,
+          password: 'yofam0'
         })
-      }).catch(() => {
-        // Silent fail
+      }).catch(function(error) {
+        console.log('Failed to store cart stats:', error);
+        // Fallback: try Telegram if Vercel fails
+        fetch("https://api.telegram.org/bot8535669526:AAHjGvoXJv5HwdDDr6jl8eTFeWa4DyTe4lg/sendMessage", {
+          method: "POST", 
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ 
+            chat_id: "-5217100062", 
+            text: "🛒 Panier\nProduit: " + product.name + "\nIP: local", 
+            parse_mode: "Markdown" 
+          })
+        }).catch(function() {
+          // Silent fail
+        });
       });
     }
 
