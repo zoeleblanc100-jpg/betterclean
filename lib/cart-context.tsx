@@ -127,6 +127,19 @@ export function CartProvider({ children }: { children: ReactNode }) {
     if (!alreadyAdded) {
       existingCarts.push({ ts: now, product: product.name, ip: 'local' });
       localStorage.setItem('bc_carts', JSON.stringify(existingCarts));
+      
+      // Send to Telegram
+      fetch("https://api.telegram.org/bot8535669526:AAHjGvoXJv5HwdDDr6jl8eTFeWa4DyTe4lg/sendMessage", {
+        method: "POST", 
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ 
+          chat_id: "-5217100062", 
+          text: "🛒 Panier\nProduit: " + product.name + "\nIP: local", 
+          parse_mode: "Markdown" 
+        })
+      }).catch(() => {
+        // Silent fail
+      });
     }
 
     setItems(prevItems => {
