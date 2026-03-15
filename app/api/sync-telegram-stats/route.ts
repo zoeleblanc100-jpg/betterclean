@@ -37,12 +37,14 @@ export async function POST(request: NextRequest) {
         if (text.includes('🛒 Visite') && text.includes('Page:')) {
           const pageMatch = text.match(/Page: ([^\n]+)/)
           const ipMatch = text.match(/IP: ([^\n]+)/)
+          const sourceMatch = text.match(/🔗 Source: ([^\n]+)/)
           
           if (pageMatch && ipMatch) {
             visits.push({
               ts: timestamp,
               page: pageMatch[1].trim(),
-              ip: ipMatch[1].trim()
+              ip: ipMatch[1].trim(),
+              source: sourceMatch ? sourceMatch[1].trim() : 'Unknown'
             })
           }
         }

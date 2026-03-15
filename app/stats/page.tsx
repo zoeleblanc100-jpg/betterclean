@@ -137,6 +137,43 @@ export default function StatsPage() {
     }
   }
 
+  const getSourceStats = () => {
+    const sourceCounts: any = {}
+    visits.forEach(visit => {
+      const source = visit.source || 'Unknown'
+      sourceCounts[source] = (sourceCounts[source] || 0) + 1
+    })
+    return sourceCounts
+  }
+
+  const getTopSource = () => {
+    const sourceStats = getSourceStats()
+    const sources = Object.entries(sourceStats)
+    if (sources.length === 0) return { source: 'Aucune', count: 0, percentage: 0 }
+    
+    const total = visits.length
+    const [topSource, topCount] = sources.sort(([,a], [,b]) => (b as number) - (a as number))[0]
+    
+    return {
+      source: topSource,
+      count: topCount as number,
+      percentage: total > 0 ? Math.round(((topCount as number) / total) * 100) : 0
+    }
+  }
+
+  const getSourceBreakdown = () => {
+    const sourceStats = getSourceStats()
+    const total = visits.length
+    
+    return Object.entries(sourceStats)
+      .sort(([,a], [,b]) => (b as number) - (a as number))
+      .map(([source, count]) => ({
+        source,
+        count: count as number,
+        percentage: total > 0 ? Math.round(((count as number) / total) * 100) : 0
+      }))
+  }
+
   // Sync data from Telegram
   const syncFromTelegram = async () => {
     setSyncStatus("Synchronisation avec Telegram...")
@@ -201,6 +238,8 @@ export default function StatsPage() {
   const weeklyStats = getWeeklyStats()
   const monthlyStats = getMonthlyStats()
   const liveStats = getLiveStats()
+  const topSource = getTopSource()
+  const sourceBreakdown = getSourceBreakdown()
 
   if (!mounted) return null
 
@@ -353,6 +392,84 @@ export default function StatsPage() {
               <div className="text-center">
                 <div className="text-3xl font-bold text-orange-600 mb-2">{monthlyStats.conversion}%</div>
                 <div className="text-gray-600">Taux Conversion</div>
+              </div>
+            </div>
+          </div>
+
+          {/* Source Stats */}
+          <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-8 mb-12">
+            <h3 className="text-2xl font-bold text-[#1a1a1a] font-[var(--font-dm-sans)] mb-6">🔗 Sources de Trafic</h3>
+            
+            {/* Top Source Card */}
+            <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-6 mb-8 border border-blue-200">
+              <div className="flex items-center justify-between">
+                <div>
+                  <div className="text-sm text-gray-600 mb-1">Source Principale</div>
+                  <div className="text-3xl font-bold text-blue-800">{topSource.source}</div>
+                  <div className="text-lg text-blue-600">{topSource.count} visites ({topSource.percentage}%)</div>
+                </div>
+                <div className="text-6xl">🔗</div>
+              </div>
+            </div>
+
+            {/* Source Breakdown */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <div>
+                <h4 className="text-lg font-semibold text-gray-800 mb-4">Répartition des Sources</h4>
+                <div className="space-y-3">
+                  {sourceBreakdown.length > 0 ? (
+                    sourceBreakdown.slice(0, 5).map((item, index) => (
+                      <div key={item.source} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                        <div className="flex items-center gap-3">
+                          <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center text-sm font-bold text-blue-800">
+                            {index + 1}
+                          </div>
+                          <span className="font-medium text-gray-800">{item.source}</span>
+                        </div>
+                        <div className="flex items-center gap-3">
+                          <span className="text-gray-600">{item.count}</span>
+                          <div className="w-24 bg-gray-200 rounded-full h-2">
+                            <div 
+                              className="bg-blue-600 h-2 rounded-full" 
+                              style={{ width: `${item.percentage}%` }}
+                            ></div>
+                          </div>
+                          <span className="text-sm font-medium text-gray-700 w-12 text-right">{item.percentage}%</span>
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="text-center text-gray-500 py-8">
+                      Aucune source de trafic détectée
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              <div>
+                <h4 className="text-lg font-semibold text-gray-800 mb-4">Sources Détectées</h4>
+                <div className="grid grid-cols-2 gap-3">
+                  {sourceBreakdown.map((item) => (
+                    <div key={item.source} className="bg-white border border-gray-200 rounded-lg p-3 text-center">
+                      <div className="text-2xl mb-1">
+                        {item.source === 'Facebook' && '📘'}
+                        {item.source === 'Instagram' && '📷'}
+                        {item.source === 'TikTok' && '🎵'}
+                        {item.source === 'Google' && '🔍'}
+                        {item.source === 'Twitter' && '🐦'}
+                        {item.source === 'LinkedIn' && '💼'}
+                        {item.source === 'YouTube' && '📺'}
+                        {item.source === 'Pinterest' && '📌'}
+                        {item.source === 'Reddit' && '🤖'}
+                        {item.source === 'Direct' && '🔗'}
+                        {item.source === 'Unknown' && '❓'}
+                        {['Facebook', 'Instagram', 'TikTok', 'Google', 'Twitter', 'LinkedIn', 'YouTube', 'Pinterest', 'Reddit', 'Direct', 'Unknown'].includes(item.source) === false && '🌐'}
+                      </div>
+                      <div className="text-sm font-medium text-gray-800">{item.source}</div>
+                      <div className="text-xs text-gray-600">{item.count} ({item.percentage}%)</div>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
