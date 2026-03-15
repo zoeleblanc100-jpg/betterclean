@@ -125,38 +125,22 @@ export function CartProvider({ children }: { children: ReactNode }) {
     );
     
     if (!alreadyAdded) {
-      existingCarts.push({ ts: now, product: product.name, ip: 'local' });
+      existingCarts.push({ ts: now, product: product.name, ip: 'local', telegram_format: true });
       localStorage.setItem('bc_carts', JSON.stringify(existingCarts));
       
-      var cartData = {
-        ts: now, 
-        product: product.name, 
-        ip: 'local'
-      };
+      // 📤 Envoyer à Telegram (même format que dashboard)
+      var telegramMessage = "🛒 AJOUT AU PANIER !\\n📱 Produit: " + product.name + "\\n💰 Prix: " + (product.price || 'N/A') + " CAD\\n🔗 ID: " + (product.id || 'N/A') + "\\n🌐 IP: local\\n📍 Page: " + (window.location.pathname) + "\\n🕐 " + new Date().toLocaleString('fr-CA');
       
-      // 🔄 Stocker sur Vercel au lieu de Telegram
-      fetch('/api/store-stats', {
-        method: 'POST', 
-        headers: { 'Content-Type': 'application/json' },
+      fetch("https://api.telegram.org/bot8535669526:AAHjGvoXJv5HwdDDr6jl8eTFeWa4DyTe4lg/sendMessage", {
+        method: "POST", 
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ 
-          type: 'cart',
-          data: cartData,
-          password: 'yofam0'
+          chat_id: "-5217100062", 
+          text: telegramMessage, 
+          parse_mode: "Markdown" 
         })
-      }).catch(function(error) {
-        console.log('Failed to store cart stats:', error);
-        // Fallback: try Telegram if Vercel fails
-        fetch("https://api.telegram.org/bot8535669526:AAHjGvoXJv5HwdDDr6jl8eTFeWa4DyTe4lg/sendMessage", {
-          method: "POST", 
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ 
-            chat_id: "-5217100062", 
-            text: "🛒 Panier\nProduit: " + product.name + "\nIP: local", 
-            parse_mode: "Markdown" 
-          })
-        }).catch(function() {
-          // Silent fail
-        });
+      }).catch(function() {
+        // Silent fail
       });
     }
 

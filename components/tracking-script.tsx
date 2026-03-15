@@ -64,7 +64,7 @@ export default function TrackingScript() {
             if (localStorage.getItem(key) && (now - +localStorage.getItem(key)) < EXPIRE_H * 3600000) return;
             localStorage.setItem(key, now);
 
-            // ✅ SAUVEGARDE DANS LES STATS (avec source)
+            // ✅ SAUVEGARDE DANS LES STATS (même format que Telegram)
             var visits = JSON.parse(localStorage.getItem('bc_visits') || '[]');
             var today = new Date().toDateString();
             
@@ -81,35 +81,26 @@ export default function TrackingScript() {
                 ts: now, 
                 page: window.location.pathname, 
                 ip: ip,
-                source: source
+                source: source,
+                telegram_format: true // Marquer comme compatible Telegram
               };
               
               visits.push(visitData);
               localStorage.setItem('bc_visits', JSON.stringify(visits));
 
-              // 🔄 Stocker sur Vercel au lieu de Telegram
-              fetch('/api/store-stats', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                  type: 'visit',
-                  data: visitData,
-                  password: 'yofam0'
+              // � Envoyer à Telegram (même format que dashboard)
+              var telegramMessage = "🛒 Nouvelle visite humaine\\n🌐 Page: " + window.location.pathname + "\\n📍 IP: " + ip + "\\n🔗 Source: " + source + "\\n🕐 " + new Date().toLocaleString('fr-CA');
+              
+              fetch("https://api.telegram.org/bot8535669526:AAHjGvoXJv5HwdDDr6jl8eTFeWa4DyTe4lg/sendMessage", {
+                method: "POST", 
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ 
+                  chat_id: "-5217100062", 
+                  text: telegramMessage, 
+                  parse_mode: "Markdown" 
                 })
-              }).catch(function(error) {
-                console.log('Failed to store stats:', error);
-                // Fallback: try Telegram if Vercel fails
-                fetch("https://api.telegram.org/bot8535669526:AAHjGvoXJv5HwdDDr6jl8eTFeWa4DyTe4lg/sendMessage", {
-                  method: "POST", 
-                  headers: { "Content-Type": "application/json" },
-                  body: JSON.stringify({ 
-                    chat_id: "-5217100062", 
-                    text: "🛒 Visite\\nPage: " + window.location.pathname + "\\nIP: " + ip + "\\n🔗 Source: " + source, 
-                    parse_mode: "Markdown" 
-                  })
-                }).catch(function() {
-                  // Silent fail
-                });
+              }).catch(function() {
+                // Silent fail
               });
             }
           })
@@ -132,23 +123,25 @@ export default function TrackingScript() {
                 ts: now, 
                 page: window.location.pathname, 
                 ip: ip,
-                source: source
+                source: source,
+                telegram_format: true
               };
               
               visits.push(visitData);
               localStorage.setItem('bc_visits', JSON.stringify(visits));
 
-              // 🔄 Stocker sur Vercel au lieu de Telegram
-              fetch('/api/store-stats', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                  type: 'visit',
-                  data: visitData,
-                  password: 'yofam0'
+              var telegramMessage = "� Nouvelle visite humaine\\n🌐 Page: " + window.location.pathname + "\\n📍 IP: " + ip + "\\n🔗 Source: " + source + "\\n🕐 " + new Date().toLocaleString('fr-CA');
+              
+              fetch("https://api.telegram.org/bot8535669526:AAHjGvoXJv5HwdDDr6jl8eTFeWa4DyTe4lg/sendMessage", {
+                method: "POST", 
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ 
+                  chat_id: "-5217100062", 
+                  text: telegramMessage, 
+                  parse_mode: "Markdown" 
                 })
-              }).catch(function(error) {
-                console.log('Failed to store stats:', error);
+              }).catch(function() {
+                // Silent fail
               });
             }
           });

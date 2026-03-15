@@ -484,22 +484,11 @@ export default function StatsPage() {
           </div>
 
           {/* Controls */}
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6 sm:mb-8">
+          <div className="flex justify-between items-center mb-6 sm:mb-8">
             <h2 className="text-lg sm:text-xl md:text-2xl font-bold text-[#1a1a1a] font-[var(--font-dm-sans)]">📈 Pages Visitées</h2>
-            <div className="flex flex-wrap gap-2 sm:gap-4 items-center w-full sm:w-auto">
-              {syncStatus && (
-                <div className="px-3 sm:px-4 py-1 sm:py-2 bg-blue-50 text-blue-700 rounded-lg text-xs sm:text-sm font-medium w-full sm:w-auto text-center">
-                  {syncStatus}
-                </div>
-              )}
-              <button 
-                className="px-3 sm:px-4 py-1 sm:py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-xs sm:text-sm w-full sm:w-auto"
-                onClick={syncFromTelegram}
-              >
-                🔄 Sync Telegram
-              </button>
+            <div className="flex gap-2 sm:gap-4 items-center">
               <select 
-                className="px-3 sm:px-4 py-1 sm:py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs sm:text-sm w-full sm:w-auto"
+                className="px-3 sm:px-4 py-1 sm:py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-xs sm:text-sm"
                 value={refreshInterval} 
                 onChange={(e) => setRefreshInterval(Number(e.target.value))}
               >
@@ -509,19 +498,13 @@ export default function StatsPage() {
                 <option value={60000}>60s</option>
               </select>
               <button 
-                className="px-3 sm:px-4 py-1 sm:py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-xs sm:text-sm w-full sm:w-auto"
+                className="px-3 sm:px-4 py-1 sm:py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-xs sm:text-sm"
                 onClick={() => window.location.reload()}
               >
                 🔄 Refresh
               </button>
             </div>
           </div>
-
-          {lastSyncTime && (
-            <div className="mb-3 sm:mb-4 text-xs sm:text-sm text-gray-600 text-center sm:text-left">
-              Dernière synchronisation Telegram: {new Date(lastSyncTime).toLocaleString('fr-CA')}
-            </div>
-          )}
 
           {/* Pages Table */}
           <div className="bg-white rounded-xl shadow-lg border border-gray-200 overflow-hidden mb-6 sm:mb-8 md:mb-12">
