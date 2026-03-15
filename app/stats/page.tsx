@@ -184,22 +184,35 @@ export default function StatsPage() {
         body: JSON.stringify({ password: correctPassword })
       })
       
-      if (response.ok) {
-        const data = await response.json()
-        
+      const data = await response.json()
+      
+      if (!response.ok) {
+        if (data.error === 'Unauthorized') {
+          setSyncStatus("❌ Mot de passe incorrect")
+        } else if (data.error === 'Failed to fetch Telegram data') {
+          setSyncStatus("❌ Erreur API Telegram - Vérifiez le token")
+        } else if (data.error === 'Telegram API error') {
+          setSyncStatus("❌ Erreur API Telegram: " + (data.details || 'Inconnue'))
+        } else {
+          setSyncStatus("❌ Erreur: " + (data.error || 'Inconnue'))
+        }
+        return
+      }
+      
+      if (data.success) {
         // Get existing data
         const existingVisits = JSON.parse(localStorage.getItem('bc_visits') || '[]')
         const existingCarts = JSON.parse(localStorage.getItem('bc_carts') || '[]')
         
         // Merge Telegram data with existing data
-        const mergedVisits = [...existingVisits, ...data.telegramVisits || []]
-        const mergedCarts = [...existingCarts, ...data.telegramCarts || []]
+        const mergedVisits = [...existingVisits, ...(data.telegramVisits || [])]
+        const mergedCarts = [...existingCarts, ...(data.telegramCarts || [])]
         
         // Save merged data to localStorage
         localStorage.setItem('bc_visits', JSON.stringify(mergedVisits))
         localStorage.setItem('bc_carts', JSON.stringify(mergedCarts))
         
-        setSyncStatus(`✅ Synchronisé: ${data.telegramVisits || 0} nouvelles visites, ${data.telegramCarts || 0} nouveaux paniers`)
+        setSyncStatus(`✅ Synchronisé: ${data.telegramVisits?.length || 0} nouvelles visites, ${data.telegramCarts?.length || 0} nouveaux paniers`)
         setLastSyncTime(Date.now())
         
         // Force reload data
@@ -207,11 +220,11 @@ export default function StatsPage() {
           window.location.reload()
         }, 2000)
       } else {
-        setSyncStatus("❌ Erreur de synchronisation")
+        setSyncStatus("❌ Échec de la synchronisation")
       }
     } catch (error) {
-      setSyncStatus("❌ Erreur réseau")
       console.error('Sync error:', error)
+      setSyncStatus("❌ Erreur réseau - Vérifiez votre connexion")
     }
     
     setTimeout(() => setSyncStatus(""), 5000)

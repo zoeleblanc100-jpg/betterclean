@@ -18,74 +18,86 @@ export async function POST(request: NextRequest) {
     )
     
     if (!telegramResponse.ok) {
-      return NextResponse.json({ error: 'Failed to fetch Telegram data' }, { status: 500 })
+      console.error('Telegram API error:', telegramResponse.statusText)
+      return NextResponse.json({ 
+        error: 'Failed to fetch Telegram data',
+        details: telegramResponse.statusText 
+      }, { status: 500 })
     }
 
     const telegramData = await telegramResponse.json()
+    
+    if (!telegramData.ok) {
+      console.error('Telegram API not ok:', telegramData)
+      return NextResponse.json({ 
+        error: 'Telegram API error',
+        details: telegramData.description 
+      }, { status: 500 })
+    }
+
     const messages = telegramData.result || []
+    console.log('Found messages:', messages.length)
 
     // Parse messages to extract stats
     const visits: any[] = []
     const carts: any[] = []
 
     messages.forEach((update: any) => {
-      if (update.message && update.message.text) {
-        const text = update.message.text
-        const timestamp = update.message.date * 1000 // Convert to milliseconds
+      try {
+        if (update.message && update.message.text) {
+          const text = update.message.text
+          const timestamp = update.message.date * 1000 // Convert to milliseconds
 
-        // Parse visit messages
-        if (text.includes('🛒 Visite') && text.includes('Page:')) {
-          const pageMatch = text.match(/Page: ([^\n]+)/)
-          const ipMatch = text.match(/IP: ([^\n]+)/)
-          const sourceMatch = text.match(/🔗 Source: ([^\n]+)/)
-          
-          if (pageMatch && ipMatch) {
-            visits.push({
-              ts: timestamp,
-              page: pageMatch[1].trim(),
-              ip: ipMatch[1].trim(),
-              source: sourceMatch ? sourceMatch[1].trim() : 'Unknown'
-            })
+          // Parse visit messages
+          if (text.includes('🛒 Visite') && text.includes('Page:')) {
+            const pageMatch = text.match(/Page: ([^\n]+)/)
+            const ipMatch = text.match(/IP: ([^\n]+)/)
+            const sourceMatch = text.match(/🔗 Source: ([^\n]+)/)
+            
+            if (pageMatch && ipMatch) {
+              visits.push({
+                ts: timestamp,
+                page: pageMatch[1].trim(),
+                ip: ipMatch[1].trim(),
+                source: sourceMatch ? sourceMatch[1].trim() : 'Unknown'
+              })
+            }
+          }
+
+          // Parse cart messages
+          if (text.includes('🛒 Panier') && text.includes('Produit:')) {
+            const productMatch = text.match(/Produit: ([^\n]+)/)
+            
+            if (productMatch) {
+              carts.push({
+                ts: timestamp,
+                product: productMatch[1].trim(),
+                ip: 'telegram'
+              })
+            }
           }
         }
-
-        // Parse cart messages (if you add cart tracking to Telegram)
-        if (text.includes('🛒 Panier') && text.includes('Produit:')) {
-          const productMatch = text.match(/Produit: ([^\n]+)/)
-          
-          if (productMatch) {
-            carts.push({
-              ts: timestamp,
-              product: productMatch[1].trim(),
-              ip: 'telegram'
-            })
-          }
-        }
+      } catch (error) {
+        console.error('Error parsing message:', error)
       }
     })
 
-    // Merge with existing localStorage data
-    const existingVisits = JSON.parse(localStorage.getItem('bc_visits') || '[]')
-    const existingCarts = JSON.parse(localStorage.getItem('bc_carts') || '[]')
-
-    // Combine data, avoiding duplicates
-    const allVisits = [...existingVisits, ...visits]
-    const allCarts = [...existingCarts, ...carts]
-
-    // Save back to localStorage (this won't work server-side, but we'll return the data)
-    // In a real implementation, you'd save to a database
+    console.log('Parsed visits:', visits.length, 'carts:', carts.length)
 
     return NextResponse.json({
       success: true,
-      visits: allVisits.length,
-      carts: allCarts.length,
-      telegramVisits: visits.length,
-      telegramCarts: carts.length,
+      visits: visits.length,
+      carts: carts.length,
+      telegramVisits: visits,
+      telegramCarts: carts,
       message: 'Data synchronized from Telegram'
     })
 
   } catch (error) {
     console.error('Sync error:', error)
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    return NextResponse.json({ 
+      error: 'Internal server error',
+      details: error instanceof Error ? error.message : 'Unknown error'
+    }, { status: 500 })
   }
 }
