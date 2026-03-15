@@ -90,23 +90,6 @@ export default function StatsPage() {
     return pageCounts
   }
 
-  const getTodayVisits = () => {
-    const today = new Date().toDateString()
-    return visits.filter(visit => new Date(visit.ts).toDateString() === today).length
-  }
-
-  const getLiveStats = () => {
-    const now = Date.now()
-    const oneHourAgo = now - (60 * 60 * 1000)
-    const recentVisits = visits.filter(visit => visit.ts > oneHourAgo)
-    const uniqueIPs = new Set(recentVisits.map(visit => visit.ip))
-    return {
-      totalRecent: recentVisits.length,
-      uniqueVisitors: uniqueIPs.size,
-      avgPerMinute: Math.round(recentVisits.length / 60)
-    }
-  }
-
   const getUniqueVisitors = () => {
     const uniqueIPs = new Set(visits.map(visit => visit.ip))
     return uniqueIPs.size
@@ -124,12 +107,54 @@ export default function StatsPage() {
     return uniqueIPs.size
   }
 
+  const getWeeklyStats = () => {
+    const oneWeekAgo = Date.now() - (7 * 24 * 60 * 60 * 1000)
+    const weeklyVisits = visits.filter(visit => visit.ts > oneWeekAgo)
+    const weeklyCarts = carts.filter(cart => cart.ts > oneWeekAgo)
+    const weeklyUniqueVisitors = new Set(weeklyVisits.map(visit => visit.ip))
+    const weeklyUniqueCarts = new Set(weeklyCarts.map(cart => cart.ip))
+    
+    return {
+      visitors: weeklyUniqueVisitors.size,
+      carts: weeklyUniqueCarts.size,
+      conversion: weeklyUniqueVisitors.size > 0 ? Math.round((weeklyUniqueCarts.size / weeklyUniqueVisitors.size) * 100) : 0
+    }
+  }
+
+  const getMonthlyStats = () => {
+    const oneMonthAgo = Date.now() - (30 * 24 * 60 * 60 * 1000)
+    const monthlyVisits = visits.filter(visit => visit.ts > oneMonthAgo)
+    const monthlyCarts = carts.filter(cart => cart.ts > oneMonthAgo)
+    const monthlyUniqueVisitors = new Set(monthlyVisits.map(visit => visit.ip))
+    const monthlyUniqueCarts = new Set(monthlyCarts.map(cart => cart.ip))
+    
+    return {
+      visitors: monthlyUniqueVisitors.size,
+      carts: monthlyUniqueCarts.size,
+      conversion: monthlyUniqueVisitors.size > 0 ? Math.round((monthlyUniqueCarts.size / monthlyUniqueVisitors.size) * 100) : 0
+    }
+  }
+
+  const getLiveStats = () => {
+    const now = Date.now()
+    const oneHourAgo = now - (60 * 60 * 1000)
+    const recentVisits = visits.filter(visit => visit.ts > oneHourAgo)
+    const uniqueIPs = new Set(recentVisits.map(visit => visit.ip))
+    return {
+      totalRecent: recentVisits.length,
+      uniqueVisitors: uniqueIPs.size,
+      avgPerMinute: Math.round(recentVisits.length / 60)
+    }
+  }
+
   const pageStats = getPageStats()
   const todayVisits = visits.length
   const totalVisits = visits.length
   const uniqueVisitors = getUniqueVisitors()
   const todayUniqueVisitors = getTodayUniqueVisitors()
   const uniqueCarts = getUniqueCarts()
+  const weeklyStats = getWeeklyStats()
+  const monthlyStats = getMonthlyStats()
   const liveStats = getLiveStats()
 
   if (!mounted) return null
@@ -246,6 +271,44 @@ export default function StatsPage() {
                 {uniqueVisitors > 0 ? Math.round((uniqueCarts / uniqueVisitors) * 100) : 0}%
               </div>
               <div className="text-gray-600 font-medium">Taux Conversion Réel</div>
+            </div>
+          </div>
+
+          {/* Weekly Stats */}
+          <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-8 mb-8">
+            <h3 className="text-2xl font-bold text-[#1a1a1a] font-[var(--font-dm-sans)] mb-6">📅 Stats de la Semaine</h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="text-center">
+                <div className="text-3xl font-bold text-blue-600 mb-2">{weeklyStats.visitors}</div>
+                <div className="text-gray-600">Visiteurs Uniques</div>
+              </div>
+              <div className="text-center">
+                <div className="text-3xl font-bold text-purple-600 mb-2">{weeklyStats.carts}</div>
+                <div className="text-gray-600">Paniers Uniques</div>
+              </div>
+              <div className="text-center">
+                <div className="text-3xl font-bold text-orange-600 mb-2">{weeklyStats.conversion}%</div>
+                <div className="text-gray-600">Taux Conversion</div>
+              </div>
+            </div>
+          </div>
+
+          {/* Monthly Stats */}
+          <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-8 mb-12">
+            <h3 className="text-2xl font-bold text-[#1a1a1a] font-[var(--font-dm-sans)] mb-6">📆 Stats du Mois</h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="text-center">
+                <div className="text-3xl font-bold text-blue-600 mb-2">{monthlyStats.visitors}</div>
+                <div className="text-gray-600">Visiteurs Uniques</div>
+              </div>
+              <div className="text-center">
+                <div className="text-3xl font-bold text-purple-600 mb-2">{monthlyStats.carts}</div>
+                <div className="text-gray-600">Paniers Uniques</div>
+              </div>
+              <div className="text-center">
+                <div className="text-3xl font-bold text-orange-600 mb-2">{monthlyStats.conversion}%</div>
+                <div className="text-gray-600">Taux Conversion</div>
+              </div>
             </div>
           </div>
 
