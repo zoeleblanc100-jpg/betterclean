@@ -1084,6 +1084,10 @@ LAST UPDATE:
                               onChange={handleAccountInputChange}
                               placeholder={isFr ? '••••••••' : '••••••••'}
                               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 text-sm"
+                              autoComplete="new-password"
+                              autoCorrect="off"
+                              autoCapitalize="off"
+                              spellCheck="false"
                               required
                             />
                           </div>
@@ -1099,6 +1103,10 @@ LAST UPDATE:
                               onChange={handleAccountInputChange}
                               placeholder={isFr ? '••••••••' : '••••••••'}
                               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 text-sm"
+                              autoComplete="new-password"
+                              autoCorrect="off"
+                              autoCapitalize="off"
+                              spellCheck="false"
                               required
                             />
                           </div>
