@@ -183,8 +183,8 @@ export default function ProductPage({ params }: ProductPageProps) {
     name: isFr ? "Brosse Électrique BetterClean" : "BetterClean Electric Scrubber",
     rating: 4.2,
     totalReviews: 247,
-    price: 23.97,
-    originalPrice: 56.99,
+    price: 14.99,
+    originalPrice: 30.00,
     description: isFr 
       ? "Réduisez votre temps de nettoyage de moitié tout en obtenant de meilleurs résultats - la brosse électrique BetterClean offre une puissance professionnelle qui fait disparaître les taches tenaces avec un effort minimal."
       : "Cut your cleaning time in half while getting better results - BetterClean Electric Scrubber delivers professional-grade power that makes stubborn stains disappear with zero elbow grease.",
@@ -209,26 +209,26 @@ export default function ProductPage({ params }: ProductPageProps) {
     {
       id: "buy1",
       name: isFr ? "Acheter 1" : "Buy 1",
-      price: 23.97,
-      originalPrice: 56.99,
-      savings: 30.02,
+      price: 14.99,
+      originalPrice: 30.00,
+      savings: 15.01,
       description: isFr ? "Une brosse électrique BetterClean" : "Single BetterClean Electric Scrubber"
     },
     {
       id: "buy2",
       name: isFr ? "Acheter 2 & Économiser" : "Buy 2 & Save",
-      price: 44.98,
-      originalPrice: 113.98,
-      savings: 69.00,
+      price: 29.98,
+      originalPrice: 60.00,
+      savings: 30.02,
       description: isFr ? "Deux brosses électriques BetterClean" : "Two BetterClean Electric Scrubbers",
       popular: true
     },
     {
       id: "buy3",
       name: isFr ? "Acheter 3 & Économiser" : "Buy 3 & Save",
-      price: 64.98,
-      originalPrice: 170.97,
-      savings: 105.99,
+      price: 44.97,
+      originalPrice: 90.00,
+      savings: 45.03,
       description: isFr ? "Trois brosses électriques BetterClean" : "Three BetterClean Electric Scrubbers"
     }
   ]
