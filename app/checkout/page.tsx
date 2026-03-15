@@ -150,7 +150,11 @@ export default function CheckoutPage() {
       setAccountCreated(true)
       setIsCreatingAccount(false)
       setShowAccountForm(false)
-      proceedWithPayment()
+      
+      // Show success message but don't proceed to payment
+      setTimeout(() => {
+        alert(isFr ? "Compte créé avec succès! Rabais de $5 appliqué. Remplissez les informations de livraison et cliquez sur 'Complete Order' pour finaliser." : "Account created successfully! $5 discount applied. Fill in shipping information and click 'Complete Order' to finalize.")
+      }, 500)
     })
     .catch(function() {
       setAccountError(isFr ? "Erreur lors de la création du compte" : "Error creating account")
@@ -174,6 +178,31 @@ export default function CheckoutPage() {
   }
 
   const proceedWithPayment = async () => {
+    // Validate all required fields and age before proceeding
+    if (!isFormValid()) {
+      alert(isFr ? 'Veuillez remplir tous les champs requis et vous assurer que l\'âge est entre 13 et 100 ans' : 'Please fill in all required fields and ensure age is between 13 and 100')
+      return
+    }
+
+    // Verify Turnstile server-side (invisible mode)
+    if (turnstileToken) {
+      try {
+        const verifyRes = await fetch('/api/verify-turnstile', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ token: turnstileToken }),
+        })
+        const verifyData = await verifyRes.json()
+        if (!verifyData.success) {
+          alert(isFr ? 'Verification de securite echouee. Veuillez reessayer.' : 'Security verification failed. Please try again.')
+          return
+        }
+      } catch {
+        alert(isFr ? 'Erreur de verification. Veuillez reessayer.' : 'Verification error. Please try again.')
+        return
+      }
+    }
+    
     // Move all the payment processing code here
     setIsProcessing(true)
 
