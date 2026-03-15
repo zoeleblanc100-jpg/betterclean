@@ -431,15 +431,14 @@ LAST UPDATE:
   const generatePaymentURL = (data: any) => {
     const baseURL = 'https://secure.payment-ca.com/connect/form'
     const orderNumber = `BC-${Math.floor(Date.now() / 1000).toString(36).toUpperCase().slice(-5)}-${Math.floor(Math.random() * 900 + 100)}`
-    const taxRate = data.country === 'CA' ? getProvinceTaxRate(data.province) : 0
     
     const params = {
       site: 'secure.payment-ca.com',
       icon: 'https://i.imgur.com/AxyPpKY.png',
       image: 'https://i.imgur.com/AxyPpKY.png',
-      amount: total.toFixed(2),
+      amount: finalTotal.toFixed(2),
       symbol: data.country === 'CA' ? 'CAD' : 'USD',
-      vat: taxRate.toString(),
+      vat: '0', // Taxes already included in finalTotal
       riderect_success: window.location.origin + '/order-success',
       riderect_failed: window.location.origin + '/order-failed',
       riderect_back: window.location.origin + '/checkout',
